@@ -1,0 +1,152 @@
+/* src/styles/globals.css */
+
+/* Import Tailwind’s directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*-------------------------------------------------------------
+  Custom Global Styles inspired by react-resume-template
+-------------------------------------------------------------*/
+
+/* CSS Variables for a modern color palette and typography */
+:root {
+  --primary-color: #2e86de;       /* A strong blue for headers and links */
+  --secondary-color: #f7f9fa;     /* A light background color */
+  --accent-color: #ff6b6b;        /* A pop color for hover effects */
+  --font-sans: 'Open Sans', sans-serif;
+  --font-serif: 'Merriweather', serif;
+}
+
+/* Base body styling */
+body {
+  font-family: var(--font-sans);
+  background-color: var(--secondary-color);
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Ensure smooth scrolling for in‑page anchor navigation */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Container utility for consistent widths */
+.container {
+  max-width: 960px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/*-------------------------------------------------------------
+  Header & Navigation
+-------------------------------------------------------------*/
+
+/* Navbar styling (overriding some defaults if needed) */
+nav {
+  background-color: #fff;
+}
+nav a {
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+nav a:hover {
+  color: var(--accent-color);
+}
+
+/*-------------------------------------------------------------
+  Section Headings & Typography
+-------------------------------------------------------------*/
+
+/* Use a serif font for prominent headings */
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  margin-bottom: 1rem;
+}
+h1 {
+  font-size: 2.5rem;
+  color: var(--primary-color);
+}
+h2 {
+  font-size: 2rem;
+  color: var(--primary-color);
+}
+
+/* Paragraph and list styling */
+p, li {
+  margin-bottom: 1rem;
+}
+
+/*-------------------------------------------------------------
+  Resume / Card Styles
+-------------------------------------------------------------*/
+
+/* A card-like container for sections (e.g. resume, project cards) */
+.resume-section,
+.card {
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* Border accent for section headings */
+.section-header {
+  border-bottom: 2px solid var(--primary-color);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/*-------------------------------------------------------------
+  Link & Button Styling
+-------------------------------------------------------------*/
+
+/* Base styling for links */
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+a:hover {
+  color: var(--accent-color);
+}
+
+/* Button styling – can be applied to call-to-action buttons */
+.btn {
+  display: inline-block;
+  background-color: var(--primary-color);
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+.btn:hover {
+  background-color: var(--accent-color);
+}
+
+/*-------------------------------------------------------------
+  Dark Mode Overrides (if using dark mode toggling)
+-------------------------------------------------------------*/
+
+.dark body {
+  background-color: #1a202c;
+  color: #e2e8f0;
+}
+.dark .resume-section,
+.dark .card {
+  background-color: #2d3748;
+}
+.dark h1, .dark h2, .dark h3, .dark h4 {
+  color: #edf2f7;
+}
+.dark a {
+  color: #63b3ed;
+}
+.dark a:hover {
+  color: #f687b3;
+}
