@@ -20,12 +20,21 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ post }) => {
     setExpanded(prev => !prev)
   }
 
+  // Helper: split the text into paragraphs by double newlines.
+  const renderParagraphs = (text: string) => {
+    return text.split(/\n\s*\n/).map((para, index) => (
+      <p key={index} className="mb-4">
+        {para}
+      </p>
+    ))
+  }
+
   return (
     <div className="bg-white dark:bg-gray-800 shadow p-6 rounded">
       <h2 className="text-2xl font-bold mb-2">{post.title}</h2>
       <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">{post.date}</p>
       <div className="text-gray-700 dark:text-gray-300 mb-4">
-        {expanded ? post.content : post.excerpt}
+      {expanded ? renderParagraphs(post.content) : renderParagraphs(post.excerpt)}
       </div>
       <button
         onClick={toggleExpand}

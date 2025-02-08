@@ -31,6 +31,7 @@ const ResumeSection: React.FC = () => {
         <h2 className="text-2xl font-semibold mb-4">Education</h2>
         <div className="mb-4">
           <h3 className="text-xl font-bold">University of Illinois at Urbana Champaign</h3>
+          <h3 className="text-xl font-bold">Saratoga High School</h3>
         </div>
       </div>
     </div>

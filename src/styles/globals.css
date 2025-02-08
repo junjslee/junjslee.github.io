@@ -1,6 +1,7 @@
 /* src/styles/globals.css */
 
 /* Import Tailwind’s directives */
+/* stylelint-disable at-rule-no-unknown */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

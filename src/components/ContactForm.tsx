@@ -57,9 +57,9 @@ const ContactForm: React.FC = () => {
           required
         >
           <option value="">Select an option</option>
-          <option value="research">Research Collaboration</option>
-          <option value="consulting">Startup Consulting</option>
-          <option value="ai">AI Projects</option>
+          <option value="research">Reaching out</option>
+          <option value="recruiting">Recruiting</option>
+          <option value="other">Other</option>
         </select>
       </div>
       <div className="mb-4">
@@ -70,7 +70,7 @@ const ContactForm: React.FC = () => {
           className="w-full p-2 border rounded"
           value={formData.message}
           onChange={handleChange}
-          rows={4}
+          rows={6}
           required
         ></textarea>
       </div>

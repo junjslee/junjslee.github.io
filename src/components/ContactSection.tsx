@@ -8,8 +8,8 @@ const ContactSection: React.FC = () => {
       <h1 className="text-4xl font-bold mb-6">Contact</h1>
       <ContactForm />
       <div className="mt-8">
-        <p className="mb-2">Connect with me:</p>
-        <div className="flex space-x-4">
+        <p className="text-xl mb-3 flex space-x-4 items-center justify-center text-center">You can reach me at:</p>
+        <div className="flex space-x-4 items-center justify-center text-center px-4">
           <a href="https://www.linkedin.com/in/junseong-lee" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:underline">
             LinkedIn
           </a>
