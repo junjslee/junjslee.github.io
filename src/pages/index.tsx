@@ -14,7 +14,7 @@ const Home: NextPage = () => {
     <Layout>
       <Head>
         <title>Jun's Portfolio</title>
-        <meta name="description" content="Personal portfolio showcasing Jun's expertise in Finance, Data Science, and Computer Science." />
+        <meta name="description" content="Jun's portfolio" />
       </Head>
       <div>
         <section id="hero">

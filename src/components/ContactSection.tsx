@@ -10,13 +10,13 @@ const ContactSection: React.FC = () => {
       <div className="mt-8">
         <p className="mb-2">Connect with me:</p>
         <div className="flex space-x-4">
-          <a href="https://www.linkedin.com/in/yourprofile" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:underline">
+          <a href="https://www.linkedin.com/in/junseong-lee" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:underline">
             LinkedIn
           </a>
-          <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:underline">
+          <a href="https://github.com/junjslee" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:underline">
             GitHub
           </a>
-          <a href="mailto:your.email@example.com" className="text-indigo-600 hover:underline">
+          <a href="mailto:junseong.lee652@gmail.com" className="text-indigo-600 hover:underline">
             Email
           </a>
         </div>
