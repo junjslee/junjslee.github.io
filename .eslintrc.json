@@ -17,7 +17,9 @@
     "rules": {
       "react/react-in-jsx-scope": "off",
       "@typescript-eslint/no-unused-vars": ["error"],
-      "react/prop-types": "off"
+      "react/prop-types": "off",
+      "react/no-unescaped-entities": "off",   // Disables the rule for unescaped characters
+      "@next/next/no-img-element": "off"       // Disables warning about using <img> instead of <Image />
     },
     "settings": {
       "react": {
@@ -25,3 +27,4 @@
       }
     }
   }
+  
