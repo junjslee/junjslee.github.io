@@ -6,8 +6,9 @@ node_modules/
 out/
 dist/
 
-# Environment variable files
+# Environment variable
 .env
+.env.local
 
 # Log files
 npm-debug.log*

@@ -1,5 +1,6 @@
 // src/components/ContactForm.tsx
 import React, { useState } from 'react'
+import emailjs from 'emailjs-com'
 
 const ContactForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -15,9 +16,33 @@ const ContactForm: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    // Implement your form submission logic (e.g., send data to an API)
+
+    // Use environment variables from .env.local
+    const serviceID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID
+    const templateID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID
+    const userID = process.env.NEXT_PUBLIC_EMAILJS_USER_ID
+
+    // Check if environment variables are loaded
+    if (!serviceID || !templateID || !userID) {
+      console.error("Missing EmailJS configuration in environment variables")
+      alert("Email service is not configured correctly.")
+      return
+    }
+
+    emailjs
+      .send(serviceID, templateID, formData, userID)
+      .then(
+        (result) => {
+          console.log(result.text)
+          alert('Message sent!')
+        },
+        (error) => {
+          console.error(error.text)
+          alert('Failed to send message.')
+        }
+      )
+
     console.log(formData)
-    alert('Form submitted!')
   }
 
   return (

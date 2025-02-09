@@ -2,16 +2,16 @@
 A modern, interactive portfolio website built with Next.js and Tailwind CSS, deployed on GitHub Pages with GitHub Actions.
 
 ## Features
-- Multi-page structure: Home, About, Projects, Resume, Blog, Contact
+- One-page structure: Home, About, Projects, Resume, Blog (Journal), Contact
 - Responsive design with dark mode support
-- Markdown-based blog
+- Blog
 - CI with GitHub Actions
 
 ## Setup
 
 1. Install dependencies:
    ```bash
-   npm install
+   npm install & npm init -y
    ```
 2. Run the development server:
    ```bash
@@ -26,8 +26,8 @@ A modern, interactive portfolio website built with Next.js and Tailwind CSS, dep
 This project uses GitHub Actions to automate deployment to GitHub Pages. On every push to the main branch, the workflow builds the project, runs lint checks, and deploys the output to GitHub Pages.
 
 ## Notes
-- **Static Export:** The Next.js configuration (`next.config.js`) is set for static export (using `next export`), which is required for GitHub Pages.
-- **Dependencies:** Make sure to install any additional dependencies (like `react-simple-typewriter`) using `npm install` or `yarn`.
-- **Customization:** Feel free to expand or modify components, add more styling, or integrate additional features as you learn and grow in full stack development.
+- Static Export: The Next.js configuration (`next.config.js`) is set for static export (using `next export`), which is required for GitHub Pages.
+- Dependencies: Make sure to install any additional dependencies (like `react-simple-typewriter`) using `npm install`/or `yarn`.
+- Customization: Feel free to fork and modify components, add more styling, or integrate additional features!
 
 
