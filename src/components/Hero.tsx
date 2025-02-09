@@ -6,27 +6,42 @@ const { useTypewriter, Cursor } = ReactTypewriter
 
 const Hero: React.FC = () => {
   const [text] = useTypewriter({
-    words: ["AI Research Intern at MI2RL", "Sergeant at 2nd Infantry Division, 8th U.S. Army", "Junior at Univ. of Illinois @ Urbana-Champaign"],
+    words: [
+      "Medical AI Research Intern at MI2RL",
+      "Sergeant (E-5) at 2nd Infantry Division, 8th U.S. Army",
+      "Experience in deep learning, full-stack dev, cloud & computer networks"
+    ],
     loop: true,
     delaySpeed: 2000,
   })
 
   return (
-    <section className="flex flex-col items-center justify-center h-screen bg-cover bg-center text-center px-4"
-    style={{ backgroundImage: "url('images/hero-background.jpg')" }}
+    <section 
+      className="relative flex flex-col items-center justify-center h-screen bg-cover bg-center text-center px-4"
+      style={{ backgroundImage: "url('images/hero-background.jpg')" }}
     >
-      <img src="images/hero.jpg" alt="Jun's photo" className="w-60 h-60 rounded-full mb-4" />
-      <h1 className="text-4xl font-bold mb-3">Hi, I'm Jun</h1>
-      <p className="text-xl text-yellow-100 dark:text-gray-300 mb-4">
-        B.S. Data Science + Finance, Computer Science <br></br>
+      {/* Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-transparent z-0"></div>
+      
+      <img 
+        src="images/hero.jpg" 
+        alt="Jun's photo" 
+        className="relative w-60 h-60 rounded-full mb-4 shadow-lg" 
+      />
+      <h1 className="relative text-4xl font-bold mb-3 text-white drop-shadow-lg">Hi, I'm Jun</h1>
+      <p className="relative text-xl text-yellow-50 dark:text-gray-300 mb-4 drop-shadow-md">
+        B.S. Data Science + Finance, Computer Science @ UIUC <br />
         I love playing soccer, basketball, and Asian Billiards (4 ball)
       </p>
-      <h2 className="text-2xl font-semibold text-indigo-300">
+      <h2 className="relative text-2xl font-semibold text-indigo-200 drop-shadow-md">
         {text}
         <Cursor />
       </h2>
-      <div className="mt-6">
-        <a href="#resume" className="px-6 py-3 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
+      <div className="relative mt-6">
+        <a 
+          href="#resume" 
+          className="px-6 py-3 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition shadow-md"
+        >
           Check out my experiences!
         </a>
       </div>

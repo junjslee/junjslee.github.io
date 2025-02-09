@@ -30,6 +30,7 @@ body {
 /* Ensure smooth scrolling for in‑page anchor navigation */
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 12px; /* Adjust navbar height */
 }
 
 /* Container utility for consistent widths */
