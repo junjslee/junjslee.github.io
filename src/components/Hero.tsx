@@ -30,8 +30,7 @@ const Hero: React.FC = () => {
       />
       <h1 className="relative text-4xl font-bold mb-3 text-white drop-shadow-lg">Hi, I'm Jun</h1>
       <p className="relative text-xl text-yellow-50 dark:text-gray-300 mb-4 drop-shadow-md">
-        B.S. Data Science + Finance, Computer Science @ UIUC <br />
-        I love playing soccer, basketball, and Asian Billiards (4 ball)
+        B.S. Data Science + Finance, Computer Science @ UIUC
       </p>
       <h2 className="relative text-2xl font-semibold text-indigo-200 drop-shadow-md">
         {text}
@@ -39,10 +38,10 @@ const Hero: React.FC = () => {
       </h2>
       <div className="relative mt-6">
         <a 
-          href="#resume" 
-          className="px-6 py-3 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition shadow-md"
+          href="#about" 
+          className="px-6 py-3 bg-indigo-600 text-white rounded dark:text-white hover:bg-indigo-700 transition shadow-md"
         >
-          Check out my experiences!
+          My portfolio ⇩
         </a>
       </div>
     </section>

@@ -7,7 +7,7 @@ const projects = [
     title: "Web Application for 2nd Infantry Division, 8th U.S. Army",
     description: "Developed and deployed a web application for the battalion's event management system and automation on AWS",
     techStack: ["Python (flask, smtp, pandas)", "HTML, CSS , Javascript", "AWS EC2", "Nginx", "Gunicorn"],
-    repoLink: "https://github.com/junjslee/ml_heart_disease_prediction",
+    repoLink: "https://github.com/junjslee/UMTauto",
     image: "images/projects/2id.jpg",
   },
   {

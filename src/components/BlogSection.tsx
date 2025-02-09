@@ -33,7 +33,7 @@ const posts = [
   },
   {
     slug: "post-2",
-    title: "What makes your hear beat",
+    title: "What makes your heart beat",
     content: 
     `
     Today, during a KATUSA meeting, my mind wandered until it didn't. The commander's story of a barber's passion for fishing hooked me. That single question, “What makes your heartbeat right now?” stayed with me, lingering like an echo in my mind. 
