@@ -17,7 +17,7 @@ const ContactForm: React.FC = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    // Use environment variables from .env.local
+    // Use environment variables from .env.local --> Added to Environment secrets on Github for deployment (injects into my github workflow smoothly)
     const serviceID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID
     const templateID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID
     const userID = process.env.NEXT_PUBLIC_EMAILJS_USER_ID
