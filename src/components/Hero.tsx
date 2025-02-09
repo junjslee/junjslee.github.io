@@ -13,9 +13,9 @@ const Hero: React.FC = () => {
 
   return (
     <section className="flex flex-col items-center justify-center h-screen bg-cover bg-center text-center px-4"
-    style={{ backgroundImage: "url('/images/hero-background.jpg')" }}
+    style={{ backgroundImage: "url('images/hero-background.jpg')" }}
     >
-      <img src="/images/hero.jpg" alt="Jun's photo" className="w-60 h-60 rounded-full mb-4" />
+      <img src="images/hero.jpg" alt="Jun's photo" className="w-60 h-60 rounded-full mb-4" />
       <h1 className="text-4xl font-bold mb-3">Hi, I'm Jun</h1>
       <p className="text-xl text-yellow-100 dark:text-gray-300 mb-4">
         B.S. Data Science + Finance, Computer Science <br></br>

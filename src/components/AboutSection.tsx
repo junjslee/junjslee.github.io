@@ -15,7 +15,7 @@ const AboutSection: React.FC = () => {
       <li>I am serving in the U.S. Army as a Korean Augmentation (KATUSA).</li>
       <h2 className="text-2xl font-semibold mt-8 mb-4">Skills & Technologies</h2>
       <ul className="list-disc list-inside">
-        <li> Python (pandas, numpy, matplotlib, statsmodels), Machine Learning (PyTorch, scikit-learn), Computer Vision (opencv)</li>
+        <li>Python (pandas, numpy, matplotlib, statsmodels), Machine Learning (PyTorch, scikit-learn), Computer Vision (opencv)</li>
         <li>Frontend: CSS/Tailwind CSS, HTML, Javascript, React, Typescript</li>
         <li>Backend:  Flask, Node.js, Next.js</li>
         <li>Linux, Git, AWS, Excel/Powerpoint</li>

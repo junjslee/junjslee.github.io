@@ -8,21 +8,21 @@ const projects = [
     description: "Built an ML model to predict heart disease based on UC Irvine's public medical data.",
     techStack: ["Python (pandas, numpy, matplotlib, scikit-learn)", "Statistical Modeling"],
     repoLink: "https://github.com/junjslee/ml_heart_disease_prediction",
-    image: "/images/projects/heart_disease.jpg",
+    image: "images/projects/heart_disease.jpg",
   },
   {
     title: "Facial Recognition using Principal Component Analysis (PCA)",
     description: "Developed a facial recognition system using PCA",
     techStack: ["Python", "Linear Algebra", "Statistical Modeling"],
     repoLink: "https://github.com/junjslee/facial_recognition_pca/blob/main/PCA-FacialRecognition.ipynb",
-    image: "/images/projects/pca.jpg",
+    image: "images/projects/pca.jpg",
   },
   {
     title: "S&P Index Prediction using Macroeconomic Indicators",
     description: "Built an ML model to predict S&P Index based on 15 macroeconomic indicators.",
     techStack: ["Python", "Machine Learning", "Statistical Modeling"],
     repoLink: "https://github.com/junjslee/https://github.com/junjslee/Predicting-S-P-500-Market-Trends-using-Macro-Economic-Indicators-with-Python/blob/master/Python-SPX%20Prediction%20using%20Macro-Economic%20Indicators.ipynb",
-    image: "/images/projects/s&p.jpg",
+    image: "images/projects/s&p.jpg",
   },
 ]
 

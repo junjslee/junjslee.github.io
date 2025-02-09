@@ -10,11 +10,17 @@ import BlogSection from '../components/BlogSection'
 import ContactSection from '../components/ContactSection'
 
 const Home: NextPage = () => {
+  const faviconHref =
+    process.env.NODE_ENV === 'production'
+      ? 'junlee.io/favicon.ico'
+      : 'favicon.ico';
+
   return (
     <Layout>
       <Head>
         <title>Jun's Portfolio</title>
         <meta name="description" content="Jun's portfolio" />
+        <link rel="icon" href={faviconHref} />
       </Head>
       <div>
         <section id="hero">
