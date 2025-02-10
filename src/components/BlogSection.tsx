@@ -36,14 +36,22 @@ const posts = [
     title: "What makes your heart beat",
     content: 
     `
-    Today, during a KATUSA meeting, my mind wandered until it didn't. The commander's story of a barber's passion for fishing hooked me. That single question, “What makes your heartbeat right now?” stayed with me, lingering like an echo in my mind. 
+    Today, during the weekly KATUSA meeting, my mind was elsewhere. I was zoning out, waiting for it to end, but then, something the commander said pulled me back to reality. He was recounting a story—an ordinary moment turned extraordinary.
     
-    After the meeting, I played soccer with some of the guys. On my way to the field, the question followed me, unraveling memories like threads from a spool. I remembered the boy I was—a kid who poured his heart into soccer, science experiments, even music. I was curious about everything, trying one thing after another, chasing what made me feel alive. 
+    He spoke about a visit over the weekend to a barber shop just outside the army base's walk-in gate, a place called "For Men." The barber, an old man with a gentle demeanor, had been chatting with him. It started casually: "What did you do over the weekend?" The commander expected a short reply, maybe a polite chuckle, but instead, the man’s face lit up. He started talking about fishing.
     
-    Lately, it’s been billiards—a new hobby, another way to unwind and explore. But life isn’t just hobbies anymore. In my early 20s, on the cusp of starting a career after the army, there’s a weight to the choices ahead. I want financial stability, but I also want happiness. The kind of happiness that comes from doing things that make my heart beat. So where do I draw the line? 
+    The way the old man described it, fishing wasn’t just a hobby—it was his heartbeat. The excitement in his voice painted a picture of still waters, the tug of a line, and the serene joy of waiting for a bite. The commander, sensing the man’s passion, listened. Then came the unexpected twist: the barber turned the question around. "What about you? Do you have something that makes your heartbeat?"
     
-    Right now, I’m studying AI, diving into math to grasp complex concepts, and building skills that feel like stepping stones to something greater. But honestly, I don’t know exactly where I’m going yet. That used to scare me, but now I see it differently. It’s okay to feel lost sometimes. Writing helps me untangle the knots in my thoughts. 
+    Hearing this, I felt a jolt. That question, so simple yet profound, gripped me. Usually, I’d have an answer—writing about philosophical questions about life on my blog, playing soccer or basketball—but today, I came up blank. For a moment, I felt lost, as if I’d forgotten what it meant to truly feel alive.
     
+    This month, I became a CPL6--4 months away from getting discharged, and I’ve been coasting—winging my days in the army, going through the motions. But the barber’s question stayed with me. It’s a question I owe myself an answer to: What makes my heartbeat right now? 
+
+    Anyway, after the meeting, I played soccer with some of the guys. On my way to the field, the question followed me, unraveling memories like threads from a spool. I remembered the boy I was—a kid who poured his heart into soccer, chemistry, even writing. I was curious about everything, trying one thing after another, chasing what made me feel alive.
+
+    Lately, it’s been billiards—a new hobby, another way to unwind and explore. But life isn’t just hobbies anymore. In my early 20s, on the cusp of starting a career after the army, there’s a weight to the choices ahead. I want financial stability, but I also want happiness. The kind of happiness that comes from doing things that make my heart beat. So where do I draw the line?
+
+    Right now, I’m studying AI, diving into math to grasp complex concepts, and building skills that feel like stepping stones to something greater. But honestly, I don’t know exactly where I’m going yet. That used to scare me, but now I see it differently. It’s okay to feel lost sometimes. Writing helps me untangle the knots in my thoughts.
+
     I’ve realized that consistency is my key—showing up for myself, one step at a time, even if I don’t have all the answers. The boy who loved soccer, science, and music didn’t have answers either. He just followed what made him curious. Maybe that’s all I need to do now: keep walking, keep trying, and keep finding joy in the little things that make my heart beat.
     `,
     excerpt: "Today, during a KATUSA meeting, my mind wandered until it didn't. The commander's story of a barber...",
