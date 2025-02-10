@@ -55,7 +55,7 @@ When deploying via GitHub Actions, add any sensitive environment variables as re
 
 ## Deployment Options
 Two GitHub Pages deployment options:
-1. Deploy as a Project Site
+### Deploy as a Project Site
 - URL Structure:
    - Your site will be available at https://yourusername.github.io/repository-name.
 - Configuration:
@@ -73,7 +73,7 @@ Two GitHub Pages deployment options:
    };
    module.exports = nextConfig;
    ```
-2. Deploy as a User Site
+### Deploy as a User Site
 - URL Structure
    - Rename the repository to yourusername.github.io so your site is available at https://yourusername.github.io.
 - Configuration:
