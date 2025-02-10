@@ -12,7 +12,7 @@ import ContactSection from '../components/ContactSection'
 const Home: NextPage = () => {
   const faviconHref =
     process.env.NODE_ENV === 'production'
-      ? 'junlee.io/favicon.ico'
+      ? 'favicon.ico' // junlee.io/
       : 'favicon.ico';
 
   return (

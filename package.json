@@ -29,17 +29,17 @@
         "tailwindcss": "^3.4.17",
         "typescript": "^5.7.3"
     },
-    "description": "A modern, interactive portfolio website built with Next.js and Tailwind CSS, deployed on GitHub Pages with GitHub Actions.",
+    "description": "A modern, interactive portfolio website built with Next.js, TypeScript, and Tailwind CSS, deployed on GitHub Pages with GitHub Actions.",
     "main": "next.config.js",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/junjslee/junlee.io.git"
+        "url": "git+https://github.com/junjslee/junjslee.github.io.git"
     },
     "keywords": [],
     "author": "Junseong Lee",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/junjslee/junlee.io/issues"
+        "url": "https://github.com/junjslee/junjslee.github.io/issues"
     },
-    "homepage": "https://github.com/junjslee/junlee.io#readme"
+    "homepage": "https://junjslee.github.io"
 }

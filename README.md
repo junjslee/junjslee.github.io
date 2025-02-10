@@ -1,5 +1,5 @@
-# junlee.io
-A modern, interactive portfolio website built with Next.js and Tailwind CSS, deployed on GitHub Pages with GitHub Actions.
+# junjslee.github.io
+A modern, interactive portfolio website built with Next.js, TypeScript, and Tailwind CSS, deployed on GitHub Pages with GitHub Actions.
 
 ## Features
 - One-page structure: Home, About, Projects, Resume, Blog (Journal), Contact
