@@ -5,7 +5,7 @@ import BlogPostCard from './BlogPostCard'
 const posts = [
   {
     slug: "post-2",
-    title: "Blog#2 What Makes My Heart Beat: Reflections on Military Service, Dad’s Wisdom, and a Long-Distance Love",
+    title: "Blog#2: What Makes My Heart Beat: Reflections on Military Service, Dad’s Wisdom, and a Long-Distance Love",
     content: 
     `
     Today was our usual Wednesday KATUSA meeting—a typical weekly briefing where soldiers gather to get training or updates. I’ll be honest—I wasn’t really paying attention at first. My mind drifted, thinking about how close I am to finishing my military service, and all the possibilities waiting for me outside these gates. But then the commander shared a story that snapped me back to reality.
@@ -26,7 +26,7 @@ const posts = [
 
     That’s also when it struck me how easily we tend to see life’s decisions in black and white—safe path vs. risky path, money vs. passion. But my dad’s words suggested a broader, more transparent approach: explore, learn, and let those experiences shape you. As I near the end of my service, I see how even routine tasks have helped me develop humility, while my coding project opened doors to a sense of purpose. Life isn’t always about either-or; often it’s about both-and.
     
-    About a month after that eye-opening KATUSA meeting, my high school best friend, Nolan, came to visit. We ended up on the topic of what happiness means—a question I’d been circling for some time. Nolan said something that resonated deeply: “Happiness is the feeling of being content—when you sense that nothing is missing.”
+    About a month after that eye-opening KATUSA meeting, my high school best friend, Nolan, flew to visit me in Korea. We ended up on the topic of what happiness means—a question I’d been circling for some time. Nolan said something that resonated deeply: “Happiness is the feeling of being content—when you sense that nothing is missing.”
 
     I countered with my own view: for me, true happiness hinges on inner peace. If I’m at peace with who I am and where I am, that’s when I’m satisfied. Interestingly, our perspectives converged on a common theme: whether you call it contentment or peace, at the heart of it is a sense of completeness—no urge or longing pulling you in different directions.
 
@@ -67,7 +67,7 @@ const posts = [
   },
   {
     slug: "post-1",
-    title: "Blog#1 One Politician’s Calculated Gamble: A Surprising Lesson in Life’s Toughest Choices",
+    title: "Blog#1: One Politician’s Calculated Gamble: A Surprising Lesson in Life’s Toughest Choices",
     content: 
     `
     Yesterday, as I watched the unfolding political drama in South Korea, a moment struck me with profound clarity. It wasn’t just the weight of a nation grappling with a leadership crisis or the cacophony of impassioned protestors in the streets. It was the quiet yet strategic move by one politician, Sangwook Kim (김상욱), that left me thinking deeply about survival—not just in politics, but in the broader tapestry of life itself.
