@@ -10,9 +10,17 @@ const posts = [
     `
     Today was our usual Wednesday KATUSA meeting—a typical weekly briefing where soldiers gather to get training or updates. I’ll be honest—I wasn’t really paying attention at first. My mind drifted, thinking about how close I am to finishing my military service, and all the possibilities waiting for me outside these gates. But then the commander shared a story that snapped me back to reality.
     
-    He talked about visiting a small barber shop near the army base’s pedestrian gate—a modest place called “For Men.” The barber, an older man with a gentle way about him, had been making casual conversation. At first, the commander only expected a quick exchange, but the barber’s face lit up when he mentioned fishing. Suddenly, the conversation was anything but casual. Fishing wasn’t just a hobby to the old man; it was his passion—his heartbeat.
+    He talked about visiting a small barber shop near the army base’s pedestrian gate—a modest place called “For Men.” The barber, an older man with a gentle way about him, had been making casual conversation. At first, the commander only expected a quick exchange: “How was your weekend?” “Did you do anything interesting?” That kind of thing. But the moment fishing came up, the barber’s face lit up, and the energy in the shop shifted. 
     
-    Then the barber asked, “What about you? Do you have something that makes your heartbeat?” That question hit me like a jolt. It made me wonder: what’s mine? Usually, I’d say it’s writing about life’s big questions, doing coding projects that interests me, playing soccer and basketball. But in that moment, my mind drew a blank. It felt like I’d forgotten what sets my soul on fire.
+    “All day, while I’m cutting hair, I’m thinking about that next catch,” the barber had said, eyes sparkling like he was already out on the water. “There’s this rush—knowing a bite could come at any second. I can feel my heart race just imagining that reel spinning, that pull on the line.”
+    
+    The commander recalled how the barber spoke of fishing as though it were the greatest adventure on earth—a passion, a beat of a heart that followed him even as he swept up clippings on the floor. He loved the quiet patience, the excitement when something finally tugs at the line. It was like fishing was the one thing that made him come alive, and just talking about it transported him far from the shop’s fluorescent lights.
+
+    Then, as he finished lining up the commander’s haircut, the barber posed a question that seemed to hang in the air:
+
+    “What about you? Do you have something that makes your heart beat?”
+
+    Even as the commander retold it, that question hit me like a jolt. It made me wonder: what’s mine? Usually, I’d say it’s writing about life’s big questions, doing coding projects that interests me, playing soccer and basketball. But in that moment, my mind drew a blank. It felt like I’d forgotten what sets my soul on fire.
     
     Before I get into the deeper stuff, let me give you a bit of background about my time here as a KATUSA soldier—part of a joint initiative between the Republic of Korea Army and the U.S. Army. After enduring 10 weeks of basic training, I began working at the battalion headquarters within the 2nd Infantry Division, 8th U.S. Army. Initially as a Private (PV2), my tasks were pretty mundane—sweeping floors, handling vehicle maintenance, and carrying out various duties given by my superiors.
     
@@ -20,11 +28,11 @@ const posts = [
 
     Throughout my service, I learned that the Army’s core values of LDRSHIP—Loyalty, Duty, Respect, Selfless Service, Honor, Integrity, and Personal Courage—were more than just acronyms. They shaped my mindset and showed me how discipline can fuel growth. Every day started at 5:50 AM with physical training, followed by a 9-to-5 schedule. After duty hours, I’d dedicate time to studying topics like computer networks. This strict routine gave my life structure and helped me reflect on what I truly value.
 
-    Yet, despite the discipline and newfound skills, I sometimes felt uncertain about the next steps in my life. I recently recalled a conversation I had about a week ago with my dad when I was struggling with the question of “Which path do I choose?” In my early 20s, standing at the crossroads of education, career, and personal growth, it all felt overwhelming. My dad’s response was simple yet profound: “Follow your heart, try everything. You never know how it will all connect in the end.”
+    Still, despite the discipline and newfound skills, I sometimes felt uncertain about the next steps in my life. I recently recalled a conversation I had about a week ago with my dad when I was struggling with the question of “Which path do I choose?” In my early 20s, standing at the crossroads of education, career, and personal growth, it all felt overwhelming. My dad’s response was simple yet profound: “Follow your heart, try everything. You never know how it will all connect in the end.”
 
     That advice resonated with me deeply. Reflecting on my own experiences—like going from floor-sweeping to building a web application for the battalion—his advice rings true. One skill or lesson really can lead to another, sometimes in ways we least expect.
 
-    That’s also when it struck me how easily we tend to see life’s decisions in black and white—safe path vs. risky path, money vs. passion. But my dad’s words suggested a broader, more transparent approach: explore, learn, and let those experiences shape you. As I near the end of my service, I see how even routine tasks have helped me develop humility, while my coding project opened doors to a sense of purpose. Life isn’t always about either-or; often it’s about both-and.
+    That’s also when it struck me how easily we tend to see life’s decisions in black and white—safe path vs. risky path, money vs. passion. But my dad’s words suggested a broader, more transparent approach: explore, learn, and let those experiences shape you. As I near the end of my service, I see how even routine tasks have helped me develop humility, while my coding project opened doors to a sense of purpose. Life isn’t always about "either-or"; often it’s about "both-and".
     
     About a month after that eye-opening KATUSA meeting, my high school best friend, Nolan, flew to visit me in Korea. We ended up on the topic of what happiness means—a question I’d been circling for some time. Nolan said something that resonated deeply: “Happiness is the feeling of being content—when you sense that nothing is missing.”
 
@@ -34,7 +42,7 @@ const posts = [
 
     Amid all this introspection and personal growth, there’s been another constant in my life: my girlfriend, Victoria. We’ve been navigating a long-distance relationship throughout my service, which has tested us in ways I never expected. Not seeing her as often as I’d like has been tough—there are days when all I want is to be next to her, sharing life’s small, everyday moments.
 
-    Yet this distance has also taught me patience on a whole new level. I’ve learned to wait, to trust, and to hold onto the conviction that love isn’t about immediate gratification. It’s about believing in the bond you share, even when physical presence is scarce. In many ways, she’s been my anchor—someone who supports me unconditionally, cheering me on through every challenge, every new project, every doubt.
+    This distance has also taught me patience on a whole new level. I’ve learned to wait, to trust, and to hold onto the conviction that love isn’t about immediate gratification. It’s about believing in the bond you share, even when physical presence is scarce. In many ways, she’s been my anchor—someone who supports me unconditionally, cheering me on through every challenge, every new project, every doubt.
 
     From her, I’ve learned that love can endure and even flourish despite obstacles. That conviction—that I’m committed to loving her at any cost—has instilled a quiet strength in me. And though it hasn’t been easy, I’ve also seen how the lessons in discipline and resilience I’ve gained in the Army complement what’s needed to keep a long-distance relationship strong. In turn, knowing Victoria is there—rooting for me—often makes me feel like I can handle whatever life throws my way.
 
@@ -52,7 +60,7 @@ const posts = [
     
     Much like the barber’s unwavering passion for fishing, my life is a tapestry woven from different threads. The Army gave me discipline and structure. My dad gave me wisdom, urging me not to fear trying new things. Nolan taught me that happiness can be as simple as feeling content. And Victoria reminds me that love, nurtured patiently, can withstand the challenges of distance.
 
-    The temptation is to view these experiences in black and white: soldier or student, practical or passionate, spiritual or scientific. But life often thrives in the gray. It’s in that uncertain space—where you’re not quite sure of your future path but open to new experiences—where the magic happens.
+    It's easy to view the world in black and white: soldier or student, practical or passionate, spiritual or scientific. But life often thrives in the gray. It’s in that uncertain space—where you’re not quite sure of where you want to go but decide to take it one by one—where the magic happens.
 
     As I wrap up my time in uniform, I realize that all these lessons—from sweeping floors to developing software, from my father’s words to Victoria’s long-distance support, and from Nolan’s perspective on happiness—point to a single truth: It’s okay not to have it all figured out. Life is richer when we allow ourselves to explore, question, and grow from the unexpected connections that form along the way.
 
