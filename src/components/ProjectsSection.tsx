@@ -4,6 +4,13 @@ import ProjectCard from './ProjectCard'
 
 const projects = [
   {
+    title: "Will You Be My Valentine?",
+    description: "Made a cute website to ask my girlfriend to be my valentine with Bugcat-Capoo GIFs",
+    techStack: ["HTML, CSS , Javascript"],
+    repoLink: "https://github.com/junjslee/will-you-be-my-valentine",
+    image: "images/projects/valentine.png",
+  },
+  {
     title: "Web Application for 2nd Infantry Division, 8th U.S. Army",
     description: "Developed and deployed a web application for the battalion's event management system and automation on AWS",
     techStack: ["Python (flask, smtp, pandas)", "HTML, CSS , Javascript", "AWS EC2", "Nginx", "Gunicorn"],
