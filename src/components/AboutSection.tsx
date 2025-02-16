@@ -1,4 +1,3 @@
-// src/components/AboutSection.tsx
 import React from 'react';
 
 const AboutSection: React.FC = () => {

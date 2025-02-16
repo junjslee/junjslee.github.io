@@ -1,4 +1,3 @@
-// src/components/ProjectsSection.tsx
 import React from 'react'
 import ProjectCard from './ProjectCard'
 

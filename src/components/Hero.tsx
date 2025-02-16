@@ -1,4 +1,3 @@
-// src/components/Hero.tsx
 import React from 'react'
 import * as ReactTypewriter from 'react-simple-typewriter'
 

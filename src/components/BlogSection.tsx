@@ -1,4 +1,3 @@
-// src/components/BlogSection.tsx
 import React from 'react'
 import BlogPostCard from './BlogPostCard'
 

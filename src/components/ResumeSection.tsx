@@ -1,4 +1,3 @@
-// src/components/ResumeSection.tsx
 import React from 'react';
 
 const experiences = [
@@ -43,10 +42,11 @@ const ResumeSection: React.FC = () => {
       <p className="mb-4">Download my resume in PDF format.</p>
       <a
         href="documents/Resume.pdf"
-        download
+        target="_blank"
+        rel="noopener noreferrer"
         className="px-6 py-3 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
       >
-        Download Resume
+        View Resume
       </a>
 
       {/* Experience Timeline */}
