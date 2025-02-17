@@ -56,7 +56,7 @@ const AboutSection: React.FC = () => {
         <li>
           Researching at<span> </span>
           <a href="https://www.mi2rl.co/" target="_blank" rel="noopener noreferrer">
-            Medical Imaging and Intelligence Reality Lab
+            Medical Imaging and Intelligent Reality Lab
           </a>
           <span>, </span> 
           <a href="https://eng.amc.seoul.kr/gb/lang/main.do" target="_blank" rel="noopener noreferrer">
