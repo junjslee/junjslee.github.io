@@ -1,12 +1,9 @@
 # junjslee.github.io
 
-<p align="center"><img width="100%" src="./public/images/portfolio.png"/></p>
-
-A modern, interactive portfolio website built with Next.js, TypeScript, and Tailwind CSS, deployed on GitHub Pages with GitHub Actions.
+An interactive portfolio website built with Next.js, TypeScript, and Tailwind CSS, utilizing GitHub Pages/Actions for CI/CD.
 
 
 ## Table of Contents
-- [Features](#features)
 - [Installation](#installation)
 - [Configuration](#configuration)
   - [Github Secrets](#github-secrets)
@@ -16,17 +13,7 @@ A modern, interactive portfolio website built with Next.js, TypeScript, and Tail
 - [GitHub Actions](#github-actions)
 - [Usage](#usage)
 - [Customization](#customization)
-- [Contributing](#contributing)
 - [License](#license)
-
-## Features
-- **Responsive Design:** A fully responsive layout with a mobile-friendly navbar.
-- **Interactive Hero Section:** Dynamic typewriter effects and background image overlays.
-- **Timeline-Style Resume:** Modern presentation of experiences and education.
-- **Markdown Blog System:** Easily add blog posts with excerpts and "Read More" toggles.
-- **Dark Mode Support:** Automatically switch between light and dark themes.
-- **CI/CD with GitHub Actions:** Automatic build and deployment to GitHub Pages.
-- **Customizable:** Easily modify sections, colors, typography, and more.
 
 ## Installation
 1. **Clone the Repository:**
@@ -105,10 +92,6 @@ Feel free to modify the following:
 - Content: Update the text in Hero.tsx, AboutSection.tsx, ResumeSection.tsx, etc.
 - Styling: Modify Tailwind CSS classes in your components or update the theme in tailwind.config.js.
 - Components: Add or remove sections as needed.
-- Environment Variables: Adjust or add new variables for additional services.
-
-## Contributing
-Contributions are welcome! Please open an issue or submit a pull request if you have suggestions or improvements.
 
 ## License
 This project is licensed under the MIT License.
