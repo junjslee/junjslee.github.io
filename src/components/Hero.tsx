@@ -6,9 +6,7 @@ const { useTypewriter, Cursor } = ReactTypewriter
 const Hero: React.FC = () => {
   const [text] = useTypewriter({
     words: [
-      "Medical AI Research Intern at MI2RL",
-      "Sergeant (E-5) at 2nd Infantry Division, 8th U.S. Army",
-      "Experience in deep learning, full-stack dev, cloud & computer networks"
+      "AI Research Intern at MI2RL",
     ],
     loop: true,
     delaySpeed: 2000,

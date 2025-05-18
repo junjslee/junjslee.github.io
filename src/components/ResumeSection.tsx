@@ -2,6 +2,10 @@ import React from 'react';
 
 const experiences = [
   {
+    title: "Research - Medical Imaging and Intelligent Reality Lab (MI2RL)",
+    period: "Oct 2023 ~ Apr 2025",
+  },
+  {
     title: "Sergeant (E-5) - 2nd Infantry Division, 8th U.S. Army",
     period: "Oct 2023 ~ Apr 2025",
   },
@@ -32,7 +36,7 @@ const experiences = [
 ];
 
 const education = [
-  "University of Illinois at Urbana Champaign"
+  "University of Illinois Urbana-Champaign"
 ];
 
 const ResumeSection: React.FC = () => {

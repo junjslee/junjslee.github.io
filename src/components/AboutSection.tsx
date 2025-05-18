@@ -5,10 +5,10 @@ const AboutSection: React.FC = () => {
     <div className="container mx-auto px-4">
       <h1 className="text-4xl font-bold mb-6">About Me</h1>
       <p className="mb-4">
-        Hi, I'm Jun. I am a Junior at the University of Illinois at Urbana Champaign studying Data Science, Finance, and Computer Science.
+        Hi, I'm Jun. I am a Junior at the University of Illinois Urbana-Champaign studying Data Science, Finance, and Computer Science.
       </p>
       <p className="mb-4">
-        My main interests include deep learning/machine learning, information security, computer networks, cloud architecture, and full stack development.
+        My main interests include deep learning, computer networks, cloud architecture, and full stack development.
       </p>
 
       {/* Additional Info with Icons */}
@@ -48,11 +48,11 @@ const AboutSection: React.FC = () => {
 
       <h2 className="text-2xl font-semibold mt-8 mb-4">Currently</h2>
       <ul className="list-disc list-inside mb-8">
-        <li>Serving in the<span> </span>
+        {/* <li>Serving in the<span> </span>
           <a href="https://www.2id.korea.army.mil/" target="_blank" rel="noopener noreferrer">
           U.S. Army as Korean Augmentation (KATUSA)
           </a>
-        </li>
+        </li> */}
         <li>
           Researching at<span> </span>
           <a href="https://www.mi2rl.co/" target="_blank" rel="noopener noreferrer">
