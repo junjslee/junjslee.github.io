@@ -25,7 +25,7 @@ const Hero: React.FC = () => {
         alt="Jun's photo" 
         className="relative w-60 h-60 rounded-full mb-4 shadow-lg" 
       />
-      <h1 className="relative text-4xl font-bold mb-3 text-white drop-shadow-lg">Hi, I'm Jun</h1>
+      <h1 className="relative text-4xl font-bold mb-3 text-white drop-shadow-lg">Hello, I'm Jun</h1>
       <p className="relative text-xl text-yellow-50 dark:text-gray-300 mb-4 drop-shadow-md">
         B.S. Data Science + Finance, Computer Science @ UIUC
       </p>

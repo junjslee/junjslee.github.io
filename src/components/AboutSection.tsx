@@ -5,7 +5,7 @@ const AboutSection: React.FC = () => {
     <div className="container mx-auto px-4">
       <h1 className="text-4xl font-bold mb-6">About Me</h1>
       <p className="mb-4">
-        Hi, I'm Jun. I am a Junior at the University of Illinois Urbana-Champaign studying Data Science, Finance, and Computer Science.
+        I am a Junior at the University of Illinois Urbana-Champaign studying Data Science, Finance, and Computer Science.
       </p>
       <p className="mb-4">
         My main interests include deep learning, computer networks, cloud architecture, and full stack development.
@@ -66,12 +66,12 @@ const AboutSection: React.FC = () => {
       </ul>
       <h2 className="text-2xl font-semibold mt-8 mb-4">Skills & Technologies</h2>
       <ul className="list-disc list-inside">
-        <li><strong>Programming Language:</strong> Python (pandas, numpy, scipy, matplotlib, tqdm), Java, Javascript, Typescript</li>
+        <li><strong>Programming Language:</strong> Python (pandas, numpy, scipy, matplotlib, tqdm), Java, Javascript/Typescript</li>
         <li><strong>Machine Learning:</strong> PyTorch, scikit-learn, MONAI, OpenCV</li>
         <li><strong>Frontend:</strong> CSS/Tailwind CSS, HTML, React</li>
         <li><strong>Backend:</strong> Flask, Node.js, Next.js</li>
-        <li><strong>Tools & Technologies:</strong> Git, Linux, AWS</li>
-        <li><strong>Language:</strong> English, Korean, Chinese, Japanese</li>
+        <li><strong>Tools & Technologies:</strong> Git, Linux, CUDA, AWS</li>
+        <li><strong>Language:</strong> English, Korean</li>
       </ul>
     </div>
   );
