@@ -5,7 +5,7 @@ import Hero from '../components/Hero'
 import AboutSection from '../components/AboutSection'
 import ProjectsSection from '../components/ProjectsSection'
 import ResumeSection from '../components/ResumeSection'
-import BlogSection from '../components/BlogSection'
+// import BlogSection from '../components/BlogSection'
 import ContactSection from '../components/ContactSection'
 
 const Home: NextPage = () => {
@@ -33,10 +33,10 @@ const Home: NextPage = () => {
         </section>
         <section id="resume" className="py-12">
           <ResumeSection />
-        </section>
+        {/* </section>
         <section id="blog" className="py-12">
           <BlogSection />
-        </section>
+        </section> */}
         <section id="contact" className="py-12">
           <ContactSection />
         </section>

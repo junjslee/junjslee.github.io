@@ -6,7 +6,7 @@ const { useTypewriter, Cursor } = ReactTypewriter
 const Hero: React.FC = () => {
   const [text] = useTypewriter({
     words: [
-      "AI Research Intern at MI2RL",
+      "AI Research Engineer Intern at MI2RL", "Junior @ UIUC"
     ],
     loop: true,
     delaySpeed: 2000,
@@ -38,7 +38,7 @@ const Hero: React.FC = () => {
           href="#about" 
           className="px-6 py-3 bg-indigo-600 text-white rounded dark:text-white hover:bg-indigo-700 transition shadow-md"
         >
-          My portfolio ⇩
+          About me ⇩
         </a>
       </div>
     </section>

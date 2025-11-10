@@ -4,7 +4,7 @@ import BlogPostCard from './BlogPostCard'
 const posts = [
   {
     slug: "post-1",
-    title: "Blog#1: What Makes My Heart Beat: Reflections on Military Service, Dad’s Wisdom, and a Long-Distance Love",
+    title: "Blog#1: Grit: Reflections on Military Service, Dad’s Wisdom, and a Long-Distance Relationship",
     content: 
     `
     Today was our usual Wednesday KATUSA meeting—a typical weekly briefing where soldiers gather to get training or updates. I’ll be honest—I wasn’t really paying attention at first. My mind drifted, thinking about how close I am to finishing my military service, and all the possibilities waiting for me outside these gates. But then the commander shared a story that snapped me back to reality.
@@ -72,32 +72,6 @@ const posts = [
     excerpt: "Ultimately, it’s not about choosing the perfect path. It’s about moving forward with an open mind and heart, ready to discover how it all connects.",
     date: "2024-01-13",
   },
-  // {
-  //   slug: "post-1",
-  //   title: "Blog#1: One Politician’s Calculated Gamble: A Surprising Lesson in Life’s Toughest Choices",
-  //   content: 
-  //   `
-  //   Yesterday, as I watched the unfolding political drama in South Korea, a moment struck me with profound clarity. It wasn’t just the weight of a nation grappling with a leadership crisis or the cacophony of impassioned protestors in the streets. It was the quiet yet strategic move by one politician, Sangwook Kim (김상욱), that left me thinking deeply about survival—not just in politics, but in the broader tapestry of life itself.
-    
-  //   Kim, a member of the president’s party, 국민의 힘 (People Power Party), walked into the parliament and cast his vote. While the rest of his party boycotted the impeachment proceedings in solidarity with their leader, Kim chose a different path. He did not fully abandon his party, nor did he fully align himself with the opposition. Instead, he stood at the crossroads, saying all the right things to appease both sides while positioning himself as a voice of reason. He admitted that President Yoon’s actions were indefensible but refrained from supporting impeachment outright—leaving open the possibility of doing so in the future.
-    
-  //   To some, his actions might seem duplicitous—a calculated move to maintain status in a volatile landscape. To others, it was a shrewd strategy, a way to fulfill his duty without alienating either side. But for me, it raised an age-old question: When faced with challenging choices, especially within systems where power and survival often collide, how do we decide between taking a principled stand and navigating the middle ground?
-    
-  //   In politics, as in life, survival often demands compromise. Companies, institutions, and even families can mirror this reality. Sometimes, standing resolutely by your principles can come at a steep cost—isolating colleagues, losing vital connections, or burning bridges that you may one day need to cross again. On the other hand, playing the game too cautiously can erode your integrity, casting doubts on who you truly are.
-    
-  //   Kim’s maneuver reminded me of this delicate balance. By participating in the vote, he fulfilled his democratic duty and avoided the label of cowardice. Yet, by not supporting impeachment, he stayed aligned with his party’s official stance. It was, in many ways, a smart move—one that might preserve his political future while keeping his options open. But is survival enough? Is it worth the cost of being seen as insincere or opportunistic?
-
-  //   These are difficult questions because they speak to more than just politics; they touch on our core values and the roles we play in the broader systems of our lives. In some scenarios, taking a firm stand can spark real change or rally others to a cause. In others, it can isolate you, muting your influence entirely. So, when should we dig in our heels, and when should we tread the safer middle path?
-    
-  //   Watching Kim, I couldn’t help but wonder what I would have done in his place. Could I have navigated the waters as cleverly, or would I have planted my feet firmly on one side? Life is full of these moments—at work, among friends, and within our families—when we must weigh principles against practicality. In the end, survival in any system is a dance of perception and timing. Yet, as I reflect, I realize that survival without integrity leaves an emptiness that no title, power, or status can fill, while integrity without strategy can leave us unheard and alone.
-    
-  //   Ultimately, perhaps the answer lies somewhere in the middle. Not in being opportunistic, but in being adaptable. Not in abandoning principles, but in wielding them with wisdom. For Kim, time will tell if his decision was a spark of brilliance or just another political calculation. For the rest of us stepping into the real adult world—a world that demands both nuance and principle—his story is a reminder that life’s most crucial decisions rarely come with tidy, one-size-fits-all solutions.
-    
-  //   If there’s one thing this unfolding drama teaches us beyond politics, it’s that growing up means reconciling moral ideals with practical realities. We learn that decisions aren’t always black and white and that sometimes holding steady in gray areas can lead us to unexpected growth. In the end, our true challenge is not merely to survive the tightrope walk, but to walk it with enough grace to remain true to ourselves. Perhaps that is what it means to truly find balance—not just in a career, but in life.
-  //   `,
-  //   excerpt: "In a high-stakes impeachment showdown, one lawmaker defied his party—without fully supporting the opposition. Was it cowardice, cunning, or something more profound? His risky balancing act offers a revealing glimpse into the difficult decisions we all face as adults.",
-  //   date: "2024-12-08",
-  // },
 ]
 
 const BlogSection: React.FC = () => {

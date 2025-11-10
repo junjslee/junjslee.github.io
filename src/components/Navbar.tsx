@@ -25,7 +25,7 @@ const Navbar: React.FC = () => {
           <a href="#about" className="ml-6 hover:text-indigo-600">About</a>
           <a href="#projects" className="ml-6 hover:text-indigo-600">Projects</a>
           <a href="#resume" className="ml-6 hover:text-indigo-600">Resume</a>
-          <a href="#blog" className="ml-6 hover:text-indigo-600">Blog</a>
+          {/* <a href="#blog" className="ml-6 hover:text-indigo-600">Blog</a> */}
           <a href="#contact" className="ml-6 hover:text-indigo-600">Contact</a>
         </div>
       </div>
@@ -61,13 +61,13 @@ const Navbar: React.FC = () => {
             >
               Resume
             </a>
-            <a
+            {/* <a
               href="#blog"
               onClick={() => setIsOpen(false)}
               className="block mt-2 hover:text-indigo-600"
             >
               Blog
-            </a>
+            </a> */}
             <a
               href="#contact"
               onClick={() => setIsOpen(false)}

@@ -2,15 +2,15 @@ import React from 'react';
 
 const experiences = [
   {
-    title: "Research - Medical Imaging and Intelligent Reality Lab (MI2RL)",
+    title: "AI Research Engineer Intern - Medical Imaging and Intelligent Reality Lab (MI2RL)",
     period: "Oct 2023 ~ Apr 2025",
   },
   {
-    title: "Sergeant (E-5) - 2nd Infantry Division, 8th U.S. Army",
+    title: "Sergeant (E-5) / Software Engineer - 2nd Infantry Division, Korean Augmentation to the United States Army",
     period: "Oct 2023 ~ Apr 2025",
   },
   {
-    title: "Co-founder - Scroll",
+    title: "Founding Developer - Scroll",
     period: "Dec 2022 ~ Oct 2023",
   },
   {
@@ -18,7 +18,7 @@ const experiences = [
     period: "Feb 2023 ~ May 2025",
   },
   {
-    title: "Senior Equity Analyst - AIM Partners",
+    title: "Valuation Analyst - AIM Partners",
     period: "Jan 2022 ~ May 2023",
   },
   {
