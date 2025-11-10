@@ -5,7 +5,7 @@ import Hero from '../components/Hero'
 import AboutSection from '../components/AboutSection'
 import ProjectsSection from '../components/ProjectsSection'
 import ResumeSection from '../components/ResumeSection'
-import BlogSection from '../components/BlogSection'
+// import BlogSection from '../components/BlogSection'
 import ContactSection from '../components/ContactSection'
 
 const Home: NextPage = () => {
