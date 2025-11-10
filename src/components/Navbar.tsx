@@ -61,13 +61,6 @@ const Navbar: React.FC = () => {
             >
               Resume
             </a>
-            {/* <a
-              href="#blog"
-              onClick={() => setIsOpen(false)}
-              className="block mt-2 hover:text-indigo-600"
-            >
-              Blog
-            </a> */}
             <a
               href="#contact"
               onClick={() => setIsOpen(false)}
@@ -83,3 +76,11 @@ const Navbar: React.FC = () => {
 };
 
 export default Navbar;
+
+{/* <a
+              href="#blog"
+              onClick={() => setIsOpen(false)}
+              className="block mt-2 hover:text-indigo-600"
+            >
+              Blog
+            </a> */}
