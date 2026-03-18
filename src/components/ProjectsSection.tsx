@@ -59,7 +59,6 @@ const ProjectsSection: React.FC = () => {
         <div className="xp-pane xp-project-browser">
           <div className="xp-listview-header">
             <span>Name</span>
-            <span>Type</span>
           </div>
           <div className="xp-project-list" role="listbox" aria-label="Project list">
             {projects.map((project) => (
@@ -69,10 +68,7 @@ const ProjectsSection: React.FC = () => {
                 className={`xp-project-row${selectedProject.title === project.title ? ' is-selected' : ''}`}
                 onClick={() => setSelectedProject(project)}
               >
-                <span className="xp-project-row-copy">
-                  <strong className="xp-project-row-title">{project.title}</strong>
-                  <span className="xp-project-row-kind">{project.category}</span>
-                </span>
+                <strong className="xp-project-row-title">{project.title}</strong>
               </button>
             ))}
           </div>

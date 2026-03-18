@@ -525,6 +525,10 @@ a {
   font-weight: 700;
 }
 
+.xp-project-browser .xp-listview-header {
+  justify-content: flex-start;
+}
+
 .xp-project-list,
 .xp-blog-index {
   display: flex;
@@ -546,6 +550,11 @@ a {
   text-align: left;
   background: transparent;
   font: inherit;
+}
+
+.xp-project-row {
+  min-height: 54px;
+  justify-content: center;
 }
 
 .xp-project-row-copy,
