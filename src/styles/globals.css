@@ -793,23 +793,52 @@ a {
 }
 
 .xp-mobile-shell {
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
+  flex-direction: column;
   background-position: center;
   background-size: cover;
+  background-repeat: no-repeat;
 }
 
-.xp-mobile-window {
-  width: min(100%, 420px);
+.xp-mobile-workspace {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  padding: 12px 12px 8px;
+  display: flex;
+}
+
+.xp-mobile-home,
+.xp-mobile-panel {
+  width: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.xp-mobile-window-body {
+  min-height: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow: auto;
 }
 
 .xp-mobile-card {
   display: flex;
   flex-direction: column;
   gap: 14px;
+  padding: 12px;
+  border: 1px solid #8ea6c9;
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.xp-mobile-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .xp-mobile-avatar {
@@ -820,23 +849,143 @@ a {
   box-shadow: 0 0 0 1px #7e9eca;
 }
 
-.xp-mobile-actions {
+.xp-mobile-shortcuts {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-  margin: 16px 0;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
 }
 
-.xp-mobile-actions a {
-  display: inline-flex;
+.xp-mobile-shortcut {
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 34px;
+  gap: 8px;
+  padding: 10px 8px;
+  border: 1px solid #8ea6c9;
+  background: rgba(255, 255, 255, 0.82);
+  font: inherit;
   text-align: center;
 }
 
-.xp-mobile-sound {
-  width: 100%;
+.xp-mobile-shortcut .xp-icon-badge {
+  width: 48px;
+  height: 48px;
+}
+
+.xp-mobile-shortcut .xp-desktop-glyph {
+  width: 40px;
+  height: 40px;
+}
+
+.xp-mobile-launcher {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 56px;
+  z-index: 1500;
+  max-height: min(68vh, 520px);
+}
+
+.xp-mobile-launcher-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow: auto;
+}
+
+.xp-mobile-launch-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border: none;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+}
+
+.xp-mobile-launch-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.xp-mobile-panel-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.xp-mobile-panel-actions button,
+.xp-mobile-system-toggle {
+  min-height: 26px;
+  padding: 0 10px;
+  border: 1px solid #7d90a8;
+  background: linear-gradient(180deg, #fefefe 0%, #dfe9f7 100%);
+  font: inherit;
+}
+
+.xp-mobile-taskbar {
+  min-height: 48px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-top: 1px solid #86befa;
+  background:
+    linear-gradient(180deg, #3c98ff 0%, #2363d3 40%, #2454bd 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32);
+}
+
+.xp-mobile-start-button {
+  min-width: 74px;
+  height: 30px;
+  font-size: 14px;
+}
+
+.xp-mobile-taskbar-buttons {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+}
+
+.xp-mobile-taskbar-button {
+  min-width: 104px;
+  max-width: 160px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 4px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.18);
+  font: inherit;
+  white-space: nowrap;
+}
+
+.xp-mobile-taskbar-button.is-active {
+  background: rgba(255, 255, 255, 0.34);
+}
+
+.xp-mobile-system {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  border: 1px solid rgba(8, 38, 88, 0.35);
+  border-radius: 4px;
+  color: #fff;
+  background: rgba(13, 86, 191, 0.55);
+}
+
+.xp-mobile-system-toggle {
+  color: inherit;
 }
 
 @media (max-width: 1200px) {
@@ -863,7 +1012,39 @@ a {
 
 @media (max-width: 719px) {
   body {
-    overflow: auto;
+    overflow: hidden;
+  }
+
+  .xp-system-tabs {
+    flex-wrap: wrap;
+    padding-left: 0;
+  }
+
+  .xp-system-tabs button {
+    min-height: 36px;
+    padding: 8px 12px;
+  }
+
+  .xp-mail-row {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .xp-explorer-stack {
+    grid-template-rows: minmax(0, 180px) minmax(0, 1fr);
+  }
+
+  .xp-project-preview-image {
+    height: 170px;
+  }
+
+  .xp-form-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .xp-form-actions button {
+    width: 100%;
   }
 }
 

@@ -80,6 +80,43 @@ interface TaskbarProps {
   onTaskbarClick: (id: InternalWindowId) => void;
 }
 
+interface MobileTaskbarProps {
+  openWindows: WindowDefinition[];
+  activeWindowId: InternalWindowId | null;
+  soundEnabled: boolean;
+  startOpen: boolean;
+  clock: string;
+  onToggleStart: () => void;
+  onToggleSound: () => void;
+  onShowDesktop: () => void;
+  onTaskbarClick: (id: InternalWindowId) => void;
+}
+
+interface MobileWindowPanelProps {
+  definition: WindowDefinition;
+  children: React.ReactNode;
+  onClose: () => void;
+  onMinimize: () => void;
+}
+
+interface MobileShellProps {
+  wallpaper: string;
+  shortcuts: ShortcutDefinition[];
+  windowStates: Record<InternalWindowId, WindowState>;
+  soundEnabled: boolean;
+  startOpen: boolean;
+  clock: string;
+  renderWindowContent: (id: InternalWindowId) => React.ReactNode;
+  onLaunchShortcut: (id: ShortcutId) => void;
+  onTaskbarClick: (id: InternalWindowId) => void;
+  onToggleStart: () => void;
+  onToggleSound: () => void;
+  onShowDesktop: () => void;
+  onCloseWindow: (id: InternalWindowId) => void;
+  onMinimizeWindow: (id: InternalWindowId) => void;
+  onPrimeAudio: () => void;
+}
+
 const MOBILE_BREAKPOINT = 720;
 const INITIAL_Z = 40;
 const DESKTOP_STATE_STORAGE_KEY = 'junlee-xp-desktop-session-v1';
@@ -469,7 +506,7 @@ function StartMenu({ shortcuts, onLaunch }: StartMenuProps): React.ReactElement 
             <img src="/images/hero.jpg" alt="Junseong Lee" className="xp-start-avatar" />
             <div>
               <strong>Jun Lee</strong>
-              <p>Windows XP Edition</p>
+              <p>Personal Website</p>
             </div>
           </div>
           <div className="xp-start-items">
@@ -666,56 +703,219 @@ function DesktopWindow({
   );
 }
 
-function MobileFallback({
-  wallpaper,
+function MobileTaskbar({
+  openWindows,
+  activeWindowId,
   soundEnabled,
+  startOpen,
+  clock,
+  onToggleStart,
   onToggleSound,
-}: {
-  wallpaper: string;
-  soundEnabled: boolean;
-  onToggleSound: () => void;
-}): React.ReactElement {
+  onShowDesktop,
+  onTaskbarClick,
+}: MobileTaskbarProps): React.ReactElement {
   return (
-    <div className="xp-mobile-shell" style={{ backgroundImage: `url(${wallpaper})` }}>
-      <div className="window xp-mobile-window">
-        <div className="title-bar">
-          <div className="title-bar-text">Jun Lee on Windows XP</div>
-          <div className="title-bar-controls">
-            <button type="button" aria-label="Help" onClick={onToggleSound} />
-          </div>
+    <div className="xp-mobile-taskbar">
+      <button
+        type="button"
+        className={`xp-start-button xp-mobile-start-button${startOpen ? ' is-open' : ''}`}
+        onClick={onToggleStart}
+      >
+        Start
+      </button>
+      <div className="xp-mobile-taskbar-buttons">
+        <button
+          type="button"
+          className={`xp-mobile-taskbar-button${activeWindowId === null ? ' is-active' : ''}`}
+          onClick={onShowDesktop}
+        >
+          Desktop
+        </button>
+        {openWindows.map((window) => (
+          <button
+            key={window.id}
+            type="button"
+            className={`xp-mobile-taskbar-button${activeWindowId === window.id ? ' is-active' : ''}`}
+            onClick={() => onTaskbarClick(window.id)}
+          >
+            <span className={`xp-icon-badge xp-icon-${window.icon} xp-taskbar-icon`}>
+              <DesktopGlyph icon={window.icon} />
+            </span>
+            <span>{window.title}</span>
+          </button>
+        ))}
+      </div>
+      <div className="xp-mobile-system">
+        <button type="button" className="xp-mobile-system-toggle" onClick={onToggleSound}>
+          {soundEnabled ? 'Sound' : 'Mute'}
+        </button>
+        <span className="xp-clock">{clock}</span>
+      </div>
+    </div>
+  );
+}
+
+function MobileWindowPanel({
+  definition,
+  children,
+  onClose,
+  onMinimize,
+}: MobileWindowPanelProps): React.ReactElement {
+  return (
+    <div className="window xp-mobile-panel" onClick={(event) => event.stopPropagation()}>
+      <div className="title-bar">
+        <div className="title-bar-text">
+          <span className={`xp-icon-badge xp-icon-${definition.icon} xp-title-icon`}>
+            <DesktopGlyph icon={definition.icon} />
+          </span>
+          <span>{definition.title}</span>
         </div>
-        <div className="window-body">
-          <div className="xp-mobile-card">
-            <img src="/images/hero.jpg" alt="Junseong Lee" className="xp-mobile-avatar" />
-            <div>
-              <h1>Desktop Recommended</h1>
-              <p>
-                This build follows the desktop-first XP layout from the inspiration site. Use a laptop
-                or desktop for the full experience.
-              </p>
-              <p>
-                You can still reach the important links from here while the full desktop waits on a
-                larger screen.
-              </p>
-            </div>
-          </div>
-          <div className="xp-mobile-actions">
-            <a href="/documents/Resume.pdf" target="_blank" rel="noopener noreferrer">
-              Resume.pdf
-            </a>
-            <a href="mailto:junseong.lee652@gmail.com">Email</a>
-            <a href="https://github.com/junjslee" target="_blank" rel="noopener noreferrer">
-              GitHub
-            </a>
-            <a href="https://www.linkedin.com/in/junseong-lee" target="_blank" rel="noopener noreferrer">
-              LinkedIn
-            </a>
-          </div>
-          <button type="button" className="xp-mobile-sound" onClick={onToggleSound}>
-            {soundEnabled ? 'Mute UI Sounds' : 'Enable UI Sounds'}
+        <div className="xp-mobile-panel-actions">
+          <button type="button" onClick={onMinimize}>
+            Desktop
+          </button>
+          <button type="button" onClick={onClose}>
+            Close
           </button>
         </div>
       </div>
+      <div className="window-body xp-window-body xp-mobile-window-body">
+        <div className="xp-window-content">{children}</div>
+      </div>
+    </div>
+  );
+}
+
+function MobileShell({
+  wallpaper,
+  shortcuts,
+  windowStates,
+  soundEnabled,
+  startOpen,
+  clock,
+  renderWindowContent,
+  onLaunchShortcut,
+  onTaskbarClick,
+  onToggleStart,
+  onToggleSound,
+  onShowDesktop,
+  onCloseWindow,
+  onMinimizeWindow,
+  onPrimeAudio,
+}: MobileShellProps): React.ReactElement {
+  const openWindowStates = WINDOW_IDS
+    .map((id) => windowStates[id])
+    .filter((windowState) => windowState.open);
+  const activeWindowState =
+    [...openWindowStates]
+      .filter((windowState) => !windowState.minimized)
+      .sort((left, right) => right.zIndex - left.zIndex)[0] ?? null;
+  const activeWindowDefinition = activeWindowState ? WINDOW_DEFINITIONS[activeWindowState.id] : null;
+  const taskbarWindows = [...openWindowStates]
+    .sort((left, right) => right.zIndex - left.zIndex)
+    .map((windowState) => WINDOW_DEFINITIONS[windowState.id]);
+
+  return (
+    <div
+      className="xp-mobile-shell"
+      style={{ backgroundImage: `url(${wallpaper})` }}
+      onClick={() => {
+        onPrimeAudio();
+        if (startOpen) {
+          onToggleStart();
+        }
+      }}
+    >
+      <div className="xp-mobile-workspace">
+        {activeWindowDefinition ? (
+          <MobileWindowPanel
+            definition={activeWindowDefinition}
+            onClose={() => onCloseWindow(activeWindowDefinition.id)}
+            onMinimize={() => onMinimizeWindow(activeWindowDefinition.id)}
+          >
+            {renderWindowContent(activeWindowDefinition.id)}
+          </MobileWindowPanel>
+        ) : (
+          <div className="window xp-mobile-home" onClick={(event) => event.stopPropagation()}>
+            <div className="title-bar">
+              <div className="title-bar-text">
+                <span className="xp-icon-badge xp-icon-about xp-title-icon">
+                  <DesktopGlyph icon="about" />
+                </span>
+                <span>Jun Lee</span>
+              </div>
+            </div>
+            <div className="window-body xp-mobile-window-body">
+              <div className="xp-mobile-card">
+                <img src="/images/hero.jpg" alt="Junseong Lee" className="xp-mobile-avatar" />
+                <div className="xp-mobile-copy">
+                  <h1>XP-Lite</h1>
+                  <p>
+                    The same portfolio and shortcuts, adapted for touch screens instead of overlapping
+                    desktop windows.
+                  </p>
+                </div>
+              </div>
+              <div className="xp-mobile-shortcuts" aria-label="Mobile shortcuts">
+                {shortcuts.map((shortcut) => (
+                  <button
+                    key={shortcut.id}
+                    type="button"
+                    className="xp-mobile-shortcut"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      onLaunchShortcut(shortcut.id);
+                    }}
+                  >
+                    <span className={`xp-icon-badge xp-icon-${shortcut.icon}`}>
+                      <DesktopGlyph icon={shortcut.icon} />
+                    </span>
+                    <span>{shortcut.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {startOpen ? (
+          <div className="window xp-mobile-launcher" onClick={(event) => event.stopPropagation()}>
+            <div className="title-bar">
+              <div className="title-bar-text">Start Menu</div>
+            </div>
+            <div className="window-body xp-mobile-launcher-body">
+              {shortcuts.map((shortcut) => (
+                <button
+                  key={shortcut.id}
+                  type="button"
+                  className="xp-mobile-launch-item"
+                  onClick={() => onLaunchShortcut(shortcut.id)}
+                >
+                  <span className={`xp-icon-badge xp-icon-${shortcut.icon} xp-start-icon`}>
+                    <DesktopGlyph icon={shortcut.icon} />
+                  </span>
+                  <span className="xp-mobile-launch-copy">
+                    <strong>{shortcut.label}</strong>
+                    <small>{shortcut.description}</small>
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        ) : null}
+      </div>
+
+      <MobileTaskbar
+        openWindows={taskbarWindows}
+        activeWindowId={activeWindowDefinition?.id ?? null}
+        soundEnabled={soundEnabled}
+        startOpen={startOpen}
+        clock={clock}
+        onToggleStart={onToggleStart}
+        onToggleSound={onToggleSound}
+        onShowDesktop={onShowDesktop}
+        onTaskbarClick={onTaskbarClick}
+      />
     </div>
   );
 }
@@ -906,6 +1106,25 @@ const XPDesktop: React.FC = () => {
     }));
   };
 
+  const showDesktop = () => {
+    playSound('minimize');
+    setStartOpen(false);
+    setWindowStates((current) =>
+      WINDOW_IDS.reduce(
+        (accumulator, id) => {
+          accumulator[id] = current[id].open
+            ? {
+                ...current[id],
+                minimized: true,
+              }
+            : current[id];
+          return accumulator;
+        },
+        {} as Record<InternalWindowId, WindowState>
+      )
+    );
+  };
+
   const toggleMaximize = (id: InternalWindowId) => {
     setWindowStates((current) => {
       const windowState = current[id];
@@ -972,6 +1191,11 @@ const XPDesktop: React.FC = () => {
 
   const toggleTaskbarWindow = (id: InternalWindowId) => {
     const windowState = windowStates[id];
+    const activeWindow =
+      [...WINDOW_IDS]
+        .map((windowId) => windowStates[windowId])
+        .filter((entry) => entry.open && !entry.minimized)
+        .sort((left, right) => right.zIndex - left.zIndex)[0] ?? null;
 
     if (!windowState.open) {
       openWindow(id);
@@ -980,6 +1204,11 @@ const XPDesktop: React.FC = () => {
 
     if (windowState.minimized) {
       openWindow(id);
+      return;
+    }
+
+    if (activeWindow?.id !== id) {
+      bringToFront(id);
       return;
     }
 
@@ -1065,10 +1294,28 @@ const XPDesktop: React.FC = () => {
 
   if (isMobile) {
     return (
-      <MobileFallback
+      <MobileShell
         wallpaper={wallpaper}
+        shortcuts={SHORTCUTS}
+        windowStates={windowStates}
         soundEnabled={soundEnabled}
-        onToggleSound={() => setSoundEnabled((value) => !value)}
+        startOpen={startOpen}
+        clock={clock}
+        renderWindowContent={renderWindowContent}
+        onLaunchShortcut={launchShortcut}
+        onTaskbarClick={toggleTaskbarWindow}
+        onToggleStart={() => {
+          playSound('click');
+          setStartOpen((value) => !value);
+        }}
+        onToggleSound={() => {
+          playSound('click');
+          setSoundEnabled((value) => !value);
+        }}
+        onShowDesktop={showDesktop}
+        onCloseWindow={closeWindow}
+        onMinimizeWindow={minimizeWindow}
+        onPrimeAudio={primeAudio}
       />
     );
   }
