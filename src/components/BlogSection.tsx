@@ -1,5 +1,12 @@
 import React, { useState } from 'react'
-import { BlogPost } from './BlogPostCard'
+
+export interface BlogPost {
+  slug: string
+  title: string
+  excerpt: string
+  content: string
+  date: string
+}
 
 export const blogPosts: BlogPost[] = [
   {
@@ -104,8 +111,10 @@ const BlogSection: React.FC<BlogSectionProps> = ({ onOpenPost }) => {
                 className={`xp-blog-row${selectedPost.slug === post.slug ? ' is-selected' : ''}`}
                 onClick={() => setSelectedPost(post)}
               >
-                <span className="xp-blog-row-title">{post.title}</span>
-                <span className="xp-blog-row-date">{post.date}</span>
+                <span className="xp-blog-row-copy">
+                  <strong className="xp-blog-row-title">{post.title}</strong>
+                  <span className="xp-blog-row-date">{post.date}</span>
+                </span>
               </button>
             ))}
           </div>
@@ -113,11 +122,11 @@ const BlogSection: React.FC<BlogSectionProps> = ({ onOpenPost }) => {
 
         <div className="xp-pane xp-blog-preview">
           <div className="xp-blog-preview-header">
-            <div>
+            <div className="xp-preview-copy">
               <span className="xp-preview-label">Preview</span>
               <h2>{selectedPost.title}</h2>
+              <time>{selectedPost.date}</time>
             </div>
-            <time>{selectedPost.date}</time>
           </div>
           <p>{selectedPost.excerpt}</p>
           <div className="xp-blog-actions">

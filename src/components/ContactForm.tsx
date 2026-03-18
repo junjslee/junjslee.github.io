@@ -112,12 +112,6 @@ const ContactForm: React.FC = () => {
 
       <div className="xp-mail-footer">
         <div className="xp-mail-links">
-          <a href="https://www.linkedin.com/in/junseong-lee" target="_blank" rel="noopener noreferrer">
-            LinkedIn
-          </a>
-          <a href="https://github.com/junjslee" target="_blank" rel="noopener noreferrer">
-            GitHub
-          </a>
           <a href="mailto:junseong.lee652@gmail.com">Direct Email</a>
         </div>
         <div className="xp-form-actions">

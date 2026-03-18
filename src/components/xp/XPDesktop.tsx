@@ -3,7 +3,7 @@ import AboutSection from '../AboutSection';
 import BlogSection, { blogPosts } from '../BlogSection';
 import ContactSection from '../ContactSection';
 import ProjectsSection from '../ProjectsSection';
-import type { BlogPost } from '../BlogPostCard';
+import type { BlogPost } from '../BlogSection';
 
 type InternalWindowId = 'about' | 'projects' | 'blog' | 'contact' | 'blogReader';
 type ShortcutId = InternalWindowId | 'resume' | 'github' | 'linkedin';
@@ -98,8 +98,8 @@ const WINDOW_DEFINITIONS: Record<InternalWindowId, WindowDefinition> = {
     id: 'about',
     title: 'about.txt',
     icon: 'about',
-    width: 520,
-    height: 520,
+    width: 560,
+    height: 560,
     x: 88,
     y: 84,
   },
@@ -116,10 +116,10 @@ const WINDOW_DEFINITIONS: Record<InternalWindowId, WindowDefinition> = {
     id: 'blog',
     title: 'Blog',
     icon: 'blog',
-    width: 640,
-    height: 480,
-    x: 224,
-    y: 188,
+    width: 800,
+    height: 600,
+    x: 204,
+    y: 152,
   },
   contact: {
     id: 'contact',
@@ -164,7 +164,7 @@ const SHORTCUTS: ShortcutDefinition[] = [
     id: 'contact',
     label: 'Contact',
     icon: 'contact',
-    description: 'Send a note or open social links.',
+    description: 'Send a note or open a drafted email.',
   },
   {
     id: 'resume',
@@ -1055,9 +1055,9 @@ const XPDesktop: React.FC = () => {
     }
   };
 
-  const visibleWindows = Object.values(windowStates)
-    .filter((windowState) => windowState.open && !windowState.minimized)
-    .sort((left, right) => left.zIndex - right.zIndex);
+  const visibleWindows = WINDOW_IDS
+    .map((id) => windowStates[id])
+    .filter((windowState) => windowState.open && !windowState.minimized);
 
   if (!hasMountedClient || !hasHydratedDesktopState) {
     return <BootScreen />;

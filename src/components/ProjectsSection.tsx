@@ -69,8 +69,10 @@ const ProjectsSection: React.FC = () => {
                 className={`xp-project-row${selectedProject.title === project.title ? ' is-selected' : ''}`}
                 onClick={() => setSelectedProject(project)}
               >
-                <span className="xp-project-row-title">{project.title}</span>
-                <span className="xp-project-row-kind">{project.category}</span>
+                <span className="xp-project-row-copy">
+                  <strong className="xp-project-row-title">{project.title}</strong>
+                  <span className="xp-project-row-kind">{project.category}</span>
+                </span>
               </button>
             ))}
           </div>
@@ -78,11 +80,11 @@ const ProjectsSection: React.FC = () => {
 
         <article className="xp-pane xp-project-preview">
           <div className="xp-project-preview-header">
-            <div>
+            <div className="xp-preview-copy">
               <span className="xp-preview-label">Selected Item</span>
               <h2>{selectedProject.title}</h2>
+              <span className="xp-project-chip">{selectedProject.category}</span>
             </div>
-            <span className="xp-project-chip">{selectedProject.category}</span>
           </div>
           <img src={selectedProject.image} alt={selectedProject.title} className="xp-project-preview-image" />
           <p>{selectedProject.description}</p>
