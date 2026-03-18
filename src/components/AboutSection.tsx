@@ -70,7 +70,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ onOpenHome }) => {
                 <strong>Champaign, IL</strong>
               </div>
               <div className="xp-system-row">
-                <span>From:</span>
+                <span>Grew up in:</span>
                 <strong>Saratoga, California</strong>
               </div>
               <div className="xp-system-row">
