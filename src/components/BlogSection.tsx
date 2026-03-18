@@ -1,11 +1,11 @@
-import React from 'react'
-import BlogPostCard from './BlogPostCard'
+import React, { useState } from 'react'
+import { BlogPost } from './BlogPostCard'
 
-const posts = [
+export const blogPosts: BlogPost[] = [
   {
     slug: "post-1",
     title: "Blog#1: Grit: Reflections on Military Service, Dad’s Wisdom, and a Long-Distance Relationship",
-    content: 
+    content:
     `
     Today was our usual Wednesday KATUSA meeting—a typical weekly briefing where soldiers gather to get training or updates. I’ll be honest—I wasn’t really paying attention at first. My mind drifted, thinking about how close I am to finishing my military service, and all the possibilities waiting for me outside these gates. But then the commander shared a story that snapped me back to reality.
     
@@ -70,20 +70,64 @@ const posts = [
     That’s where I find my heartbeat—and maybe that’s where you’ll find yours, too.
     `,
     excerpt: "Ultimately, it’s not about choosing the perfect path. It’s about moving forward with an open mind and heart, ready to discover how it all connects.",
-    date: "2024-01-13",
+    date: "2025-01-13",
   },
 ]
 
-const BlogSection: React.FC = () => {
+interface BlogSectionProps {
+  onOpenPost?: (post: BlogPost) => void
+}
+
+const BlogSection: React.FC<BlogSectionProps> = ({ onOpenPost }) => {
+  const [selectedPost, setSelectedPost] = useState(blogPosts[0])
+
   return (
-    <div className="container mx-auto px-4">
-      <h1 className="text-4xl font-bold mb-6">Blog</h1>
-      <div className="space-y-8">
-        {posts.map((post, index) => (
-          <BlogPostCard key={index} post={post} />
-        ))}
+    <section className="xp-content xp-blog-section">
+      <div className="xp-pane">
+        <h1>Blog</h1>
+        <p>
+          This is the long-form side of the site. Writing helps me think more clearly about work, growth,
+          relationships, and the parts of life that do not reduce neatly to a bullet list.
+        </p>
       </div>
-    </div>
+      <div className="xp-explorer-shell xp-blog-shell">
+        <div className="xp-pane xp-blog-browser">
+          <div className="xp-listview-header">
+            <span>Entry</span>
+            <span>Date</span>
+          </div>
+          <div className="xp-blog-index" role="listbox" aria-label="Blog entries">
+            {blogPosts.map((post) => (
+              <button
+                key={post.slug}
+                type="button"
+                className={`xp-blog-row${selectedPost.slug === post.slug ? ' is-selected' : ''}`}
+                onClick={() => setSelectedPost(post)}
+              >
+                <span className="xp-blog-row-title">{post.title}</span>
+                <span className="xp-blog-row-date">{post.date}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="xp-pane xp-blog-preview">
+          <div className="xp-blog-preview-header">
+            <div>
+              <span className="xp-preview-label">Preview</span>
+              <h2>{selectedPost.title}</h2>
+            </div>
+            <time>{selectedPost.date}</time>
+          </div>
+          <p>{selectedPost.excerpt}</p>
+          <div className="xp-blog-actions">
+            <button type="button" onClick={() => onOpenPost?.(selectedPost)}>
+              Open Entry
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
   )
 }
 

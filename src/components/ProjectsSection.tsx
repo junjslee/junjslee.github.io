@@ -1,5 +1,4 @@
-import React from 'react'
-import ProjectCard from './ProjectCard'
+import React, { useState } from 'react'
 
 const projects = [
   {
@@ -8,6 +7,7 @@ const projects = [
     techStack: ["HTML, CSS , Javascript"],
     repoLink: "https://github.com/junjslee/will-you-be-my-valentine",
     image: "images/projects/valentine.png",
+    category: "Web App",
   },
   {
     title: "Web Application for 2nd Infantry Division, 8th U.S. Army",
@@ -15,6 +15,7 @@ const projects = [
     techStack: ["Python (flask, smtp, pandas)", "HTML, CSS , Javascript", "AWS EC2", "Nginx", "Gunicorn"],
     repoLink: "https://github.com/junjslee/UMTauto",
     image: "images/projects/2id.jpg",
+    category: "Operations",
   },
   {
     title: "Kaggle Heart Disease Prediction",
@@ -22,6 +23,7 @@ const projects = [
     techStack: ["Python (pandas, numpy, matplotlib, scikit-learn)", "Statistical Modeling"],
     repoLink: "https://github.com/junjslee/ml_heart_disease_prediction",
     image: "images/projects/heart_disease.jpg",
+    category: "ML",
   },
   {
     title: "Facial Recognition using PCA",
@@ -29,26 +31,77 @@ const projects = [
     techStack: ["Python", "Linear Algebra", "Statistical Modeling"],
     repoLink: "https://github.com/junjslee/facial_recognition_pca/blob/main/PCA-FacialRecognition.ipynb",
     image: "images/projects/pca.jpg",
+    category: "Research",
   },
   {
     title: "S&P Index Prediction using Macroeconomic Indicators",
     description: "Pipelined a linear regression model to predict S&P Index based on 15 macroeconomic indicators",
     techStack: ["Python", "Machine Learning", "Statistical Modeling"],
-    repoLink: "https://github.com/junjslee/https://github.com/junjslee/Predicting-S-P-500-Market-Trends-using-Macro-Economic-Indicators-with-Python/blob/master/Python-SPX%20Prediction%20using%20Macro-Economic%20Indicators.ipynb",
+    repoLink: "https://github.com/junjslee/Predicting-S-P-500-Market-Trends-using-Macro-Economic-Indicators-with-Python/blob/master/Python-SPX%20Prediction%20using%20Macro-Economic%20Indicators.ipynb",
     image: "images/projects/s&p.jpg",
+    category: "Finance",
   },
 ]
 
 const ProjectsSection: React.FC = () => {
+  const [selectedProject, setSelectedProject] = useState(projects[0])
+
   return (
-    <div className="container mx-auto px-4">
-      <h1 className="text-4xl font-bold mb-6">Projects</h1>
-      <div className="grid gap-8 grid-cols-1 md:grid-cols-2">
-        {projects.map((project, index) => (
-          <ProjectCard key={index} project={project} />
-        ))}
+    <section className="xp-content xp-projects-section">
+      <div className="xp-pane">
+        <h1>Projects</h1>
+        <p>
+          A mix of research, applied ML, and software projects. I like building things that prove a point,
+          even if the first version is rough.
+        </p>
       </div>
-    </div>
+      <div className="xp-explorer-shell">
+        <div className="xp-pane xp-project-browser">
+          <div className="xp-listview-header">
+            <span>Name</span>
+            <span>Type</span>
+          </div>
+          <div className="xp-project-list" role="listbox" aria-label="Project list">
+            {projects.map((project) => (
+              <button
+                key={project.title}
+                type="button"
+                className={`xp-project-row${selectedProject.title === project.title ? ' is-selected' : ''}`}
+                onClick={() => setSelectedProject(project)}
+              >
+                <span className="xp-project-row-title">{project.title}</span>
+                <span className="xp-project-row-kind">{project.category}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <article className="xp-pane xp-project-preview">
+          <div className="xp-project-preview-header">
+            <div>
+              <span className="xp-preview-label">Selected Item</span>
+              <h2>{selectedProject.title}</h2>
+            </div>
+            <span className="xp-project-chip">{selectedProject.category}</span>
+          </div>
+          <img src={selectedProject.image} alt={selectedProject.title} className="xp-project-preview-image" />
+          <p>{selectedProject.description}</p>
+          <div className="xp-project-meta">
+            <strong>Tech stack</strong>
+            <ul className="xp-list">
+              {selectedProject.techStack.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="xp-project-actions">
+            <a href={selectedProject.repoLink} target="_blank" rel="noopener noreferrer">
+              Open on GitHub
+            </a>
+          </div>
+        </article>
+      </div>
+    </section>
   )
 }
 

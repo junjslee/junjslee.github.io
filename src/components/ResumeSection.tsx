@@ -41,49 +41,36 @@ const education = [
 
 const ResumeSection: React.FC = () => {
   return (
-    <div className="container mx-auto px-4">
-      <h1 className="text-4xl font-bold mb-6">Resume</h1>
-      <p className="mb-4">Download my resume in PDF format.</p>
-      <a
-        href="documents/Resume.pdf"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="px-6 py-3 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
-      >
-        View Resume
-      </a>
+    <section className="xp-content xp-resume-section">
+      <div className="xp-pane">
+        <h1>Resume</h1>
+        <p>Open the full PDF or skim the highlights below.</p>
+        <a href="/documents/Resume.pdf" target="_blank" rel="noopener noreferrer">
+          View Resume.pdf
+        </a>
+      </div>
 
-      {/* Experience Timeline */}
-      <div className="mt-8">
-        <h2 className="text-2xl font-semibold mb-4">Experience</h2>
-        <ul className="relative border-l border-gray-200 dark:border-gray-700">
+      <div className="xp-pane">
+        <h2>Experience</h2>
+        <ol className="xp-timeline">
           {experiences.map((exp, index) => (
-            <li key={index} className="mb-5 ml-6">
-              <span className="absolute flex items-center justify-center w-6 h-6 bg-primary rounded-full -left-3 ring-skyblue dark:ring-gray-900">
-                {/* Simple dot icon */}
-                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" className="w-4 h-4 text-blue">
-                  <circle cx="12" cy="12" r="6" />
-                </svg>
-              </span>
-              <h3 className="text-xl font text-gray-900 dark:text-white">{exp.title}</h3>
-              <time className="block mb-2 text-sm font-normal text-gray-400 dark:text-gray-500">
-                {exp.period}
-              </time>
+            <li key={index}>
+              <strong>{exp.title}</strong>
+              <span>{exp.period}</span>
             </li>
           ))}
-        </ul>
+        </ol>
       </div>
 
-      {/* Education Section */}
-      <div className="mt-8">
-        <h2 className="text-2xl font-semibold mb-4">Education</h2>
-        <ul className="list-disc list-inside">
+      <div className="xp-pane">
+        <h2>Education</h2>
+        <ul className="xp-list">
           {education.map((edu, index) => (
-            <li key={index} className="text-xl font font-serif">{edu}</li>
+            <li key={index}>{edu}</li>
           ))}
         </ul>
       </div>
-    </div>
+    </section>
   );
 };
 

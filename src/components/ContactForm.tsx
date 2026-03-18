@@ -2,105 +2,112 @@ import React, { useState } from 'react'
 import emailjs from 'emailjs-com'
 
 const ContactForm: React.FC = () => {
+  const serviceID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID
+  const templateID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID
+  const userID = process.env.NEXT_PUBLIC_EMAILJS_USER_ID
+  const isEmailJsConfigured = Boolean(serviceID && templateID && userID)
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     inquiry: '',
     message: '',
   })
+  const [status, setStatus] = useState<string | null>(null)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
+    setStatus(null)
   }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    // Use environment variables from .env.local --> Added to Environment secrets on Github for deployment (injects into my github workflow smoothly)
-    const serviceID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID
-    const templateID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID
-    const userID = process.env.NEXT_PUBLIC_EMAILJS_USER_ID
+    if (!isEmailJsConfigured) {
+      const subject = encodeURIComponent(`[Website] ${formData.inquiry || 'General note'} from ${formData.name}`)
+      const body = encodeURIComponent(
+        `Name: ${formData.name}\nEmail: ${formData.email}\nReason: ${formData.inquiry}\n\n${formData.message}`
+      )
 
-    // Check if environment variables are loaded
-    if (!serviceID || !templateID || !userID) {
-      console.error("Missing EmailJS configuration in environment variables")
-      alert("Email service is not configured correctly.")
+      window.location.href = `mailto:junseong.lee652@gmail.com?subject=${subject}&body=${body}`
+      setStatus('Opened your email client because EmailJS is not configured in this environment.')
       return
     }
 
     emailjs
-      .send(serviceID, templateID, formData, userID)
+      .send(serviceID!, templateID!, formData, userID!)
       .then(
-        (result) => {
-          console.log(result.text)
-          alert('Message sent!')
+        () => {
+          setStatus('Message sent successfully.')
+          setFormData({
+            name: '',
+            email: '',
+            inquiry: '',
+            message: '',
+          })
         },
         (error) => {
           console.error(error.text)
-          alert('Failed to send message.')
+          setStatus('Failed to send message.')
         }
       )
-
-    console.log(formData)
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 shadow p-6 rounded">
-      <div className="mb-4">
-        <label className="block mb-1" htmlFor="name">Name</label>
+    <form onSubmit={handleSubmit} className="xp-contact-form">
+      <div className="field-row-stacked">
+        <label htmlFor="name">Name</label>
         <input
           type="text"
           id="name"
           name="name"
-          className="w-full p-2 border rounded"
           value={formData.name}
           onChange={handleChange}
           required
         />
       </div>
-      <div className="mb-4">
-        <label className="block mb-1" htmlFor="email">Email</label>
+      <div className="field-row-stacked">
+        <label htmlFor="email">Email</label>
         <input
           type="email"
           id="email"
           name="email"
-          className="w-full p-2 border rounded"
           value={formData.email}
           onChange={handleChange}
           required
         />
       </div>
-      <div className="mb-4">
-        <label className="block mb-1" htmlFor="inquiry">Inquiry Type</label>
+      <div className="field-row-stacked">
+        <label htmlFor="inquiry">Reason</label>
         <select
           id="inquiry"
           name="inquiry"
-          className="w-full p-2 border rounded"
           value={formData.inquiry}
           onChange={handleChange}
           required
         >
           <option value="">Select an option</option>
-          <option value="research">Reaching out</option>
+          <option value="research">General note</option>
           <option value="recruiting">Recruiting</option>
           <option value="other">Other</option>
         </select>
       </div>
-      <div className="mb-4">
-        <label className="block mb-1" htmlFor="message">Message</label>
+      <div className="field-row-stacked">
+        <label htmlFor="message">Message</label>
         <textarea
           id="message"
           name="message"
-          className="w-full p-2 border rounded"
           value={formData.message}
           onChange={handleChange}
           rows={6}
           required
-        ></textarea>
+        />
       </div>
-      <button type="submit" className="px-6 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
-        Send Message
-      </button>
+      <div className="xp-form-actions">
+        <button type="submit">
+          {isEmailJsConfigured ? 'Send Message' : 'Open Email Draft'}
+        </button>
+        {status ? <span className="xp-form-status">{status}</span> : null}
+      </div>
     </form>
   )
 }

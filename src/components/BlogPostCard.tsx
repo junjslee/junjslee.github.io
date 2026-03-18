@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React from 'react'
 
-interface BlogPost {
+export interface BlogPost {
   slug: string
   title: string
   excerpt: string
@@ -10,38 +10,23 @@ interface BlogPost {
 
 interface BlogPostCardProps {
   post: BlogPost
+  onOpen?: (post: BlogPost) => void
 }
 
-const BlogPostCard: React.FC<BlogPostCardProps> = ({ post }) => {
-  const [expanded, setExpanded] = useState(false)
-
-  const toggleExpand = () => {
-    setExpanded(prev => !prev)
-  }
-
-  // Helper: split the text into paragraphs by double newlines.
-  const renderParagraphs = (text: string) => {
-    return text.split(/\n\s*\n/).map((para, index) => (
-      <p key={index} className="mb-4">
-        {para}
-      </p>
-    ))
-  }
-
+const BlogPostCard: React.FC<BlogPostCardProps> = ({ post, onOpen }) => {
   return (
-    <div className="bg-white dark:bg-gray-800 shadow p-6 rounded">
-      <h2 className="text-2xl font-bold mb-2">{post.title}</h2>
-      <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">{post.date}</p>
-      <div className="text-gray-700 dark:text-gray-300 mb-4">
-      {expanded ? renderParagraphs(post.content) : renderParagraphs(post.excerpt)}
+    <article className="xp-blog-post">
+      <header className="xp-blog-post-header">
+        <h2>{post.title}</h2>
+        <time>{post.date}</time>
+      </header>
+      <div className="xp-blog-post-body">
+        <p>{post.excerpt}</p>
       </div>
-      <button
-        onClick={toggleExpand}
-        className="text-indigo-600 hover:underline focus:outline-none"
-      >
-        {expanded ? 'Show Less' : 'Read More'}
+      <button type="button" onClick={() => onOpen?.(post)}>
+        Open Entry
       </button>
-    </div>
+    </article>
   )
 }
 
