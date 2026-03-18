@@ -1,14 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import AboutSection from '../AboutSection';
-import BlogSection, { blogPosts } from '../BlogSection';
+import { blogPosts } from '../BlogSection';
 import ContactSection from '../ContactSection';
-import ProjectsSection from '../ProjectsSection';
-import ResearchSection from '../ResearchSection';
+import JunLeeSection from '../JunLeeSection';
 import type { BlogPost } from '../BlogSection';
 
-type InternalWindowId = 'about' | 'projects' | 'research' | 'blog' | 'contact' | 'blogReader';
+type InternalWindowId = 'about' | 'home' | 'contact' | 'blogReader';
 type ShortcutId = InternalWindowId | 'resume' | 'github' | 'linkedin';
-type IconKind = 'about' | 'projects' | 'research' | 'blog' | 'contact' | 'resume' | 'github' | 'linkedin' | 'reader';
+type IconKind = 'about' | 'home' | 'contact' | 'resume' | 'github' | 'linkedin' | 'reader';
 type SoundName = 'open' | 'close' | 'minimize' | 'maximize' | 'click';
 
 interface WindowDefinition {
@@ -121,7 +120,7 @@ interface MobileShellProps {
 const MOBILE_BREAKPOINT = 720;
 const INITIAL_Z = 40;
 const DESKTOP_STATE_STORAGE_KEY = 'junlee-xp-desktop-session-v1';
-const WINDOW_IDS: InternalWindowId[] = ['about', 'projects', 'research', 'blog', 'contact', 'blogReader'];
+const WINDOW_IDS: InternalWindowId[] = ['about', 'home', 'contact', 'blogReader'];
 const DEFAULT_WALLPAPER = '/images/gif/1_day.gif';
 const WALLPAPER_RULES = [
   { startHour: 10, endHour: 16, src: '/images/gif/1_day.gif' },
@@ -138,35 +137,17 @@ const WINDOW_DEFINITIONS: Record<InternalWindowId, WindowDefinition> = {
     icon: 'about',
     width: 560,
     height: 560,
-    x: 88,
+    x: 132,
     y: 84,
   },
-  projects: {
-    id: 'projects',
-    title: 'Projects',
-    icon: 'projects',
-    width: 720,
-    height: 540,
-    x: 392,
-    y: 92,
-  },
-  research: {
-    id: 'research',
-    title: 'Research',
-    icon: 'research',
-    width: 740,
-    height: 560,
-    x: 316,
-    y: 118,
-  },
-  blog: {
-    id: 'blog',
-    title: 'Blog',
-    icon: 'blog',
-    width: 800,
-    height: 600,
-    x: 204,
-    y: 152,
+  home: {
+    id: 'home',
+    title: 'Jun Lee',
+    icon: 'home',
+    width: 860,
+    height: 620,
+    x: 434,
+    y: 96,
   },
   contact: {
     id: 'contact',
@@ -196,22 +177,10 @@ const SHORTCUTS: ShortcutDefinition[] = [
     description: 'Open my profile and current focus.',
   },
   {
-    id: 'projects',
-    label: 'Projects',
-    icon: 'projects',
-    description: 'View software, research, and experiments.',
-  },
-  {
-    id: 'research',
-    label: 'Research',
-    icon: 'research',
-    description: 'Open repositories, papers, and co-authored work.',
-  },
-  {
-    id: 'blog',
-    label: 'Blog',
-    icon: 'blog',
-    description: 'Open reflections and long-form writing.',
+    id: 'home',
+    label: 'Jun Lee',
+    icon: 'home',
+    description: 'Browse projects, research, and writing.',
   },
   {
     id: 'contact',
@@ -241,6 +210,9 @@ const SHORTCUTS: ShortcutDefinition[] = [
     href: 'https://www.linkedin.com/in/junseong-lee',
   },
 ];
+
+const DESKTOP_SHORTCUT_IDS: ShortcutId[] = ['about', 'home', 'resume', 'contact'];
+const DESKTOP_SHORTCUTS = SHORTCUTS.filter((shortcut) => DESKTOP_SHORTCUT_IDS.includes(shortcut.id));
 
 interface PersistedDesktopState {
   windowStates: Partial<Record<InternalWindowId, Partial<WindowState>>>;
@@ -272,11 +244,9 @@ function createWindowState(id: InternalWindowId, zIndex: number): WindowState {
 function createDefaultWindowStates(): Record<InternalWindowId, WindowState> {
   return {
     about: createWindowState('about', INITIAL_Z + 1),
-    projects: createWindowState('projects', INITIAL_Z + 2),
-    research: createWindowState('research', INITIAL_Z + 3),
-    blog: createWindowState('blog', INITIAL_Z + 4),
-    contact: createWindowState('contact', INITIAL_Z + 5),
-    blogReader: createWindowState('blogReader', INITIAL_Z + 6),
+    home: createWindowState('home', INITIAL_Z + 2),
+    contact: createWindowState('contact', INITIAL_Z + 3),
+    blogReader: createWindowState('blogReader', INITIAL_Z + 4),
   };
 }
 
@@ -410,34 +380,13 @@ function DesktopGlyph({ icon }: { icon: IconKind }): React.ReactElement {
           <circle cx="36" cy="28" r="5" fill="#ffd186" stroke="#143f86" strokeWidth="2" />
         </svg>
       );
-    case 'projects':
+    case 'home':
       return (
         <svg viewBox="0 0 48 48" className="xp-desktop-glyph" aria-hidden="true">
           <path d="M6 16h15l4 4h17v18a4 4 0 0 1-4 4H10a4 4 0 0 1-4-4Z" fill="#f2ca45" stroke="#8a5f00" strokeWidth="2" />
           <path d="M6 16a4 4 0 0 1 4-4h10l4 4h14a4 4 0 0 1 4 4H6Z" fill="#ffe07a" stroke="#8a5f00" strokeWidth="2" />
-          <rect x="10" y="23" width="12" height="3" fill="#8a5f00" opacity="0.65" />
-        </svg>
-      );
-    case 'research':
-      return (
-        <svg viewBox="0 0 48 48" className="xp-desktop-glyph" aria-hidden="true">
-          <rect x="8" y="9" width="20" height="28" rx="2" fill="#f5fbff" stroke="#0d3f86" strokeWidth="2" />
-          <rect x="14" y="15" width="8" height="2" fill="#0d5db4" />
-          <rect x="14" y="20" width="10" height="2" fill="#6480a4" />
-          <rect x="14" y="25" width="8" height="2" fill="#6480a4" />
-          <path d="M29 14h5l6 17h-5l-1.2-3.6h-6.6L26 31h-5Z" fill="#d77f00" stroke="#8a4b00" strokeWidth="1.5" />
-          <rect x="28.6" y="23.5" width="4" height="1.8" fill="#fff1cc" />
-        </svg>
-      );
-    case 'blog':
-      return (
-        <svg viewBox="0 0 48 48" className="xp-desktop-glyph" aria-hidden="true">
-          <rect x="9" y="7" width="28" height="34" rx="4" fill="#ffe598" stroke="#935f00" strokeWidth="2" />
-          <rect x="15" y="14" width="16" height="3" fill="#935f00" />
-          <rect x="15" y="21" width="12" height="2" fill="#935f00" opacity="0.72" />
-          <rect x="15" y="26" width="15" height="2" fill="#935f00" opacity="0.72" />
-          <path d="m33 34 6 6" stroke="#0d3f86" strokeWidth="4" strokeLinecap="round" />
-          <circle cx="31" cy="32" r="6" fill="#91d5ff" stroke="#0d3f86" strokeWidth="2" />
+          <circle cx="31" cy="30" r="6" fill="#87c95e" stroke="#245d12" strokeWidth="2" />
+          <path d="M31 25v10M26 30h10" stroke="#f8fff0" strokeWidth="2" />
         </svg>
       );
     case 'contact':
@@ -1258,9 +1207,7 @@ const XPDesktop: React.FC = () => {
   const launchShortcut = (id: ShortcutId) => {
     switch (id) {
       case 'about':
-      case 'projects':
-      case 'research':
-      case 'blog':
+      case 'home':
       case 'contact':
         openWindow(id);
         return;
@@ -1289,13 +1236,9 @@ const XPDesktop: React.FC = () => {
   const renderWindowContent = (id: InternalWindowId) => {
     switch (id) {
       case 'about':
-        return <AboutSection />;
-      case 'projects':
-        return <ProjectsSection />;
-      case 'research':
-        return <ResearchSection />;
-      case 'blog':
-        return <BlogSection onOpenPost={openBlogPost} />;
+        return <AboutSection onOpenHome={() => openWindow('home')} />;
+      case 'home':
+        return <JunLeeSection onOpenPost={openBlogPost} />;
       case 'contact':
         return <ContactSection />;
       case 'blogReader':
@@ -1362,7 +1305,7 @@ const XPDesktop: React.FC = () => {
         }}
       >
         <div className="xp-shortcuts" aria-label="Desktop shortcuts">
-          {SHORTCUTS.map((shortcut) => (
+          {DESKTOP_SHORTCUTS.map((shortcut) => (
             <DesktopIcon
               key={shortcut.id}
               shortcut={shortcut}

@@ -2,13 +2,17 @@ import React, { useState } from 'react'
 
 type AboutTab = 'general' | 'experience' | 'identity'
 
+interface AboutSectionProps {
+  onOpenHome?: () => void
+}
+
 const experiences = [
   'AI Research Engineer Intern - Asan Medical Center',
   'Sergeant/Software Engineer - 8th U.S. Army (2ID KATUSA)',
   'Quantitative Trading Analyst - Quant @ UIUC',
 ]
 
-const AboutSection: React.FC = () => {
+const AboutSection: React.FC<AboutSectionProps> = ({ onOpenHome }) => {
   const [activeTab, setActiveTab] = useState<AboutTab>('general')
   const stopWindowFocus = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation()
@@ -51,8 +55,7 @@ const AboutSection: React.FC = () => {
               <div className="xp-system-headline">
                 <h1>Junseong Lee</h1>
                 <p className="xp-lead">
-                  AI research engineer, software builder, and student focused on computer vision,
-                  product-minded engineering, and quantitative thinking.
+                  Interested in  on statistical learning, system design, hci.
                 </p>
                 <p>
                   B.S. in Finance and Data Science (CS minor) @ UIUC <br />
@@ -83,6 +86,18 @@ const AboutSection: React.FC = () => {
             <div className="xp-system-license">
               <span>Registered to</span>
               <strong>Jun</strong>
+            </div>
+
+            <div className="xp-system-callout">
+              <strong>Want the rest of the site?</strong>
+              <p>Open `Jun Lee` for projects, research, and writing.</p>
+              <button
+                type="button"
+                onMouseDown={stopWindowFocus}
+                onClick={onOpenHome}
+              >
+                Open Jun Lee
+              </button>
             </div>
           </>
         ) : null}

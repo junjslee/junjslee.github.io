@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const projects = [
+export const projects = [
   {
     title: "Will You Be My Valentine?",
     description: "Made a website for my partner with Bugcat-Capoo GIFs",

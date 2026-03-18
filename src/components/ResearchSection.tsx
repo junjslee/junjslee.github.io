@@ -10,7 +10,7 @@ interface ResearchEntry {
   linkLabel: string
 }
 
-const researchEntries: ResearchEntry[] = [
+export const researchEntries: ResearchEntry[] = [
   {
     title: 'Official Codebase for the Neonatal Human-AI Interaction Study',
     year: '2025',
