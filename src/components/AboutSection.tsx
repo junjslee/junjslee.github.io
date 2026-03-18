@@ -3,9 +3,8 @@ import React, { useState } from 'react'
 type AboutTab = 'general' | 'experience' | 'identity'
 
 const experiences = [
-  'AI Research Engineer Intern - Medical Imaging and Intelligent Reality Lab (MI2RL)',
-  'Sergeant (E-5) / Software Engineer - 2nd Infantry Division, KATUSA',
-  'Founding Developer - Scroll',
+  'AI Research Engineer Intern - Asan Medical Center',
+  'Sergeant/Software Engineer - 8th U.S. Army (2ID KATUSA)',
   'Quantitative Trading Analyst - Quant @ UIUC',
 ]
 

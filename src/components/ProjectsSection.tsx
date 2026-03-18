@@ -6,7 +6,6 @@ const projects = [
     description: "Made a website for my partner with Bugcat-Capoo GIFs",
     techStack: ["HTML, CSS , Javascript"],
     repoLink: "https://github.com/junjslee/will-you-be-my-valentine",
-    image: "images/projects/valentine.png",
     category: "Web App",
   },
   {
@@ -14,7 +13,6 @@ const projects = [
     description: "Developed and deployed a web application for my battalion's event management system",
     techStack: ["Python (flask, smtp, pandas)", "HTML, CSS , Javascript", "AWS EC2", "Nginx", "Gunicorn"],
     repoLink: "https://github.com/junjslee/UMTauto",
-    image: "images/projects/2id.jpg",
     category: "Operations",
   },
   {
@@ -22,7 +20,6 @@ const projects = [
     description: "Built ML models to predict heart disease. Learned about non-parametric approaches and its tradeoffs",
     techStack: ["Python", "pandas", "numpy", "matplotlib", "scikit-learn", "Statistical Modeling"],
     repoLink: "https://github.com/junjslee/ml_heart_disease_prediction",
-    image: "images/projects/heart_disease.jpg",
     category: "ML",
   },
   {
@@ -30,7 +27,6 @@ const projects = [
     description: "Learned how facial recognition system works through Principal Component Analysis in Linear Algebra",
     techStack: ["Dimensionality Reduction", "Linear Algebra", "Statistical Modeling"],
     repoLink: "https://github.com/junjslee/facial_recognition_pca/blob/main/PCA-FacialRecognition.ipynb",
-    image: "images/projects/pca.jpg",
     category: "Project",
   },
   {
@@ -38,7 +34,6 @@ const projects = [
     description: "First project to understand statistical modeling to predict S&P Index based on 15 macroeconomic indicators I extracted from TraidingView",
     techStack: ["Time Series Analysis", "Linear Regression", "Augmented Dickey-Fuller Test", "Granger Causality Test"],
     repoLink: "https://github.com/junjslee/Predicting-S-P-500-Market-Trends-using-Macro-Economic-Indicators-with-Python/blob/master/Python-SPX%20Prediction%20using%20Macro-Economic%20Indicators.ipynb",
-    image: "images/projects/s&p.jpg",
     category: "Finance",
   },
 ]
@@ -82,7 +77,16 @@ const ProjectsSection: React.FC = () => {
               <span className="xp-project-chip">{selectedProject.category}</span>
             </div>
           </div>
-          <img src={selectedProject.image} alt={selectedProject.title} className="xp-project-preview-image" />
+          <div className="xp-project-details">
+            <div className="xp-project-detail-row">
+              <span>Type</span>
+              <strong>{selectedProject.category}</strong>
+            </div>
+            <div className="xp-project-detail-row">
+              <span>Destination</span>
+              <strong>GitHub Repository</strong>
+            </div>
+          </div>
           <p>{selectedProject.description}</p>
           <div className="xp-project-meta">
             <strong>Tech stack</strong>
