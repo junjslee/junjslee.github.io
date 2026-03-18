@@ -56,34 +56,34 @@ const AboutSection: React.FC = () => {
                   product-minded engineering, and quantitative thinking.
                 </p>
                 <p>
-                  I study Data Science, Finance, and Computer Science at UIUC and like building software
-                  that turns fuzzy ideas into something people can actually use.
+                  B.S. in Finance and Data Science (CS minor) @ UIUC <br />
+                  Peeling the onions. Always peeling the onions... :3
                 </p>
               </div>
             </div>
 
             <div className="xp-system-specs">
               <div className="xp-system-row">
-                <span>Location</span>
+                <span>Curr Location</span>
                 <strong>Champaign, IL</strong>
               </div>
               <div className="xp-system-row">
-                <span>Background</span>
-                <strong>Korean</strong>
+                <span>From:</span>
+                <strong>Saratoga, California</strong>
               </div>
               <div className="xp-system-row">
                 <span>Focus</span>
-                <strong>AI, vision, product-minded software</strong>
+                <strong>"what? why? how?"</strong>
               </div>
               <div className="xp-system-row">
-                <span>Interests</span>
-                <strong>Soccer, billiards, basketball, poker</strong>
+                <span>Hobbies</span>
+                <strong>french billiards, gomoku, soccer, and games</strong>
               </div>
             </div>
 
             <div className="xp-system-license">
               <span>Registered to</span>
-              <strong>Junseong Lee</strong>
+              <strong>Jun</strong>
             </div>
           </>
         ) : null}
@@ -94,18 +94,22 @@ const AboutSection: React.FC = () => {
               <strong>Current Status</strong>
               <p>
                 Researching at{' '}
+                <a href="https://lmic.mgh.harvard.edu/" target="_blank" rel="noopener noreferrer">
+                  LMIC @ Massachusetts General Hospital, Harvard Medical School
+                </a>
+                ,{' '}
                 <a href="https://www.mi2rl.co/" target="_blank" rel="noopener noreferrer">
-                  Medical Imaging and Intelligent Reality Lab
-                </a>{' '}
-                with collaboration at{' '}
-                <a href="https://eng.amc.seoul.kr/gb/lang/main.do" target="_blank" rel="noopener noreferrer">
-                  Asan Medical Center
+                  MI2RL @ Asan Medical Center
+                </a>
+                , and{' '}
+                <a href="https://monet.cs.illinois.edu/" target="_blank" rel="noopener noreferrer">
+                  MONET Lab @ University of Illinois Urbana-Champaign
                 </a>
                 .
               </p>
               <p>
-                My work tends to sit between research and production: take something useful, make it cleaner,
-                faster, and easier for someone else to trust.
+                "Discipline. Transparency. Curiosity." <br /> 
+                I like to understand the "why" and "how" of things, and then make something impactful out of it.
               </p>
             </div>
 
@@ -126,23 +130,22 @@ const AboutSection: React.FC = () => {
               <strong>How I work</strong>
               <p>
                 I like projects that begin slightly unformed and get sharper through iteration, whether that
-                means research prototypes, production cleanup, or rebuilding my own website into something
-                more opinionated.
+                means research prototypes, production cleanup, or learning something new.
               </p>
             </div>
 
             <div className="xp-system-specs">
               <div className="xp-system-row">
                 <span>Style</span>
-                <strong>Direct, experimental, product-minded</strong>
+                <strong>Direct, experimental, and curious</strong>
               </div>
               <div className="xp-system-row">
                 <span>Favorite build loop</span>
-                <strong>Sketch, ship, adjust, tighten</strong>
+                <strong>Sketch, ship, adjust, and repeat</strong>
               </div>
               <div className="xp-system-row">
                 <span>Outside the screen</span>
-                <strong>Soccer, billiards, late-night conversations</strong>
+                <strong>french billiards, gomoku, soccer, and games</strong>
               </div>
             </div>
           </>

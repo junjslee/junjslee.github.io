@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 const projects = [
   {
     title: "Will You Be My Valentine?",
-    description: "Made a website to surprise my girlfriend with valentine (Bugcat-Capoo GIFs)",
+    description: "Made a website for my partner with Bugcat-Capoo GIFs",
     techStack: ["HTML, CSS , Javascript"],
     repoLink: "https://github.com/junjslee/will-you-be-my-valentine",
     image: "images/projects/valentine.png",
@@ -18,9 +18,9 @@ const projects = [
     category: "Operations",
   },
   {
-    title: "Kaggle Heart Disease Prediction",
-    description: "Built ML models to predict heart disease based on UC Irvine's public medical data",
-    techStack: ["Python (pandas, numpy, matplotlib, scikit-learn)", "Statistical Modeling"],
+    title: "Heart Disease Prediction using UCI Medical Data",
+    description: "Built ML models to predict heart disease. Learned about non-parametric approaches and its tradeoffs",
+    techStack: ["Python", "pandas", "numpy", "matplotlib", "scikit-learn", "Statistical Modeling"],
     repoLink: "https://github.com/junjslee/ml_heart_disease_prediction",
     image: "images/projects/heart_disease.jpg",
     category: "ML",
@@ -28,15 +28,15 @@ const projects = [
   {
     title: "Facial Recognition using PCA",
     description: "Learned how facial recognition system works through Principal Component Analysis in Linear Algebra",
-    techStack: ["Python", "Linear Algebra", "Statistical Modeling"],
+    techStack: ["Dimensionality Reduction", "Linear Algebra", "Statistical Modeling"],
     repoLink: "https://github.com/junjslee/facial_recognition_pca/blob/main/PCA-FacialRecognition.ipynb",
     image: "images/projects/pca.jpg",
-    category: "Research",
+    category: "Project",
   },
   {
     title: "S&P Index Prediction using Macroeconomic Indicators",
-    description: "Pipelined a linear regression model to predict S&P Index based on 15 macroeconomic indicators",
-    techStack: ["Python", "Machine Learning", "Statistical Modeling"],
+    description: "First project to understand statistical modeling to predict S&P Index based on 15 macroeconomic indicators I extracted from TraidingView",
+    techStack: ["Time Series Analysis", "Linear Regression", "Augmented Dickey-Fuller Test", "Granger Causality Test"],
     repoLink: "https://github.com/junjslee/Predicting-S-P-500-Market-Trends-using-Macro-Economic-Indicators-with-Python/blob/master/Python-SPX%20Prediction%20using%20Macro-Economic%20Indicators.ipynb",
     image: "images/projects/s&p.jpg",
     category: "Finance",
