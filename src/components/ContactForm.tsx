@@ -53,60 +53,79 @@ const ContactForm: React.FC = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="xp-contact-form">
-      <div className="field-row-stacked">
-        <label htmlFor="name">Name</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
+    <form onSubmit={handleSubmit} className="xp-mail-compose">
+      <div className="xp-mail-fields">
+        <div className="xp-mail-row">
+          <label htmlFor="to">To</label>
+          <input id="to" value="junseong.lee652@gmail.com" readOnly />
+        </div>
+        <div className="xp-mail-row">
+          <label htmlFor="name">Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="xp-mail-row">
+          <label htmlFor="email">From</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="xp-mail-row">
+          <label htmlFor="inquiry">Subject</label>
+          <select
+            id="inquiry"
+            name="inquiry"
+            value={formData.inquiry}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select an option</option>
+            <option value="research">General note</option>
+            <option value="recruiting">Recruiting</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
       </div>
-      <div className="field-row-stacked">
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div className="field-row-stacked">
-        <label htmlFor="inquiry">Reason</label>
-        <select
-          id="inquiry"
-          name="inquiry"
-          value={formData.inquiry}
-          onChange={handleChange}
-          required
-        >
-          <option value="">Select an option</option>
-          <option value="research">General note</option>
-          <option value="recruiting">Recruiting</option>
-          <option value="other">Other</option>
-        </select>
-      </div>
-      <div className="field-row-stacked">
+
+      <div className="xp-mail-editor">
         <label htmlFor="message">Message</label>
         <textarea
           id="message"
           name="message"
           value={formData.message}
           onChange={handleChange}
-          rows={6}
+          rows={9}
           required
         />
       </div>
-      <div className="xp-form-actions">
-        <button type="submit">
-          {isEmailJsConfigured ? 'Send Message' : 'Open Email Draft'}
-        </button>
-        {status ? <span className="xp-form-status">{status}</span> : null}
+
+      <div className="xp-mail-footer">
+        <div className="xp-mail-links">
+          <a href="https://www.linkedin.com/in/junseong-lee" target="_blank" rel="noopener noreferrer">
+            LinkedIn
+          </a>
+          <a href="https://github.com/junjslee" target="_blank" rel="noopener noreferrer">
+            GitHub
+          </a>
+          <a href="mailto:junseong.lee652@gmail.com">Direct Email</a>
+        </div>
+        <div className="xp-form-actions">
+          <button type="submit">
+            {isEmailJsConfigured ? 'Send Message' : 'Open Email Draft'}
+          </button>
+          {status ? <span className="xp-form-status">{status}</span> : null}
+        </div>
       </div>
     </form>
   )

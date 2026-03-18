@@ -90,7 +90,7 @@ const BlogSection: React.FC<BlogSectionProps> = ({ onOpenPost }) => {
           relationships, and the parts of life that do not reduce neatly to a bullet list.
         </p>
       </div>
-      <div className="xp-explorer-shell xp-blog-shell">
+      <div className="xp-explorer-stack xp-blog-shell">
         <div className="xp-pane xp-blog-browser">
           <div className="xp-listview-header">
             <span>Entry</span>

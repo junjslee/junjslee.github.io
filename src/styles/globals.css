@@ -384,6 +384,84 @@ a {
   box-shadow: inset 1px 1px 0 #fff;
 }
 
+.xp-system-tabs {
+  display: flex;
+  gap: 4px;
+  padding-left: 4px;
+}
+
+.xp-system-tabs button {
+  padding: 6px 12px;
+  border: 1px solid #8ea6c9;
+  border-bottom: none;
+  background: #e6eef9;
+}
+
+.xp-system-tabs button.is-active {
+  position: relative;
+  top: 1px;
+  background: #f5f4ea;
+}
+
+.xp-system-top {
+  display: grid;
+  grid-template-columns: 116px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.xp-system-avatar {
+  width: 104px;
+  height: 104px;
+  object-fit: cover;
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 1px #7e9eca;
+}
+
+.xp-system-headline {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.xp-system-specs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.xp-system-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 10px;
+  border: 1px solid #d4ddec;
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.xp-system-row span,
+.xp-system-license span {
+  font-size: 12px;
+  color: #5b6472;
+}
+
+.xp-system-note {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid #d4ddec;
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.xp-system-license {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #c8d4e8;
+}
+
 .xp-list,
 .xp-timeline {
   display: flex;
@@ -433,6 +511,13 @@ a {
   gap: 14px;
 }
 
+.xp-explorer-stack {
+  display: grid;
+  grid-template-rows: minmax(0, 185px) minmax(0, 1fr);
+  gap: 14px;
+  min-height: 0;
+}
+
 .xp-listview-header {
   display: flex;
   justify-content: space-between;
@@ -450,6 +535,7 @@ a {
   flex-direction: column;
   border: 1px solid #8ea6c9;
   background: rgba(255, 255, 255, 0.82);
+  overflow: auto;
 }
 
 .xp-project-row,
@@ -484,6 +570,9 @@ a {
 .xp-blog-row-title {
   flex: 1;
   min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .xp-project-row-kind,
@@ -506,6 +595,7 @@ a {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  min-height: 0;
 }
 
 .xp-project-preview-header,
@@ -546,6 +636,80 @@ a {
 
 .xp-project-actions a {
   align-self: flex-start;
+}
+
+.xp-mail-shell {
+  min-height: 100%;
+}
+
+.xp-mail-toolbar {
+  display: flex;
+  gap: 8px;
+}
+
+.xp-mail-toolbar button {
+  min-height: 28px;
+  padding: 0 12px;
+}
+
+.xp-mail-panel {
+  min-height: 0;
+}
+
+.xp-mail-header-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.xp-mail-compose {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+}
+
+.xp-mail-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.xp-mail-row {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+}
+
+.xp-mail-row label {
+  font-size: 12px;
+  color: #3c4a62;
+}
+
+.xp-mail-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+}
+
+.xp-mail-editor textarea {
+  min-height: 190px;
+  resize: vertical;
+}
+
+.xp-mail-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.xp-mail-links {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .xp-blog-reader time {
@@ -650,10 +814,18 @@ a {
 }
 
 @media (max-width: 820px) {
+  .xp-system-top,
+  .xp-system-row,
+  .xp-mail-footer,
   .xp-profile-header,
   .xp-info-grid,
   .xp-contact-layout {
     grid-template-columns: 1fr;
+  }
+
+  .xp-system-row,
+  .xp-mail-footer {
+    flex-direction: column;
   }
 }
 

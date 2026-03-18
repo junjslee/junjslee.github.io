@@ -55,7 +55,7 @@ const ProjectsSection: React.FC = () => {
           even if the first version is rough.
         </p>
       </div>
-      <div className="xp-explorer-shell">
+      <div className="xp-explorer-stack">
         <div className="xp-pane xp-project-browser">
           <div className="xp-listview-header">
             <span>Name</span>
