@@ -69,10 +69,10 @@ const explorerEntries: ExplorerEntry[] = [
   })),
 ]
 
-const folderOrder: FolderId[] = ['projects', 'research', 'writing']
+const folderOrder: FolderId[] = ['research', 'projects', 'writing']
 
 const JunLeeSection: React.FC<JunLeeSectionProps> = ({ onOpenPost }) => {
-  const [activeFolder, setActiveFolder] = useState<FolderId>('projects')
+  const [activeFolder, setActiveFolder] = useState<FolderId>('research')
   const visibleEntries = useMemo(
     () => explorerEntries.filter((entry) => entry.folder === activeFolder),
     [activeFolder]
@@ -112,10 +112,10 @@ const JunLeeSection: React.FC<JunLeeSectionProps> = ({ onOpenPost }) => {
   return (
     <section className="xp-content xp-home-explorer">
       <div className="xp-pane xp-home-header">
-        <h1>Jun Lee</h1>
+        <h1>Notes from Jun Lee</h1>
         <p>
-          A personal hub for my work, research, and writing. Use the folders on the left to browse
-          what I have been building and thinking about.
+          A running journal of research, projects, and writing. Use the folders on the left to
+          browse what I have been learning, building, and writing down.
         </p>
       </div>
 

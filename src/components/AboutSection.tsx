@@ -7,6 +7,7 @@ interface AboutSectionProps {
 }
 
 const experiences = [
+  'Research Intern - Massachusetts General Hospital and Harvard Medical School',
   'AI Research Engineer Intern - Asan Medical Center',
   'Sergeant/Software Engineer - 8th U.S. Army (2ID KATUSA)',
   'Quantitative Trading Analyst - Quant @ UIUC',
@@ -55,10 +56,10 @@ const AboutSection: React.FC<AboutSectionProps> = ({ onOpenHome }) => {
               <div className="xp-system-headline">
                 <h1>Junseong Lee</h1>
                 <p className="xp-lead">
-                  Interested in  on statistical learning, system design, hci.
+                  Understanding how linear models solve non-linear problems. <br></br>
+                  Interested in statistical learning, system design, and medical AI.
                 </p>
                 <p>
-                  B.S. in Finance and Data Science (CS minor) @ UIUC <br />
                   Peeling the onions. Always peeling the onions... :3
                 </p>
               </div>
@@ -71,7 +72,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ onOpenHome }) => {
               </div>
               <div className="xp-system-row">
                 <span>Grew up in:</span>
-                <strong>Saratoga, California</strong>
+                <strong>Saratoga, CA && Seoul, Korea</strong>
               </div>
               <div className="xp-system-row">
                 <span>Focus</span>
@@ -105,6 +106,10 @@ const AboutSection: React.FC<AboutSectionProps> = ({ onOpenHome }) => {
         {activeTab === 'experience' ? (
           <>
             <div className="xp-system-note">
+              <strong>Education</strong>
+              <p>
+              B.S. in Finance and Data Science (CS minor) @ UIUC
+              </p>
               <strong>Current Status</strong>
               <p>
                 Researching at{' '}
@@ -121,6 +126,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ onOpenHome }) => {
                 </a>
                 .
               </p>
+              <strong>Motto</strong>
               <p>
                 "Discipline. Transparency. Curiosity." <br /> 
                 I like to understand the "why" and "how" of things, and then make something impactful out of it.
@@ -159,7 +165,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ onOpenHome }) => {
               </div>
               <div className="xp-system-row">
                 <span>Outside the screen</span>
-                <strong>french billiards, gomoku, soccer, and games</strong>
+                <strong>taking the edge off</strong>
               </div>
             </div>
           </>
