@@ -86,12 +86,12 @@ const AboutSection: React.FC<AboutSectionProps> = ({ onOpenHome }) => {
 
             <div className="xp-system-license">
               <span>Registered to</span>
-              <strong>Jun</strong>
+              <strong>Junseong Lee</strong>
             </div>
 
             <div className="xp-system-callout">
               <strong>Want the rest of the site?</strong>
-              <p>Open `Jun Lee` for projects, research, and writing.</p>
+              <p>Open `Jun Lee` for research, projects, and writing.</p>
               <button
                 type="button"
                 onMouseDown={stopWindowFocus}

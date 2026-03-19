@@ -112,17 +112,17 @@ const JunLeeSection: React.FC<JunLeeSectionProps> = ({ onOpenPost }) => {
   return (
     <section className="xp-content xp-home-explorer">
       <div className="xp-pane xp-home-header">
-        <h1>Notes from Jun Lee</h1>
+        <h1>Notes from Junseong Lee</h1>
         <p>
-          A running journal of research, projects, and writing. Use the folders on the left to
-          browse what I have been learning, building, and writing down.
+          A running place for research, projects, and writing. Use the folders on the left to
+          browse what I have been learning, building, and thinking through.
         </p>
       </div>
 
       <div className="xp-home-shell">
         <aside className="xp-pane xp-home-sidebar">
           <div className="xp-home-path">Home</div>
-          <div className="xp-home-folders" role="tablist" aria-label="Jun Lee sections">
+          <div className="xp-home-folders" role="tablist" aria-label="Junseong Lee sections">
             {folderOrder.map((folder) => (
               <button
                 key={folder}

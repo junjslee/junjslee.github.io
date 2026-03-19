@@ -514,8 +514,8 @@ function StartMenu({ shortcuts, onLaunch }: StartMenuProps): React.ReactElement 
           <div className="xp-start-profile">
             <img src="/images/hero.jpg" alt="Junseong Lee" className="xp-start-avatar" />
             <div>
-              <strong>Jun Lee</strong>
-              <p>Personal Website</p>
+              <strong>Junseong Lee</strong>
+              <p>Research, projects, and writing</p>
             </div>
           </div>
           <div className="xp-start-items">
@@ -858,10 +858,10 @@ function MobileShell({
               <div className="xp-mobile-card">
                 <img src="/images/hero.jpg" alt="Junseong Lee" className="xp-mobile-avatar" />
                 <div className="xp-mobile-copy">
-                  <h1>XP-Lite</h1>
+                  <h1>Junseong Lee</h1>
                   <p>
-                    The same portfolio and shortcuts, adapted for touch screens instead of overlapping
-                    desktop windows.
+                    Research, projects, writing, and shortcuts adapted for touch screens instead of
+                    overlapping desktop windows.
                   </p>
                 </div>
               </div>
