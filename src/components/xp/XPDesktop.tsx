@@ -120,15 +120,17 @@ interface MobileShellProps {
 const MOBILE_BREAKPOINT = 720;
 const INITIAL_Z = 40;
 const DESKTOP_STATE_STORAGE_KEY = 'junlee-xp-desktop-session-v1';
+const WALLPAPER_STORAGE_KEY = 'junlee-xp-wallpaper-session-v1';
 const WINDOW_IDS: InternalWindowId[] = ['about', 'home', 'contact', 'blogReader'];
-const DEFAULT_WALLPAPER = '/images/gif/1_day.gif';
-const WALLPAPER_RULES = [
-  { startHour: 10, endHour: 16, src: '/images/gif/1_day.gif' },
-  { startHour: 16, endHour: 22, src: '/images/gif/2_evening.gif' },
-  { startHour: 22, endHour: 24, src: '/images/gif/3_night_cityview.gif' },
-  { startHour: 0, endHour: 4, src: '/images/gif/3_night_cityview.gif' },
-  { startHour: 4, endHour: 10, src: '/images/gif/4_night_drive.gif' },
+const WALLPAPER_OPTIONS = [
+  '/images/gif/1_day.gif',
+  '/images/gif/2_evening.gif',
+  '/images/gif/3_night_cityview.gif',
+  '/images/gif/4_night_drive.gif',
+  '/images/gif/5_night_totoro.gif',
 ] as const;
+const DEFAULT_WALLPAPER = WALLPAPER_OPTIONS[0];
+const MIN_BOOT_DURATION_MS = 450;
 
 const WINDOW_DEFINITIONS: Record<InternalWindowId, WindowDefinition> = {
   about: {
@@ -313,10 +315,40 @@ function formatClock(date: Date): string {
   });
 }
 
-function getWallpaperForDate(date: Date): string {
-  const hour = date.getHours();
-  const activeWallpaper = WALLPAPER_RULES.find((rule) => hour >= rule.startHour && hour < rule.endHour);
-  return activeWallpaper?.src ?? '/images/gif/4_night_drive.gif';
+function readWallpaperSessionChoice(): string | null {
+  try {
+    const wallpaper = window.sessionStorage.getItem(WALLPAPER_STORAGE_KEY);
+    if (!wallpaper || !WALLPAPER_OPTIONS.includes(wallpaper as (typeof WALLPAPER_OPTIONS)[number])) {
+      return null;
+    }
+
+    return wallpaper;
+  } catch (error) {
+    console.error('Failed to read wallpaper session state.', error);
+    return null;
+  }
+}
+
+function writeWallpaperSessionChoice(wallpaper: string): void {
+  try {
+    window.sessionStorage.setItem(WALLPAPER_STORAGE_KEY, wallpaper);
+  } catch (error) {
+    console.error('Failed to write wallpaper session state.', error);
+  }
+}
+
+function chooseRandomWallpaper(): string {
+  const randomIndex = Math.floor(Math.random() * WALLPAPER_OPTIONS.length);
+  return WALLPAPER_OPTIONS[randomIndex] ?? DEFAULT_WALLPAPER;
+}
+
+function preloadWallpaper(src: string): Promise<void> {
+  return new Promise((resolve) => {
+    const image = new Image();
+    image.onload = () => resolve();
+    image.onerror = () => resolve();
+    image.src = src;
+  });
 }
 
 function playToneSequence(context: AudioContext, tones: Array<{ frequency: number; length: number; delay: number }>): void {
@@ -906,7 +938,7 @@ function BootScreen(): React.ReactElement {
         </div>
         <div className="window-body xp-boot-body">
           <strong>Starting up...</strong>
-          <p>Loading your desktop, wallpaper, and open windows.</p>
+          <p>Loading your desktop and preparing a fresh wallpaper.</p>
           <div className="xp-boot-progress" aria-hidden="true">
             <span className="xp-boot-progress-bar" />
           </div>
@@ -922,11 +954,12 @@ const XPDesktop: React.FC = () => {
   const [startOpen, setStartOpen] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [clock, setClock] = useState('--:--');
-  const [wallpaper, setWallpaper] = useState(DEFAULT_WALLPAPER);
+  const [wallpaper, setWallpaper] = useState('');
   const [isMobile, setIsMobile] = useState(false);
   const [selectedBlogPost, setSelectedBlogPost] = useState<BlogPost>(blogPosts[0]);
   const [hasMountedClient, setHasMountedClient] = useState(false);
   const [hasHydratedDesktopState, setHasHydratedDesktopState] = useState(false);
+  const [hasPreparedWallpaper, setHasPreparedWallpaper] = useState(false);
   const zCounter = useRef(INITIAL_Z + 10);
   const audioContextRef = useRef<AudioContext | null>(null);
 
@@ -941,13 +974,22 @@ const XPDesktop: React.FC = () => {
 
     const initialNow = new Date();
     setClock(formatClock(initialNow));
-    setWallpaper(getWallpaperForDate(initialNow));
     setHasMountedClient(true);
+
+    const selectedWallpaper = readWallpaperSessionChoice() ?? chooseRandomWallpaper();
+    writeWallpaperSessionChoice(selectedWallpaper);
+
+    Promise.all([
+      preloadWallpaper(selectedWallpaper),
+      new Promise((resolve) => window.setTimeout(resolve, MIN_BOOT_DURATION_MS)),
+    ]).finally(() => {
+      setWallpaper(selectedWallpaper);
+      setHasPreparedWallpaper(true);
+    });
 
     const timer = window.setInterval(() => {
       const now = new Date();
       setClock(formatClock(now));
-      setWallpaper(getWallpaperForDate(now));
     }, 1000);
 
     return () => {
@@ -1262,7 +1304,7 @@ const XPDesktop: React.FC = () => {
     .map((id) => windowStates[id])
     .filter((windowState) => windowState.open && !windowState.minimized);
 
-  if (!hasMountedClient || !hasHydratedDesktopState) {
+  if (!hasMountedClient || !hasHydratedDesktopState || !hasPreparedWallpaper) {
     return <BootScreen />;
   }
 
