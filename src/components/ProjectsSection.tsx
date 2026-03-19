@@ -1,6 +1,14 @@
 import React, { useState } from 'react'
 
-export const projects = [
+export interface ProjectEntry {
+  title: string
+  description: string
+  techStack: string[]
+  repoLink: string
+  category: string
+}
+
+export const projects: ProjectEntry[] = [
   {
     title: "Will You Be My Valentine?",
     description: "Made a website for my partner with Bugcat-Capoo GIFs",

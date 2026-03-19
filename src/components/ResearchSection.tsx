@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-interface ResearchEntry {
+export interface ResearchEntry {
   title: string
   year: string
   href: string

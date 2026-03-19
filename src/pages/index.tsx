@@ -1,35 +1,44 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import XPDesktop from '../components/xp/XPDesktop'
+import { SITE_DESCRIPTION, SITE_IMAGE, SITE_NAME, SITE_URL } from '../lib/site'
 
 const Home: NextPage = () => {
+  const personJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: SITE_NAME,
+    url: SITE_URL,
+    image: SITE_IMAGE,
+    jobTitle: 'AI Research Engineer',
+    alumniOf: 'University of Illinois Urbana-Champaign',
+    sameAs: [
+      'https://github.com/junjslee',
+      'https://www.linkedin.com/in/junseong-lee',
+    ],
+  }
+
   return (
     <>
       <Head>
-        <title>Junseong Lee</title>
-        <meta
-          name="description"
-          content="Personal site of Junseong Lee, with research, projects, and writing on medical AI, statistical learning, and software systems."
-        />
+        <title>{SITE_NAME}</title>
+        <meta name="description" content={SITE_DESCRIPTION} />
+        <meta name="robots" content="index,follow,max-image-preview:large" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#2454bd" />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="Junseong Lee" />
-        <meta
-          property="og:description"
-          content="Personal site of Junseong Lee, with research, projects, and writing on medical AI, statistical learning, and software systems."
-        />
-        <meta property="og:url" content="https://junjslee.github.io/" />
-        <meta property="og:image" content="https://junjslee.github.io/images/hero.jpg" />
+        <meta property="og:site_name" content={SITE_NAME} />
+        <meta property="og:title" content={SITE_NAME} />
+        <meta property="og:description" content={SITE_DESCRIPTION} />
+        <meta property="og:url" content={SITE_URL} />
+        <meta property="og:image" content={SITE_IMAGE} />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Junseong Lee" />
-        <meta
-          name="twitter:description"
-          content="Personal site of Junseong Lee, with research, projects, and writing on medical AI, statistical learning, and software systems."
-        />
-        <meta name="twitter:image" content="https://junjslee.github.io/images/hero.jpg" />
-        <link rel="canonical" href="https://junjslee.github.io/" />
+        <meta name="twitter:title" content={SITE_NAME} />
+        <meta name="twitter:description" content={SITE_DESCRIPTION} />
+        <meta name="twitter:image" content={SITE_IMAGE} />
+        <link rel="canonical" href={SITE_URL} />
         <link rel="icon" href="/favicon.ico" />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }} />
       </Head>
       <XPDesktop />
     </>

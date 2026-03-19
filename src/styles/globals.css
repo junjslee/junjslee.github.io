@@ -1251,3 +1251,140 @@ a {
     transform: translateX(150%);
   }
 }
+
+.seo-page {
+  height: 100dvh;
+  overflow-y: auto;
+  padding: 28px 20px 48px;
+  background:
+    radial-gradient(circle at top, rgba(181, 214, 255, 0.92), rgba(181, 214, 255, 0) 34%),
+    linear-gradient(180deg, #d8ebff 0%, #eff6ff 100%);
+  color: #123056;
+}
+
+.seo-page-shell {
+  width: min(100%, 980px);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.seo-card {
+  padding: 18px 20px;
+  border: 1px solid #6f8db8;
+  box-shadow: inset 1px 1px 0 #ffffff;
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.seo-page-header h1,
+.seo-entry h2 {
+  margin: 0;
+}
+
+.seo-page-header p,
+.seo-page-footer p,
+.seo-entry p,
+.seo-article p {
+  margin: 0;
+  line-height: 1.65;
+}
+
+.seo-page-eyebrow {
+  margin-bottom: 8px;
+  color: #295391;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.seo-site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.seo-site-nav a,
+.seo-entry-header a,
+.seo-note a {
+  color: #0b55c4;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.seo-site-nav a:hover,
+.seo-entry-header a:hover,
+.seo-note a:hover {
+  text-decoration: underline;
+}
+
+.seo-page-body,
+.seo-entry-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.seo-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #d6e0ef;
+}
+
+.seo-entry:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.seo-entry-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.seo-entry-meta {
+  margin: 6px 0 0;
+  color: #40628f;
+  font-size: 0.92rem;
+}
+
+.seo-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.seo-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border: 1px solid #8aa7d1;
+  background: #f1f7ff;
+  font-size: 0.9rem;
+}
+
+.seo-note {
+  margin: 2px 0 0;
+  color: #36547d;
+}
+
+.seo-article {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media (max-width: 719px) {
+  .seo-page {
+    padding: 18px 12px 28px;
+  }
+
+  .seo-entry-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
