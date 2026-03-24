@@ -1,16 +1,15 @@
 import React, { useState } from 'react'
 
-type AboutTab = 'general' | 'experience' | 'identity'
+type AboutTab = 'general' | 'experience' | 'mindset'
 
 interface AboutSectionProps {
   onOpenHome?: () => void
 }
 
 const experiences = [
-  'Research Intern - Massachusetts General Hospital and Harvard Medical School',
-  'AI Research Engineer Intern - Asan Medical Center',
-  'Sergeant/Software Engineer - 8th U.S. Army (2ID KATUSA)',
-  'Quantitative Trading Analyst - Quant @ UIUC',
+  // 'Research Intern - Massachusetts General Hospital and Harvard Medical School',
+  'AI Research Engineer Intern @ Asan Medical Center',
+  'Sergeant - 8th U.S. Army (2ID KATUSA)',
 ]
 
 const AboutSection: React.FC<AboutSectionProps> = ({ onOpenHome }) => {
@@ -40,11 +39,11 @@ const AboutSection: React.FC<AboutSectionProps> = ({ onOpenHome }) => {
         </button>
         <button
           type="button"
-          className={activeTab === 'identity' ? 'is-active' : ''}
+          className={activeTab === 'mindset' ? 'is-active' : ''}
           onMouseDown={stopWindowFocus}
-          onClick={() => setActiveTab('identity')}
+          onClick={() => setActiveTab('mindset')}
         >
-          Identity
+          Mindset
         </button>
       </div>
 
@@ -113,10 +112,10 @@ const AboutSection: React.FC<AboutSectionProps> = ({ onOpenHome }) => {
               <strong>Current Status</strong>
               <p>
                 Researching at{' '}
-                <a href="https://lmic.mgh.harvard.edu/" target="_blank" rel="noopener noreferrer">
+                {/* <a href="https://lmic.mgh.harvard.edu/" target="_blank" rel="noopener noreferrer">
                   LMIC @ Massachusetts General Hospital, Harvard Medical School
-                </a>
-                ,{' '}
+                </a> */}
+                {/* ,{' '} */}
                 <a href="https://www.mi2rl.co/" target="_blank" rel="noopener noreferrer">
                   MI2RL @ Asan Medical Center
                 </a>
@@ -128,8 +127,12 @@ const AboutSection: React.FC<AboutSectionProps> = ({ onOpenHome }) => {
               </p>
               <strong>Motto</strong>
               <p>
-                "Discipline. Transparency. Curiosity." <br /> 
-                I like to understand the "why" and "how" of things, and then make something impactful out of it.
+                {/* "Discipline. Transparency. Curiosity."  */}
+                <span style={{ fontWeight: 'bold', color: '#2a9d8f', fontSize: '1.2em' }}>
+                  "Discipline. Transparency. Curiosity."
+                </span>
+                <br /> 
+                I like to understand the `why` and `how` of things, and then make something impactful out of it.
               </p>
             </div>
 
@@ -144,10 +147,10 @@ const AboutSection: React.FC<AboutSectionProps> = ({ onOpenHome }) => {
           </>
         ) : null}
 
-        {activeTab === 'identity' ? (
+        {activeTab === 'mindset' ? (
           <>
             <div className="xp-system-note">
-              <strong>How I work</strong>
+              <strong>How I think and work</strong>
               <p>
                 I like projects that begin slightly unformed and get sharper through iteration, whether that
                 means research prototypes, production cleanup, or learning something new.
