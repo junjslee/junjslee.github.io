@@ -3,13 +3,15 @@ import AboutSection from '../AboutSection';
 import { blogPosts } from '../BlogSection';
 import ContactSection from '../ContactSection';
 import JunLeeSection from '../JunLeeSection';
+import TerminalSection from '../TerminalSection';
 import type { BlogPost } from '../BlogSection';
 
-type InternalWindowId = 'about' | 'home' | 'contact' | 'blogReader';
+type InternalWindowId = 'about' | 'home' | 'contact' | 'blogReader' | 'terminal';
 type ShortcutId = InternalWindowId | 'resume' | 'github' | 'linkedin';
-type IconKind = 'about' | 'home' | 'contact' | 'resume' | 'github' | 'linkedin' | 'reader';
+type IconKind = 'about' | 'home' | 'contact' | 'resume' | 'github' | 'linkedin' | 'reader' | 'terminal';
 type MobileSection = 'about' | 'work' | 'contact';
 type SoundName = 'open' | 'close' | 'minimize' | 'maximize' | 'click';
+type BootPhase = 'loading' | 'welcome' | 'desktop';
 
 interface WindowDefinition {
   id: InternalWindowId;
@@ -74,10 +76,12 @@ interface TaskbarProps {
   windows: WindowDefinition[];
   windowStates: Record<InternalWindowId, WindowState>;
   soundEnabled: boolean;
+  crtEnabled: boolean;
   startOpen: boolean;
   clock: string;
   onToggleStart: () => void;
   onToggleSound: () => void;
+  onToggleCrt: () => void;
   onTaskbarClick: (id: InternalWindowId) => void;
 }
 
@@ -102,6 +106,7 @@ interface MobileShellProps {
   shortcuts: ShortcutDefinition[];
   activeSection: MobileSection;
   soundEnabled: boolean;
+  crtEnabled: boolean;
   menuOpen: boolean;
   clock: string;
   renderMobileSection: (section: MobileSection) => React.ReactNode;
@@ -112,15 +117,17 @@ interface MobileShellProps {
   onLaunchShortcut: (id: ShortcutId) => void;
   onToggleMenu: () => void;
   onToggleSound: () => void;
+  onToggleCrt: () => void;
   onPrimeAudio: () => void;
   onOpenWork: () => void;
 }
 
 const MOBILE_BREAKPOINT = 720;
 const INITIAL_Z = 40;
-const DESKTOP_STATE_STORAGE_KEY = 'junlee-xp-desktop-session-v1';
+const DESKTOP_STATE_STORAGE_KEY = 'junlee-xp-desktop-state-v1';
 const WALLPAPER_STORAGE_KEY = 'junlee-xp-wallpaper-session-v1';
-const WINDOW_IDS: InternalWindowId[] = ['about', 'home', 'contact', 'blogReader'];
+const CRT_STORAGE_KEY = 'junlee-xp-crt-v1';
+const WINDOW_IDS: InternalWindowId[] = ['about', 'home', 'contact', 'blogReader', 'terminal'];
 const WALLPAPER_OPTIONS = [
   // '/images/gif/1_day.gif',
   '/images/gif/2_evening.gif',
@@ -129,7 +136,7 @@ const WALLPAPER_OPTIONS = [
   '/images/gif/5_night_totoro.gif',
 ] as const;
 const DEFAULT_WALLPAPER = WALLPAPER_OPTIONS[0];
-const MIN_BOOT_DURATION_MS = 450;
+const MIN_BOOT_DURATION_MS = 1600;
 
 const WINDOW_DEFINITIONS: Record<InternalWindowId, WindowDefinition> = {
   about: {
@@ -167,6 +174,15 @@ const WINDOW_DEFINITIONS: Record<InternalWindowId, WindowDefinition> = {
     height: 540,
     x: 360,
     y: 118,
+  },
+  terminal: {
+    id: 'terminal',
+    title: 'Command Prompt',
+    icon: 'terminal',
+    width: 600,
+    height: 400,
+    x: 200,
+    y: 130,
   },
 };
 
@@ -210,9 +226,15 @@ const SHORTCUTS: ShortcutDefinition[] = [
     description: 'Professional profile and updates.',
     href: 'https://www.linkedin.com/in/junseong-lee',
   },
+  {
+    id: 'terminal',
+    label: 'cmd.exe',
+    icon: 'terminal',
+    description: 'Open the command prompt.',
+  },
 ];
 
-const DESKTOP_SHORTCUT_IDS: ShortcutId[] = ['about', 'home', 'resume', 'contact'];
+const DESKTOP_SHORTCUT_IDS: ShortcutId[] = ['about', 'home', 'resume', 'contact', 'terminal'];
 const DESKTOP_SHORTCUTS = SHORTCUTS.filter((shortcut) => DESKTOP_SHORTCUT_IDS.includes(shortcut.id));
 
 interface PersistedDesktopState {
@@ -248,6 +270,7 @@ function createDefaultWindowStates(): Record<InternalWindowId, WindowState> {
     home: createWindowState('home', INITIAL_Z + 2),
     contact: createWindowState('contact', INITIAL_Z + 3),
     blogReader: createWindowState('blogReader', INITIAL_Z + 4),
+    terminal: createWindowState('terminal', INITIAL_Z + 5),
   };
 }
 
@@ -279,7 +302,7 @@ function restoreWindowState(
 
 function readDesktopSessionState(): PersistedDesktopState | null {
   try {
-    const rawState = window.sessionStorage.getItem(DESKTOP_STATE_STORAGE_KEY);
+    const rawState = window.localStorage.getItem(DESKTOP_STATE_STORAGE_KEY);
     if (!rawState) {
       return null;
     }
@@ -293,7 +316,7 @@ function readDesktopSessionState(): PersistedDesktopState | null {
 
 function writeDesktopSessionState(state: PersistedDesktopState): void {
   try {
-    window.sessionStorage.setItem(DESKTOP_STATE_STORAGE_KEY, JSON.stringify(state));
+    window.localStorage.setItem(DESKTOP_STATE_STORAGE_KEY, JSON.stringify(state));
   } catch (error) {
     console.error('Failed to write desktop session state.', error);
   }
@@ -301,9 +324,25 @@ function writeDesktopSessionState(state: PersistedDesktopState): void {
 
 function clearDesktopSessionState(): void {
   try {
-    window.sessionStorage.removeItem(DESKTOP_STATE_STORAGE_KEY);
+    window.localStorage.removeItem(DESKTOP_STATE_STORAGE_KEY);
   } catch (error) {
     console.error('Failed to clear desktop session state.', error);
+  }
+}
+
+function readCrtChoice(): boolean {
+  try {
+    return window.localStorage.getItem(CRT_STORAGE_KEY) === 'true';
+  } catch {
+    return false;
+  }
+}
+
+function writeCrtChoice(enabled: boolean): void {
+  try {
+    window.localStorage.setItem(CRT_STORAGE_KEY, String(enabled));
+  } catch {
+    // ignore
   }
 }
 
@@ -465,6 +504,16 @@ function DesktopGlyph({ icon }: { icon: IconKind }): React.ReactElement {
           <path d="M36 14h4v20h-4" fill="#d95a3c" stroke="#143f86" strokeWidth="2" />
         </svg>
       );
+    case 'terminal':
+      return (
+        <svg viewBox="0 0 48 48" className="xp-desktop-glyph" aria-hidden="true">
+          <rect x="4" y="8" width="40" height="30" rx="2" fill="#0c0c0c" stroke="#3d6394" strokeWidth="1.5" />
+          <rect x="4" y="8" width="40" height="6" rx="2" fill="#1c3c6e" />
+          <rect x="4" y="11" width="40" height="3" fill="#1c3c6e" />
+          <path d="M11 24 l6 -4 -6 -4" fill="none" stroke="#39d353" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <rect x="19" y="19" width="8" height="10" rx="1" fill="#39d353" opacity="0.75" />
+        </svg>
+      );
   }
 }
 
@@ -545,10 +594,12 @@ function Taskbar({
   windows,
   windowStates,
   soundEnabled,
+  crtEnabled,
   startOpen,
   clock,
   onToggleStart,
   onToggleSound,
+  onToggleCrt,
   onTaskbarClick,
 }: TaskbarProps): React.ReactElement {
   const openWindows = windows.filter((window) => windowStates[window.id].open);
@@ -583,6 +634,9 @@ function Taskbar({
         })}
       </div>
       <div className="xp-system-tray">
+        <button type="button" className="xp-tray-toggle" onClick={onToggleCrt}>
+          {crtEnabled ? 'CRT ●' : 'CRT'}
+        </button>
         <button type="button" className="xp-tray-toggle" onClick={onToggleSound}>
           {soundEnabled ? 'Sound On' : 'Sound Off'}
         </button>
@@ -794,6 +848,7 @@ function MobileShell({
   shortcuts,
   activeSection,
   soundEnabled,
+  crtEnabled,
   menuOpen,
   clock,
   renderMobileSection,
@@ -804,6 +859,7 @@ function MobileShell({
   onLaunchShortcut,
   onToggleMenu,
   onToggleSound,
+  onToggleCrt,
   onPrimeAudio,
   onOpenWork,
 }: MobileShellProps): React.ReactElement {
@@ -875,6 +931,15 @@ function MobileShell({
                     <small>Toggle interface sound effects.</small>
                   </span>
                 </button>
+                <button type="button" className="xp-mobile-launch-item" onClick={onToggleCrt}>
+                  <span className="xp-icon-badge xp-icon-about xp-start-icon">
+                    <DesktopGlyph icon="about" />
+                  </span>
+                  <span className="xp-mobile-launch-copy">
+                    <strong>{crtEnabled ? 'CRT scanlines: On' : 'CRT scanlines: Off'}</strong>
+                    <small>Toggle retro CRT display effect.</small>
+                  </span>
+                </button>
               </div>
             </div>
           </div>
@@ -902,21 +967,68 @@ function MobileShell({
   );
 }
 
-function BootScreen(): React.ReactElement {
-  return (
-    <div className="xp-boot-screen">
-      <div className="window xp-boot-window">
-        <div className="title-bar">
-          <div className="title-bar-text">Windows XP Portfolio</div>
-        </div>
-        <div className="window-body xp-boot-body">
-          <strong>Starting up...</strong>
-          <p>Loading your desktop and preparing a fresh wallpaper.</p>
-          <div className="xp-boot-progress" aria-hidden="true">
-            <span className="xp-boot-progress-bar" />
-          </div>
+function BootScreen({ phase, onLogin }: { phase: BootPhase; onLogin: () => void }): React.ReactElement {
+  useEffect(() => {
+    if (phase !== 'welcome') return;
+    const timer = window.setTimeout(onLogin, 1800);
+    return () => window.clearTimeout(timer);
+  }, [phase, onLogin]);
+
+  if (phase === 'welcome') {
+    return (
+      <div className="xp-welcome-screen">
+        <span className="xp-welcome-title">Welcome</span>
+        <div className="xp-welcome-divider" />
+        <div className="xp-welcome-content">
+          <button type="button" className="xp-welcome-user" onClick={onLogin}>
+            <img src="/images/hero.jpg" alt="Junseong Lee" className="xp-welcome-avatar" />
+            <span>Junseong Lee</span>
+          </button>
+          <p className="xp-welcome-hint">click to sign in</p>
         </div>
       </div>
+    );
+  }
+
+  return (
+    <div className="xp-boot-screen">
+      <div className="xp-boot-logo">
+        <span className="xp-boot-windows">Windows</span>
+        <span className="xp-boot-xp">XP</span>
+      </div>
+      <div className="xp-boot-progress-wrap">
+        <div className="xp-boot-progress-track">
+          <div className="xp-boot-progress-runner" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function BSoD(): React.ReactElement {
+  useEffect(() => {
+    const timer = window.setTimeout(() => window.location.reload(), 3500);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  return (
+    <div className="xp-bsod">
+      <p>A problem has been detected and Windows has been shut down to prevent damage to your computer.</p>
+      <br />
+      <p>IRQL_NOT_LESS_OR_EQUAL</p>
+      <br />
+      <p>If this is the first time you have seen this Stop error screen, restart your computer. If this screen appears again, follow these steps:</p>
+      <br />
+      <p>Check to make sure any new hardware or software is properly installed. If this is a new installation, ask your hardware or software manufacturer for any Windows updates you might need.</p>
+      <br />
+      <p>Technical information:</p>
+      <br />
+      <p>{'*** STOP: 0x0000000A (0x00000004, 0x00000002, 0x00000001, 0x8050A388)'}</p>
+      <br />
+      <p>{'*** sudo_rm.sys - Address BF800B62 base at BF800000, DateStamp 3edd3e29'}</p>
+      <br />
+      <p>Beginning dump of physical memory</p>
+      <p>Physical memory dump complete.</p>
     </div>
   );
 }
@@ -926,6 +1038,9 @@ const XPDesktop: React.FC = () => {
   const [selectedShortcut, setSelectedShortcut] = useState<ShortcutId | null>(null);
   const [startOpen, setStartOpen] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
+  const [crtEnabled, setCrtEnabled] = useState(false);
+  const [bsodActive, setBsodActive] = useState(false);
+  const [bootPhase, setBootPhase] = useState<BootPhase>('loading');
   const [clock, setClock] = useState('--:--');
   const [wallpaper, setWallpaper] = useState('');
   const [isMobile, setIsMobile] = useState(false);
@@ -933,7 +1048,7 @@ const XPDesktop: React.FC = () => {
   const [selectedBlogPost, setSelectedBlogPost] = useState<BlogPost>(blogPosts[0]);
   const [hasMountedClient, setHasMountedClient] = useState(false);
   const [hasHydratedDesktopState, setHasHydratedDesktopState] = useState(false);
-  const [hasPreparedWallpaper, setHasPreparedWallpaper] = useState(false);
+  const [, setHasPreparedWallpaper] = useState(false);
   const zCounter = useRef(INITIAL_Z + 10);
   const audioContextRef = useRef<AudioContext | null>(null);
 
@@ -949,6 +1064,7 @@ const XPDesktop: React.FC = () => {
     const initialNow = new Date();
     setClock(formatClock(initialNow));
     setHasMountedClient(true);
+    setCrtEnabled(readCrtChoice());
 
     const selectedWallpaper = readWallpaperSessionChoice() ?? chooseRandomWallpaper();
     writeWallpaperSessionChoice(selectedWallpaper);
@@ -959,6 +1075,7 @@ const XPDesktop: React.FC = () => {
     ]).finally(() => {
       setWallpaper(selectedWallpaper);
       setHasPreparedWallpaper(true);
+      setBootPhase('welcome');
     });
 
     const timer = window.setInterval(() => {
@@ -1019,6 +1136,14 @@ const XPDesktop: React.FC = () => {
 
     writeDesktopSessionState(persistedState);
   }, [hasHydratedDesktopState, selectedBlogPost.slug, windowStates]);
+
+  const toggleCrt = () => {
+    setCrtEnabled((prev) => {
+      const next = !prev;
+      writeCrtChoice(next);
+      return next;
+    });
+  };
 
   const primeAudio = () => {
     const AudioContextClass =
@@ -1206,6 +1331,7 @@ const XPDesktop: React.FC = () => {
       case 'about':
       case 'home':
       case 'contact':
+      case 'terminal':
         openWindow(id);
         return;
       case 'resume':
@@ -1243,6 +1369,8 @@ const XPDesktop: React.FC = () => {
         return <JunLeeSection onOpenPost={openBlogPost} />;
       case 'contact':
         return <ContactSection />;
+      case 'terminal':
+        return <TerminalSection onTriggerBsod={() => setBsodActive(true)} />;
       case 'blogReader':
         return (
           <section className="xp-content xp-blog-reader">
@@ -1283,44 +1411,55 @@ const XPDesktop: React.FC = () => {
     .map((id) => windowStates[id])
     .filter((windowState) => windowState.open && !windowState.minimized);
 
-  if (!hasMountedClient || !hasHydratedDesktopState || !hasPreparedWallpaper) {
-    return <BootScreen />;
+  if (!hasMountedClient || !hasHydratedDesktopState || bootPhase !== 'desktop') {
+    const displayPhase: BootPhase =
+      hasMountedClient && hasHydratedDesktopState && bootPhase === 'welcome' ? 'welcome' : 'loading';
+    return <BootScreen phase={displayPhase} onLogin={() => setBootPhase('desktop')} />;
   }
 
   if (isMobile) {
     return (
-      <MobileShell
-        wallpaper={wallpaper}
-        shortcuts={SHORTCUTS}
-        activeSection={mobileSection}
-        soundEnabled={soundEnabled}
-        menuOpen={startOpen}
-        clock={clock}
-        renderMobileSection={renderMobileSection}
-        renderBlogReader={() => renderWindowContent('blogReader')}
-        isBlogReaderOpen={windowStates.blogReader.open && !windowStates.blogReader.minimized}
-        onCloseBlogReader={closeBlogReader}
-        onChangeSection={(section) => {
-          playSound('click');
-          setMobileSection(section);
-          setStartOpen(false);
-        }}
-        onLaunchShortcut={launchShortcut}
-        onToggleMenu={() => {
-          playSound('click');
-          setStartOpen((value) => !value);
-        }}
-        onToggleSound={() => {
-          playSound('click');
-          setSoundEnabled((value) => !value);
-        }}
-        onPrimeAudio={primeAudio}
-        onOpenWork={() => {
-          playSound('open');
-          setMobileSection('work');
-          setStartOpen(false);
-        }}
-      />
+      <>
+        <MobileShell
+          wallpaper={wallpaper}
+          shortcuts={SHORTCUTS}
+          activeSection={mobileSection}
+          soundEnabled={soundEnabled}
+          crtEnabled={crtEnabled}
+          menuOpen={startOpen}
+          clock={clock}
+          renderMobileSection={renderMobileSection}
+          renderBlogReader={() => renderWindowContent('blogReader')}
+          isBlogReaderOpen={windowStates.blogReader.open && !windowStates.blogReader.minimized}
+          onCloseBlogReader={closeBlogReader}
+          onChangeSection={(section) => {
+            playSound('click');
+            setMobileSection(section);
+            setStartOpen(false);
+          }}
+          onLaunchShortcut={launchShortcut}
+          onToggleMenu={() => {
+            playSound('click');
+            setStartOpen((value) => !value);
+          }}
+          onToggleSound={() => {
+            playSound('click');
+            setSoundEnabled((value) => !value);
+          }}
+          onToggleCrt={() => {
+            playSound('click');
+            toggleCrt();
+          }}
+          onPrimeAudio={primeAudio}
+          onOpenWork={() => {
+            playSound('open');
+            setMobileSection('work');
+            setStartOpen(false);
+          }}
+        />
+        {crtEnabled && <div className="xp-crt-overlay" />}
+        {bsodActive && <BSoD />}
+      </>
     );
   }
 
@@ -1376,6 +1515,7 @@ const XPDesktop: React.FC = () => {
         windows={Object.values(WINDOW_DEFINITIONS)}
         windowStates={windowStates}
         soundEnabled={soundEnabled}
+        crtEnabled={crtEnabled}
         startOpen={startOpen}
         clock={clock}
         onToggleStart={() => {
@@ -1386,8 +1526,14 @@ const XPDesktop: React.FC = () => {
           playSound('click');
           setSoundEnabled((value) => !value);
         }}
+        onToggleCrt={() => {
+          playSound('click');
+          toggleCrt();
+        }}
         onTaskbarClick={toggleTaskbarWindow}
       />
+      {crtEnabled && <div className="xp-crt-overlay" />}
+      {bsodActive && <BSoD />}
     </div>
   );
 };

@@ -1,4 +1,20 @@
 import React, { useMemo, useState } from 'react'
+
+function IEToolbar({ url, onGo }: { url: string; onGo: () => void }): React.ReactElement {
+  return (
+    <div className="xp-ie-toolbar">
+      <button type="button" className="xp-ie-nav-btn" disabled aria-label="Back">&#9668;</button>
+      <button type="button" className="xp-ie-nav-btn" disabled aria-label="Forward">&#9658;</button>
+      <div className="xp-ie-address-row">
+        <span className="xp-ie-address-label">Address</span>
+        <div className="xp-ie-address-bar">
+          <span className="xp-ie-url">{url}</span>
+        </div>
+        <button type="button" className="xp-ie-go-btn" onClick={onGo}>Go</button>
+      </div>
+    </div>
+  )
+}
 import { blogPosts, type BlogPost } from './BlogSection'
 import { projects } from './ProjectsSection'
 import { researchEntries } from './ResearchSection'
@@ -137,6 +153,16 @@ const JunLeeSection: React.FC<JunLeeSectionProps> = ({ onOpenPost }) => {
           </div>
         </aside>
 
+        <div className="xp-home-main-wrap">
+          {activeFolder === 'projects' && (
+            <IEToolbar
+              url={selectedEntry?.href ?? 'https://github.com/junjslee'}
+              onGo={() => {
+                const url = selectedEntry?.href ?? 'https://github.com/junjslee'
+                window.open(url, '_blank', 'noopener,noreferrer')
+              }}
+            />
+          )}
         <div className="xp-home-main">
           <div className="xp-pane xp-home-browser">
             <div className="xp-listview-header">
@@ -181,6 +207,13 @@ const JunLeeSection: React.FC<JunLeeSectionProps> = ({ onOpenPost }) => {
               </div>
             </article>
           ) : null}
+        </div>
+          {activeFolder === 'projects' && (
+            <div className="xp-ie-statusbar">
+              <span>Done</span>
+              <span>Internet</span>
+            </div>
+          )}
         </div>
       </div>
     </section>
