@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 
 interface TerminalLine {
-  kind: 'input' | 'output' | 'error'
+  kind: 'input' | 'output' | 'error' | 'ascii'
   text: string
 }
 
@@ -9,106 +9,121 @@ interface TerminalSectionProps {
   onTriggerBsod: () => void
 }
 
-const PROMPT = 'C:\\Users\\JunLee> '
+const PROMPT = 'C:\\JunLee> '
+
+const BANNER = String.raw`
+        _                 _
+       (_)_   _ _ __     | | ___  ___
+       | | | | | '_ \ _  | |/ _ \/ _ \
+       | | |_| | | | | |_| |  __/  __/
+      _/ |\__,_|_| |_|\___/ \___|\___|
+     |__/
+`
 
 const INITIAL_LINES: TerminalLine[] = [
+  { kind: 'ascii', text: BANNER },
   { kind: 'output', text: 'Microsoft Windows XP [Version 5.1.2600]' },
-  { kind: 'output', text: '(C) Copyright 1985-2001 Microsoft Corp.' },
+  { kind: 'output', text: '(c) 1985-2001 Junseong Corp. All rights reserved.' },
   { kind: 'output', text: '' },
+  { kind: 'output', text: 'Type  help  to see what this thing can do.' },
   { kind: 'output', text: '' },
+]
+
+const JOKES = [
+  'There are 10 kinds of people. Those who know binary and those who don\'t.',
+  'Why do programmers prefer dark mode? Because light attracts bugs.',
+  'A SQL query walks into a bar, sees two tables, and asks: "Mind if I join?"',
+  '!false — it\'s funny because it\'s true.',
+  'I would tell you a UDP joke, but you might not get it.',
+  'There\'s no place like 127.0.0.1.',
 ]
 
 function runCommand(input: string, onTriggerBsod: () => void): TerminalLine[] {
   const trimmed = input.trim()
-  const lower = trimmed.toLowerCase()
-
   if (!trimmed) return []
 
-  if (lower === 'help') {
+  const lower = trimmed.toLowerCase()
+  const [head, ...rest] = trimmed.split(/\s+/)
+  const cmd = head.toLowerCase()
+  const args = rest.join(' ')
+
+  if (cmd === 'help') {
     return [
-      { kind: 'output', text: 'Available commands:' },
-      { kind: 'output', text: '  help        Show this help message' },
-      { kind: 'output', text: '  cls, clear  Clear the terminal screen' },
-      { kind: 'output', text: '  dir         List directory contents' },
-      { kind: 'output', text: '  whoami      Display current user' },
-      { kind: 'output', text: '  ipconfig    Display network configuration' },
-      { kind: 'output', text: '  systeminfo  Display system information' },
+      { kind: 'output', text: 'Commands:' },
+      { kind: 'output', text: '  help             this list' },
+      { kind: 'output', text: '  dir              browse C:\\JunLee' },
+      { kind: 'output', text: '  whoami           who is this guy anyway' },
+      { kind: 'output', text: '  echo <text>      parrot mode' },
+      { kind: 'output', text: '  joke             tell me a joke' },
+      { kind: 'output', text: '  cls | clear      clean slate' },
+      { kind: 'output', text: '' },
+      { kind: 'output', text: '  (there are hidden commands. go on.)' },
       { kind: 'output', text: '' },
     ]
   }
 
-  if (lower === 'cls' || lower === 'clear') {
+  if (cmd === 'cls' || cmd === 'clear') {
     return [{ kind: 'output', text: '__CLEAR__' }]
   }
 
-  if (lower === 'dir') {
+  if (cmd === 'dir') {
     return [
-      { kind: 'output', text: ' Volume in drive C is JunLee-PC' },
-      { kind: 'output', text: ' Directory of C:\\Users\\JunLee' },
+      { kind: 'output', text: ' Volume in drive C is JUN-LEE' },
+      { kind: 'output', text: ' Directory of C:\\JunLee' },
       { kind: 'output', text: '' },
-      { kind: 'output', text: '03/26/2026  09:14 AM    <DIR>          Research' },
-      { kind: 'output', text: '03/26/2026  09:14 AM    <DIR>          Projects' },
-      { kind: 'output', text: '03/26/2026  09:14 AM    <DIR>          Writing' },
-      { kind: 'output', text: '03/26/2026  09:14 AM             2,048 about.txt' },
-      { kind: 'output', text: '03/26/2026  09:14 AM           184,320 Resume.pdf' },
-      { kind: 'output', text: '               2 File(s)        186,368 bytes' },
-      { kind: 'output', text: '               3 Dir(s)  238,102,364,160 bytes free' },
+      { kind: 'output', text: ' <DIR>   Research/' },
+      { kind: 'output', text: ' <DIR>   Projects/      (episteme, UMTauto, ...)' },
+      { kind: 'output', text: ' <DIR>   Writing/' },
+      { kind: 'output', text: '         about.txt' },
+      { kind: 'output', text: '         Resume.pdf' },
+      { kind: 'output', text: '         coffee.sh' },
       { kind: 'output', text: '' },
     ]
   }
 
-  if (lower === 'whoami') {
+  if (cmd === 'whoami') {
     return [
-      { kind: 'output', text: 'junjslee-pc\\Junseong Lee' },
+      { kind: 'output', text: 'Junseong Lee — AI Research Engineer @ Asan Medical Center.' },
+      { kind: 'output', text: 'Likes: medical AI, calibrated reasoning, small useful tools.' },
       { kind: 'output', text: '' },
     ]
   }
 
-  if (lower === 'ipconfig') {
+  if (cmd === 'echo') {
+    return [{ kind: 'output', text: args || 'ECHO is on.' }, { kind: 'output', text: '' }]
+  }
+
+  if (cmd === 'joke') {
+    const pick = JOKES[Math.floor(Math.random() * JOKES.length)]
+    return [{ kind: 'output', text: pick }, { kind: 'output', text: '' }]
+  }
+
+  if (cmd === 'coffee' || lower === 'coffee.sh') {
     return [
-      { kind: 'output', text: 'Windows IP Configuration' },
-      { kind: 'output', text: '' },
-      { kind: 'output', text: 'Ethernet adapter Local Area Connection:' },
-      { kind: 'output', text: '' },
-      { kind: 'output', text: '   Connection-specific DNS Suffix  . : github.io' },
-      { kind: 'output', text: '   IP Address. . . . . . . . . . . : 185.199.108.153' },
-      { kind: 'output', text: '   Subnet Mask . . . . . . . . . . : 255.255.255.0' },
-      { kind: 'output', text: '   Default Gateway . . . . . . . . : 185.199.108.1' },
+      { kind: 'ascii', text: '     ( (\n      ) )\n   .______.\n   |      |]\n   \\      /\n    `----\'' },
+      { kind: 'output', text: 'brewing... ☕ done. stay caffeinated.' },
       { kind: 'output', text: '' },
     ]
   }
 
-  if (lower === 'systeminfo') {
+  if (cmd === 'exit' || cmd === 'shutdown') {
     return [
-      { kind: 'output', text: 'Host Name:              JUNJSLEE-PC' },
-      { kind: 'output', text: 'OS Name:                Windows XP Portfolio Edition' },
-      { kind: 'output', text: 'OS Version:             5.1.2600 Service Pack 3' },
-      { kind: 'output', text: 'Owner:                  Junseong Lee' },
-      { kind: 'output', text: 'System Model:           B.S. Finance & Data Science CS Minor' },
-      { kind: 'output', text: 'Processor:              AI Research Engineer @ Asan Medical Center' },
-      { kind: 'output', text: 'Current Focus:          Statistical learning + Medical AI' },
+      { kind: 'output', text: 'nice try. you can hit the X button though.' },
       { kind: 'output', text: '' },
     ]
   }
 
-  if (
-    lower === 'sudo rm -rf /' ||
-    lower === 'rm -rf /' ||
-    lower === 'del /f /s /q c:\\'
-  ) {
-    window.setTimeout(() => {
-      onTriggerBsod()
-    }, 900)
+  if (lower === 'sudo rm -rf /' || lower === 'rm -rf /' || lower === 'del /f /s /q c:\\') {
+    window.setTimeout(() => onTriggerBsod(), 900)
     return [
-      { kind: 'error', text: 'WARNING: Attempting to delete system partition...' },
-      { kind: 'error', text: 'Access Denied. Initiating emergency shutdown sequence.' },
+      { kind: 'error', text: 'WARNING: deleting system partition...' },
+      { kind: 'error', text: 'just kidding. no wait—' },
       { kind: 'output', text: '' },
     ]
   }
 
   return [
-    { kind: 'error', text: `'${trimmed}' is not recognized as an internal or external command,` },
-    { kind: 'error', text: 'operable program or batch file.' },
+    { kind: 'error', text: `'${trimmed}' is not recognized. try 'help'.` },
     { kind: 'output', text: '' },
   ]
 }

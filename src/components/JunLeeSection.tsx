@@ -15,6 +15,20 @@ function IEToolbar({ url, onGo }: { url: string; onGo: () => void }): React.Reac
     </div>
   )
 }
+
+type KindVisual = { icon: string; accent: string }
+
+function getKindVisual(folder: FolderId, kind: string): KindVisual {
+  if (folder === 'writing') return { icon: '✎', accent: '#c46b2a' }
+  if (folder === 'research') return { icon: '◈', accent: '#2b7a7a' }
+  const k = kind.toLowerCase()
+  if (k.includes('agent')) return { icon: '⌬', accent: '#6e3bd8' }
+  if (k.includes('web')) return { icon: '◉', accent: '#d63a7a' }
+  if (k.includes('ml')) return { icon: '∿', accent: '#1f8a4a' }
+  if (k.includes('finance')) return { icon: '$', accent: '#1e6db0' }
+  if (k.includes('operation')) return { icon: '⚙', accent: '#5b6472' }
+  return { icon: '▣', accent: '#546b8a' }
+}
 import { blogPosts, type BlogPost } from './BlogSection'
 import { projects } from './ProjectsSection'
 import { researchEntries } from './ResearchSection'
@@ -34,6 +48,7 @@ interface ExplorerEntry {
   summary: string
   actionLabel: string
   href?: string
+  liveLink?: string
   post?: BlogPost
 }
 
@@ -58,10 +73,11 @@ const explorerEntries: ExplorerEntry[] = [
     title: project.title,
     folder: 'projects' as const,
     kind: project.category,
-    meta: 'GitHub Repository',
+    meta: project.liveLink ? 'GitHub + Live Site' : 'GitHub Repository',
     summary: project.description,
     actionLabel: 'Open on GitHub',
     href: project.repoLink,
+    liveLink: project.liveLink,
   })),
   ...researchEntries.map((entry) => ({
     id: `research-${entry.title}`,
@@ -156,9 +172,9 @@ const JunLeeSection: React.FC<JunLeeSectionProps> = ({ onOpenPost }) => {
         <div className="xp-home-main-wrap">
           {activeFolder === 'projects' && (
             <IEToolbar
-              url={selectedEntry?.href ?? 'https://github.com/junjslee'}
+              url={selectedEntry?.liveLink ?? selectedEntry?.href ?? 'https://github.com/junjslee'}
               onGo={() => {
-                const url = selectedEntry?.href ?? 'https://github.com/junjslee'
+                const url = selectedEntry?.liveLink ?? selectedEntry?.href ?? 'https://github.com/junjslee'
                 window.open(url, '_blank', 'noopener,noreferrer')
               }}
             />
@@ -171,36 +187,70 @@ const JunLeeSection: React.FC<JunLeeSectionProps> = ({ onOpenPost }) => {
               <span>Info</span>
             </div>
             <div className="xp-home-list" role="listbox" aria-label={`${folderCopy[activeFolder].label} list`}>
-              {visibleEntries.map((entry) => (
-                <button
-                  key={entry.id}
-                  type="button"
-                  className={`xp-home-row${selectedEntry?.id === entry.id ? ' is-selected' : ''}`}
-                  onClick={() => setSelectedEntryId(entry.id)}
-                  onDoubleClick={() => openEntry(entry)}
-                >
-                  <span className="xp-home-row-title">{entry.title}</span>
-                  <span className="xp-home-row-kind">{entry.kind}</span>
-                  <span className="xp-home-row-meta">{entry.meta}</span>
-                </button>
-              ))}
+              {visibleEntries.map((entry) => {
+                const visual = getKindVisual(entry.folder, entry.kind)
+                return (
+                  <button
+                    key={entry.id}
+                    type="button"
+                    className={`xp-home-row${selectedEntry?.id === entry.id ? ' is-selected' : ''}`}
+                    onClick={() => setSelectedEntryId(entry.id)}
+                    onDoubleClick={() => openEntry(entry)}
+                    title={entry.title}
+                  >
+                    <span className="xp-home-row-title">
+                      <span
+                        className="xp-home-row-glyph"
+                        style={{ color: visual.accent, borderColor: visual.accent }}
+                        aria-hidden="true"
+                      >
+                        {visual.icon}
+                      </span>
+                      <span className="xp-home-row-name">{entry.title}</span>
+                      {entry.liveLink ? <span className="xp-home-row-live">LIVE</span> : null}
+                    </span>
+                    <span className="xp-home-row-kind">{entry.kind}</span>
+                    <span className="xp-home-row-meta">{entry.meta}</span>
+                  </button>
+                )
+              })}
             </div>
           </div>
 
           {selectedEntry ? (
             <article className="xp-pane xp-home-preview">
               <div className="xp-project-preview-header">
+                <div
+                  className="xp-preview-hero"
+                  style={{
+                    background: `linear-gradient(135deg, ${getKindVisual(selectedEntry.folder, selectedEntry.kind).accent} 0%, #0f1b3a 100%)`,
+                  }}
+                  aria-hidden="true"
+                >
+                  <span className="xp-preview-hero-glyph">
+                    {getKindVisual(selectedEntry.folder, selectedEntry.kind).icon}
+                  </span>
+                </div>
                 <div className="xp-preview-copy">
                   <span className="xp-preview-label">{folderCopy[activeFolder].label}</span>
                   <h2>{selectedEntry.title}</h2>
                   <div className="xp-research-chips">
                     <span className="xp-project-chip">{selectedEntry.kind}</span>
                     <span className="xp-project-chip">{selectedEntry.meta}</span>
+                    {selectedEntry.liveLink ? <span className="xp-project-chip is-live">LIVE</span> : null}
                   </div>
                 </div>
               </div>
               <p>{selectedEntry.summary}</p>
               <div className="xp-project-actions">
+                {selectedEntry.liveLink ? (
+                  <button
+                    type="button"
+                    onClick={() => window.open(selectedEntry.liveLink!, '_blank', 'noopener,noreferrer')}
+                  >
+                    Open Live Site
+                  </button>
+                ) : null}
                 <button type="button" onClick={handlePrimaryAction}>
                   {selectedEntry.actionLabel}
                 </button>

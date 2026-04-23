@@ -39,9 +39,16 @@ const ProjectsPage: NextPage = () => {
                 <h2>{project.title}</h2>
                 <p className="seo-entry-meta">{project.category}</p>
               </div>
-              <a href={project.repoLink} target="_blank" rel="noopener noreferrer">
-                Open Repository
-              </a>
+              <div className="seo-entry-links">
+                {project.liveLink ? (
+                  <a href={project.liveLink} target="_blank" rel="noopener noreferrer">
+                    Live Site
+                  </a>
+                ) : null}
+                <a href={project.repoLink} target="_blank" rel="noopener noreferrer">
+                  Open Repository
+                </a>
+              </div>
             </div>
             <p>{project.description}</p>
             <div className="seo-tag-list" aria-label="Technology stack">

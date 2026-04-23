@@ -6,9 +6,18 @@ export interface ProjectEntry {
   techStack: string[]
   repoLink: string
   category: string
+  liveLink?: string
 }
 
 export const projects: ProjectEntry[] = [
+  {
+    title: "episteme",
+    description: "A cognitive governance layer for AI agents — protocols, skills, and memory that push agents toward calibrated reasoning instead of confident-wrong answers. Live: https://episteme-alpha.vercel.app",
+    techStack: ["TypeScript", "Next.js", "Claude Code / Agent SDK", "Vercel"],
+    repoLink: "https://github.com/junjslee/episteme",
+    liveLink: "https://episteme-alpha.vercel.app/",
+    category: "Agent OS",
+  },
   {
     title: "Will You Be My Valentine?",
     description: "Made a website for my partner with Bugcat-Capoo GIFs",
@@ -105,6 +114,11 @@ const ProjectsSection: React.FC = () => {
             </ul>
           </div>
           <div className="xp-project-actions">
+            {selectedProject.liveLink ? (
+              <a href={selectedProject.liveLink} target="_blank" rel="noopener noreferrer">
+                Open Live Site
+              </a>
+            ) : null}
             <a href={selectedProject.repoLink} target="_blank" rel="noopener noreferrer">
               Open on GitHub
             </a>

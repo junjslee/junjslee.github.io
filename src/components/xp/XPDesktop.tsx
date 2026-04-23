@@ -4,14 +4,15 @@ import { blogPosts } from '../BlogSection';
 import ContactSection from '../ContactSection';
 import JunLeeSection from '../JunLeeSection';
 import TerminalSection from '../TerminalSection';
+import MinesweeperSection from '../MinesweeperSection';
 import type { BlogPost } from '../BlogSection';
 
-type InternalWindowId = 'about' | 'home' | 'contact' | 'blogReader' | 'terminal';
+type InternalWindowId = 'about' | 'home' | 'contact' | 'blogReader' | 'terminal' | 'minesweeper';
 type ShortcutId = InternalWindowId | 'resume' | 'github' | 'linkedin';
-type IconKind = 'about' | 'home' | 'contact' | 'resume' | 'github' | 'linkedin' | 'reader' | 'terminal';
+type IconKind = 'about' | 'home' | 'contact' | 'resume' | 'github' | 'linkedin' | 'reader' | 'terminal' | 'minesweeper';
 type MobileSection = 'about' | 'work' | 'contact';
 type SoundName = 'open' | 'close' | 'minimize' | 'maximize' | 'click';
-type BootPhase = 'loading' | 'welcome' | 'desktop';
+type BootPhase = 'loading' | 'desktop';
 
 interface WindowDefinition {
   id: InternalWindowId;
@@ -58,7 +59,13 @@ interface DesktopWindowProps {
   onMinimize: () => void;
   onToggleMaximize: () => void;
   onMove: (x: number, y: number) => void;
+  onResize: (x: number, y: number, width: number, height: number) => void;
 }
+
+type ResizeDirection = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw';
+
+const RESIZE_MIN_WIDTH = 320;
+const RESIZE_MIN_HEIGHT = 240;
 
 interface DesktopIconProps {
   shortcut: ShortcutDefinition;
@@ -125,9 +132,8 @@ interface MobileShellProps {
 const MOBILE_BREAKPOINT = 720;
 const INITIAL_Z = 40;
 const DESKTOP_STATE_STORAGE_KEY = 'junlee-xp-desktop-state-v1';
-const WALLPAPER_STORAGE_KEY = 'junlee-xp-wallpaper-session-v1';
 const CRT_STORAGE_KEY = 'junlee-xp-crt-v1';
-const WINDOW_IDS: InternalWindowId[] = ['about', 'home', 'contact', 'blogReader', 'terminal'];
+const WINDOW_IDS: InternalWindowId[] = ['about', 'home', 'contact', 'blogReader', 'terminal', 'minesweeper'];
 const WALLPAPER_OPTIONS = [
   // '/images/gif/1_day.gif',
   '/images/gif/2_evening.gif',
@@ -136,7 +142,7 @@ const WALLPAPER_OPTIONS = [
   '/images/gif/5_night_totoro.gif',
 ] as const;
 const DEFAULT_WALLPAPER = WALLPAPER_OPTIONS[0];
-const MIN_BOOT_DURATION_MS = 1600;
+const MIN_BOOT_DURATION_MS = 900;
 
 const WINDOW_DEFINITIONS: Record<InternalWindowId, WindowDefinition> = {
   about: {
@@ -183,6 +189,15 @@ const WINDOW_DEFINITIONS: Record<InternalWindowId, WindowDefinition> = {
     height: 400,
     x: 200,
     y: 130,
+  },
+  minesweeper: {
+    id: 'minesweeper',
+    title: 'Minesweeper',
+    icon: 'minesweeper',
+    width: 440,
+    height: 560,
+    x: 260,
+    y: 110,
   },
 };
 
@@ -232,9 +247,15 @@ const SHORTCUTS: ShortcutDefinition[] = [
     icon: 'terminal',
     description: 'Open the command prompt.',
   },
+  {
+    id: 'minesweeper',
+    label: 'Minesweeper',
+    icon: 'minesweeper',
+    description: 'Classic mine-clearing game.',
+  },
 ];
 
-const DESKTOP_SHORTCUT_IDS: ShortcutId[] = ['about', 'home', 'resume', 'contact', 'terminal'];
+const DESKTOP_SHORTCUT_IDS: ShortcutId[] = ['about', 'home', 'resume', 'contact', 'terminal', 'minesweeper', 'github', 'linkedin'];
 const DESKTOP_SHORTCUTS = SHORTCUTS.filter((shortcut) => DESKTOP_SHORTCUT_IDS.includes(shortcut.id));
 
 interface PersistedDesktopState {
@@ -271,6 +292,7 @@ function createDefaultWindowStates(): Record<InternalWindowId, WindowState> {
     contact: createWindowState('contact', INITIAL_Z + 3),
     blogReader: createWindowState('blogReader', INITIAL_Z + 4),
     terminal: createWindowState('terminal', INITIAL_Z + 5),
+    minesweeper: createWindowState('minesweeper', INITIAL_Z + 6),
   };
 }
 
@@ -353,31 +375,13 @@ function formatClock(date: Date): string {
   });
 }
 
-function readWallpaperSessionChoice(): string | null {
-  try {
-    const wallpaper = window.sessionStorage.getItem(WALLPAPER_STORAGE_KEY);
-    if (!wallpaper || !WALLPAPER_OPTIONS.includes(wallpaper as (typeof WALLPAPER_OPTIONS)[number])) {
-      return null;
-    }
-
-    return wallpaper;
-  } catch (error) {
-    console.error('Failed to read wallpaper session state.', error);
-    return null;
-  }
-}
-
-function writeWallpaperSessionChoice(wallpaper: string): void {
-  try {
-    window.sessionStorage.setItem(WALLPAPER_STORAGE_KEY, wallpaper);
-  } catch (error) {
-    console.error('Failed to write wallpaper session state.', error);
-  }
-}
-
-function chooseRandomWallpaper(): string {
-  const randomIndex = Math.floor(Math.random() * WALLPAPER_OPTIONS.length);
-  return WALLPAPER_OPTIONS[randomIndex] ?? DEFAULT_WALLPAPER;
+function chooseDailyWallpaper(): string {
+  const now = new Date();
+  const dayIndex = Math.floor(
+    Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) / 86400000
+  );
+  const index = ((dayIndex % WALLPAPER_OPTIONS.length) + WALLPAPER_OPTIONS.length) % WALLPAPER_OPTIONS.length;
+  return WALLPAPER_OPTIONS[index] ?? DEFAULT_WALLPAPER;
 }
 
 function preloadWallpaper(src: string): Promise<void> {
@@ -512,6 +516,17 @@ function DesktopGlyph({ icon }: { icon: IconKind }): React.ReactElement {
           <rect x="4" y="11" width="40" height="3" fill="#1c3c6e" />
           <path d="M11 24 l6 -4 -6 -4" fill="none" stroke="#39d353" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           <rect x="19" y="19" width="8" height="10" rx="1" fill="#39d353" opacity="0.75" />
+        </svg>
+      );
+    case 'minesweeper':
+      return (
+        <svg viewBox="0 0 48 48" className="xp-desktop-glyph" aria-hidden="true">
+          <rect x="6" y="6" width="36" height="36" rx="2" fill="#c3c3c3" stroke="#6a6a6a" strokeWidth="1.5" />
+          <path d="M6 6 h36 M6 18 h36 M6 30 h36 M6 42 h36 M6 6 v36 M18 6 v36 M30 6 v36 M42 6 v36" stroke="#9a9a9a" strokeWidth="0.8" />
+          <circle cx="24" cy="24" r="7" fill="#1a1a1a" />
+          <rect x="22" y="14" width="4" height="3" fill="#1a1a1a" />
+          <circle cx="21.5" cy="21.5" r="1.6" fill="#ffffff" />
+          <path d="M14 14 L18 18 M34 34 L30 30" stroke="#1a1a1a" strokeWidth="1.5" strokeLinecap="round" />
         </svg>
       );
   }
@@ -655,24 +670,60 @@ function DesktopWindow({
   onMinimize,
   onToggleMaximize,
   onMove,
+  onResize,
 }: DesktopWindowProps): React.ReactElement {
   const windowRef = useRef<HTMLDivElement | null>(null);
   const dragPosition = useRef<{ offsetX: number; offsetY: number } | null>(null);
+  const resizeRef = useRef<{
+    dir: ResizeDirection;
+    startX: number;
+    startY: number;
+    startW: number;
+    startH: number;
+    startLeft: number;
+    startTop: number;
+  } | null>(null);
 
   useEffect(() => {
     const handlePointerMove = (event: MouseEvent) => {
-      if (!dragPosition.current || state.maximized) {
+      if (state.maximized) {
         return;
       }
 
-      const nextX = Math.max(16, event.clientX - dragPosition.current.offsetX);
-      const nextY = Math.max(16, event.clientY - dragPosition.current.offsetY);
+      if (resizeRef.current) {
+        const { dir, startX, startY, startW, startH, startLeft, startTop } = resizeRef.current;
+        const dx = event.clientX - startX;
+        const dy = event.clientY - startY;
+        let nextW = startW;
+        let nextH = startH;
+        let nextLeft = startLeft;
+        let nextTop = startTop;
 
-      onMove(nextX, nextY);
+        if (dir.includes('e')) nextW = Math.max(RESIZE_MIN_WIDTH, startW + dx);
+        if (dir.includes('s')) nextH = Math.max(RESIZE_MIN_HEIGHT, startH + dy);
+        if (dir.includes('w')) {
+          nextW = Math.max(RESIZE_MIN_WIDTH, startW - dx);
+          nextLeft = startLeft + (startW - nextW);
+        }
+        if (dir.includes('n')) {
+          nextH = Math.max(RESIZE_MIN_HEIGHT, startH - dy);
+          nextTop = startTop + (startH - nextH);
+        }
+
+        onResize(nextLeft, nextTop, nextW, nextH);
+        return;
+      }
+
+      if (dragPosition.current) {
+        const nextX = Math.max(16, event.clientX - dragPosition.current.offsetX);
+        const nextY = Math.max(16, event.clientY - dragPosition.current.offsetY);
+        onMove(nextX, nextY);
+      }
     };
 
     const handlePointerUp = () => {
       dragPosition.current = null;
+      resizeRef.current = null;
     };
 
     window.addEventListener('mousemove', handlePointerMove);
@@ -682,7 +733,23 @@ function DesktopWindow({
       window.removeEventListener('mousemove', handlePointerMove);
       window.removeEventListener('mouseup', handlePointerUp);
     };
-  }, [onMove, state.maximized]);
+  }, [onMove, onResize, state.maximized]);
+
+  const beginResize = (dir: ResizeDirection) => (event: React.MouseEvent) => {
+    if (state.maximized) return;
+    event.preventDefault();
+    event.stopPropagation();
+    onFocus();
+    resizeRef.current = {
+      dir,
+      startX: event.clientX,
+      startY: event.clientY,
+      startW: state.width,
+      startH: state.height,
+      startLeft: state.x,
+      startTop: state.y,
+    };
+  };
 
   const style = state.maximized
     ? { zIndex: state.zIndex }
@@ -761,6 +828,22 @@ function DesktopWindow({
       <div className="window-body xp-window-body">
         <div className="xp-window-content">{children}</div>
       </div>
+      {!state.maximized && (
+        <>
+          <div className="xp-resize-handle xp-resize-n" onMouseDown={beginResize('n')} />
+          <div className="xp-resize-handle xp-resize-s" onMouseDown={beginResize('s')} />
+          <div className="xp-resize-handle xp-resize-e" onMouseDown={beginResize('e')} />
+          <div className="xp-resize-handle xp-resize-w" onMouseDown={beginResize('w')} />
+          <div className="xp-resize-handle xp-resize-nw" onMouseDown={beginResize('nw')} />
+          <div className="xp-resize-handle xp-resize-ne" onMouseDown={beginResize('ne')} />
+          <div className="xp-resize-handle xp-resize-sw" onMouseDown={beginResize('sw')} />
+          <div className="xp-resize-handle xp-resize-se" onMouseDown={beginResize('se')}>
+            <svg viewBox="0 0 10 10" aria-hidden="true">
+              <path d="M2 9 L9 2 M5 9 L9 5 M8 9 L9 8" stroke="#7d90a8" strokeWidth="1" strokeLinecap="round" />
+            </svg>
+          </div>
+        </>
+      )}
     </div>
   );
 }
@@ -967,29 +1050,7 @@ function MobileShell({
   );
 }
 
-function BootScreen({ phase, onLogin }: { phase: BootPhase; onLogin: () => void }): React.ReactElement {
-  useEffect(() => {
-    if (phase !== 'welcome') return;
-    const timer = window.setTimeout(onLogin, 1800);
-    return () => window.clearTimeout(timer);
-  }, [phase, onLogin]);
-
-  if (phase === 'welcome') {
-    return (
-      <div className="xp-welcome-screen">
-        <span className="xp-welcome-title">Welcome</span>
-        <div className="xp-welcome-divider" />
-        <div className="xp-welcome-content">
-          <button type="button" className="xp-welcome-user" onClick={onLogin}>
-            <img src="/images/hero.jpg" alt="Junseong Lee" className="xp-welcome-avatar" />
-            <span>Junseong Lee</span>
-          </button>
-          <p className="xp-welcome-hint">click to sign in</p>
-        </div>
-      </div>
-    );
-  }
-
+function BootScreen(): React.ReactElement {
   return (
     <div className="xp-boot-screen">
       <div className="xp-boot-logo">
@@ -1066,8 +1127,7 @@ const XPDesktop: React.FC = () => {
     setHasMountedClient(true);
     setCrtEnabled(readCrtChoice());
 
-    const selectedWallpaper = readWallpaperSessionChoice() ?? chooseRandomWallpaper();
-    writeWallpaperSessionChoice(selectedWallpaper);
+    const selectedWallpaper = chooseDailyWallpaper();
 
     Promise.all([
       preloadWallpaper(selectedWallpaper),
@@ -1075,7 +1135,7 @@ const XPDesktop: React.FC = () => {
     ]).finally(() => {
       setWallpaper(selectedWallpaper);
       setHasPreparedWallpaper(true);
-      setBootPhase('welcome');
+      setBootPhase('desktop');
     });
 
     const timer = window.setInterval(() => {
@@ -1264,6 +1324,37 @@ const XPDesktop: React.FC = () => {
     });
   };
 
+  const resizeWindow = (
+    id: InternalWindowId,
+    x: number,
+    y: number,
+    width: number,
+    height: number
+  ) => {
+    setWindowStates((current) => {
+      const maxX = Math.max(16, window.innerWidth - width - 20);
+      const maxY = Math.max(16, window.innerHeight - height - 70);
+      const clampedX = Math.max(16, Math.min(x, maxX));
+      const clampedY = Math.max(16, Math.min(y, maxY));
+      return {
+        ...current,
+        [id]: {
+          ...current[id],
+          x: clampedX,
+          y: clampedY,
+          width,
+          height,
+          restored: {
+            x: clampedX,
+            y: clampedY,
+            width,
+            height,
+          },
+        },
+      };
+    });
+  };
+
   const moveWindow = (id: InternalWindowId, x: number, y: number) => {
     setWindowStates((current) => {
       const windowState = current[id];
@@ -1332,6 +1423,7 @@ const XPDesktop: React.FC = () => {
       case 'home':
       case 'contact':
       case 'terminal':
+      case 'minesweeper':
         openWindow(id);
         return;
       case 'resume':
@@ -1371,6 +1463,8 @@ const XPDesktop: React.FC = () => {
         return <ContactSection />;
       case 'terminal':
         return <TerminalSection onTriggerBsod={() => setBsodActive(true)} />;
+      case 'minesweeper':
+        return <MinesweeperSection />;
       case 'blogReader':
         return (
           <section className="xp-content xp-blog-reader">
@@ -1412,9 +1506,7 @@ const XPDesktop: React.FC = () => {
     .filter((windowState) => windowState.open && !windowState.minimized);
 
   if (!hasMountedClient || !hasHydratedDesktopState || bootPhase !== 'desktop') {
-    const displayPhase: BootPhase =
-      hasMountedClient && hasHydratedDesktopState && bootPhase === 'welcome' ? 'welcome' : 'loading';
-    return <BootScreen phase={displayPhase} onLogin={() => setBootPhase('desktop')} />;
+    return <BootScreen />;
   }
 
   if (isMobile) {
@@ -1495,6 +1587,7 @@ const XPDesktop: React.FC = () => {
             onMinimize={() => minimizeWindow(windowState.id)}
             onToggleMaximize={() => toggleMaximize(windowState.id)}
             onMove={(x, y) => moveWindow(windowState.id, x, y)}
+            onResize={(x, y, w, h) => resizeWindow(windowState.id, x, y, w, h)}
           >
             {renderWindowContent(windowState.id)}
           </DesktopWindow>
