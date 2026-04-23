@@ -11,6 +11,8 @@ tsconfig.tsbuildinfo
 .env
 .env.local
 
+.episteme/
+
 # Log files
 npm-debug.log*
 yarn-debug.log*
