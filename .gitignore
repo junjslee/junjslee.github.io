@@ -21,3 +21,4 @@ yarn-error.log*
 
 # IDE and editor settings
 .vscode/
+.claude/settings.local.json
