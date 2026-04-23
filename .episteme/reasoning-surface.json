@@ -1,0 +1,30 @@
+{
+  "timestamp": "2026-04-23T02:15:59Z",
+  "core_question": "Should we push the 2 clean commits to origin/main now, publishing this session's XP overhaul to the live portfolio?",
+  "knowns": [
+    "Working tree is clean; 2 commits (51b2b13 scaffold, 0227809 feat) ahead of origin/main after soft-reset + recommit",
+    "cs225sp26 course PDFs were removed from both working tree and staged index before recommit, so they never reach origin",
+    "Last `npm run build` on the exact HEAD we are pushing passed clean — 7 static pages exported, CSS hash 451710133516a162",
+    "No force-push required: origin/main has never seen the collapsed 8 checkpoint commits, so a regular push is sufficient",
+    "GitHub Pages deploys on push to main via GitHub Actions; a broken build there prevents the live site from updating rather than breaking it",
+    "All code paths touched (Minesweeper, resize, explorer polish, mobile scroll, boot flow) live in the XP desktop shell; SEO pages were smoke-built but not behaviorally changed"
+  ],
+  "unknowns": [
+    "If the GitHub Actions build step exits non-zero within 5 minutes after push, the deploy fails and the Actions tab shows a red X — root cause is likely a Node major mismatch between local 20.14 and CI",
+    "When iOS Safari crosses the sticky-taskbar viewport seam, if scroll jitter exceeds 8 px per frame during a 5 seconds scroll test, the sticky rule regresses on real hardware",
+    "If 5 consecutive finger taps against the 4 px edge-resize strip produce 0 successful resize gestures, the touch target fails usability and mobile users cannot resize windows"
+  ],
+  "assumptions": [
+    "GitHub Actions deploy workflow is wired and hasn't rotted since the last successful deploy",
+    "Static export output on CI matches local output because Next.js static export is deterministic given identical inputs and Node majors",
+    "Removing PDFs that were only in local checkpoint commits has zero downstream impact because no code or markdown referenced them",
+    "Rolling back after push is cheap: `git revert <sha>` and redeploy take under 2 minutes each"
+  ],
+  "disconfirmation": "If the GitHub Actions deploy workflow exits non-zero within 5 minutes of this push, or if Minesweeper fails to open on the live site after deploy completes, revert commit 0227809 and redeploy",
+  "verification_trace": {
+    "command": "curl -sI https://junjslee.github.io/",
+    "threshold_observable": "http_status == 200",
+    "or_dashboard": "https://github.com/junjslee/junjslee.github.io/actions",
+    "window_seconds": 600
+  }
+}
