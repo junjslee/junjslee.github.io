@@ -1,29 +1,31 @@
 # Next Steps
 
 ## Active Goal
-No feature in progress. Session of 2026-07-11 shipped: smooth boot fade (loading → fading → desktop), motion polish pass (window-open animation, start-menu pop, hover/press transitions, mobile section fades, `prefers-reduced-motion` guard), episteme project copy rewritten to current-kernel reality (liveLink → https://www.epistemekernel.com/), and the MGH/Harvard LMIC research-intern experience activated across About, terminal `whoami`, and Person JSON-LD.
+None — session of 2026-07-11 is fully shipped and deployed. Operator said: "as of now we are good, if new updates happen, will lyk and we can work more on it by then."
 
-## Next Actions
-1. Visual smoke test locally (`npx serve out`, or `npm run dev`): confirm the boot screen fades into the desktop with no double-flash, windows animate open, About → Experience shows the LMIC entry, Projects shows the new episteme copy and Live Site button opens epistemekernel.com.
-2. Push to deploy. The 2026-04-22 batch is already on `origin/main` (verified 2026-07-11); `main` is ahead by exactly this session's 3 commits (`9c77fbf` boot fade + motion, `1e656d8` content, `d7ae24d` docs). `git push origin main` deploys via GitHub Actions.
-3. After deploy, smoke-test live: boot fade on a cold load, mobile section-switch fade, `/projects` SEO page shows updated episteme entry.
-4. Optional backlog (carried over): startup chime, Cmd/Ctrl+K palette, per-project case studies, MDX blog. Consider a ResearchSection entry for LMIC work once there is a public artifact (repo/paper) — nothing was fabricated this session.
+## Current State
+- Deployed to https://junjslee.github.io via push `d11be56..014d272` (4 commits: `9c77fbf` boot fade + motion polish, `1e656d8` episteme + LMIC content, `14cb30d` docs, `014d272` date corrections). GitHub Actions run `29159260854` concluded success; live site verified serving the new build (CSS hash `2b3854e024a24854`, boot-screen markup present).
+- Experience dates are future-proofed by operator instruction: LMIC @ MGH/Harvard Medical School is "(Summer 2026)" — it runs through August 2026 and needs no edit afterward; MONET Lab (ended May 2026) and MI2RL Asan (ended Feb 2026) are listed as previous.
+- `main` and `origin/main` are in sync apart from the docs-handoff commit made after deploy (pushed in the same session).
+
+## Next Actions (when the operator flags new updates)
+1. Optional quick win: replace `public/documents/Resume.pdf` — it predates the LMIC internship.
+2. Add an LMIC entry to the Research window/`/research` page once a public artifact (repo/paper) exists — nothing fabricated so far.
+3. Optional backlog: startup chime, Cmd/Ctrl+K palette, per-project case studies, MDX blog, compress wallpaper GIFs (heaviest first-load asset), bump deprecated-Node `actions/*` versions in the Pages workflow.
 
 ## Blockers
 - None.
 
 ## Suggested Commands
 ```bash
-# Visual pass on the exact export
-npx serve out
+# Verify before any future deploy
+npm run build && npm run lint
 
-# Deploy this session's 3 commits
-git log origin/main..HEAD --oneline
+# Deploy
 git push origin main
 ```
 
 ## Handoff Notes
-- All project data stays single-sourced: `projects[]` (ProjectsSection.tsx) and `researchEntries[]` (ResearchSection.tsx) feed the XP explorer, standalone windows, and SEO pages — edit once, propagates everywhere.
-- Boot flow: `BootPhase = 'loading' | 'fading' | 'desktop'`; the fading overlay unmounts via a 650ms timeout while the CSS animation runs 600ms with `forwards` fill — keep those in sync if retuning.
-- LMIC dates are stated as "2026 - Present"; MI2RL Asan marked previous per Resume.pdf (Feb 2025 – Feb 2026). Resume.pdf itself predates the LMIC internship — consider replacing `public/documents/Resume.pdf` with an updated version.
-- `npm run build` + `npm run lint` clean on 2026-07-11; last CSS hash `2b3854e024a24854`.
+- Project data stays single-sourced: `projects[]` (ProjectsSection.tsx) and `researchEntries[]` (ResearchSection.tsx) feed the XP explorer, standalone windows, and SEO pages.
+- Boot flow: `BootPhase = 'loading' | 'fading' | 'desktop'`; fade overlay unmounts via a 650ms timeout while the CSS animation runs 600ms with `forwards` fill — keep in sync if retuning.
+- All decorative motion sits behind `prefers-reduced-motion: reduce` guards at the bottom third of `globals.css`.

@@ -26,7 +26,7 @@
 - Smooth boot (2026-07-11): `BootPhase` gained a `fading` sub-state — the boot screen now overlays the already-painted desktop and fades out over 0.6s (`xp-boot-fade-out`, pointer-events none) while the shell fades in (`xp-shell-reveal`); unmounts at 650ms; boot screen also gained a `© Junseong Lee` footer
 - Motion polish (2026-07-11): window-open animation (`xp-window-open`, 160ms scale+fade) + soft drop shadow on windows and start menu; start menu / mobile launcher pop (`xp-menu-pop`); hover/press transitions on desktop icons, taskbar buttons, start button/items, home folders, project/blog rows, and all XP action buttons; mobile section switches re-mount the panel with a fade (`key={activeSection}` + `xp-fade-in`); mobile overlay fade; all decorative motion disabled under `prefers-reduced-motion: reduce`
 - episteme copy refresh (2026-07-11): project entry rewritten to match the current repo — cognitive-governance kernel (reasoning gate before high-impact actions, hash-chained protocol memory), ships as Claude Code plugin + Python kernel; `liveLink` moved from episteme-alpha.vercel.app to https://www.epistemekernel.com/ (verified live); tech stack updated; propagates to XP explorer, IE toolbar, and `/projects` SEO page automatically
-- MGH/Harvard LMIC experience (2026-07-11): activated the prepared LMIC entry — About window Experience tab lists "Research Intern @ LMIC, Massachusetts General Hospital & Harvard Medical School (2026 - Present)" with lab link (lmic.mgh.harvard.edu, verified live); Current Status shows LMIC + MONET as current, MI2RL Asan as previous (its internship ended 2026-02 per Resume.pdf); terminal `whoami` updated; Person JSON-LD gained MGH + HMS `affiliation` and jobTitle "AI Researcher"
+- MGH/Harvard LMIC experience (2026-07-11): activated the prepared LMIC entry — About window Experience tab lists "Research Intern @ LMIC, Massachusetts General Hospital & Harvard Medical School (Summer 2026)" with lab link (lmic.mgh.harvard.edu, verified live); per operator correction the dates are future-proofed: LMIC runs through Aug 2026 and is written as a fixed range, MONET Lab (ended May 2026) added to highlights and marked previous alongside MI2RL Asan (ended Feb 2026); terminal `whoami` updated; Person JSON-LD gained MGH + HMS `affiliation` and jobTitle "AI Researcher"
 
 ## In Progress
 - Nothing tracked.
@@ -40,8 +40,8 @@
 - `npm run build` — passes clean on 2026-07-11 (boot fade + motion polish + content refresh); 6/6 routes exported, CSS hash `2b3854e024a24854`
 - `npm run lint` — no warnings or errors (2026-07-11)
 - Static output grep-verified: epistemekernel.com liveLink on `/projects`, MGH affiliation JSON-LD on `/`, all new keyframes + reduced-motion guard in built CSS
-- Residual: boot fade not yet eyeballed in a real browser — recommend `npx serve out` visual pass before pushing
-- Deployed to https://junjslee.github.io via GitHub Actions
+- Deployed 2026-07-11: push `d11be56..014d272`, GitHub Actions run `29159260854` success, live site confirmed serving new CSS hash `2b3854e024a24854`
+- Residual: boot fade verified in served HTML/CSS but not manually eyeballed in a browser — worth a glance on next visit to the live site
 
 ## Blockers
 - None known.

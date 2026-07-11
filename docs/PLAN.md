@@ -1,25 +1,24 @@
 # Plan
 
 ## Current Goal
-Session of 2026-07-11: (1) smooth the boot/loading experience — fade the boot screen out over the painted desktop instead of hard-cutting; (2) refresh `episteme` project copy to match its current state (cognitive-governance kernel, Claude Code plugin + Python kernel, live at epistemekernel.com); (3) add the Research Intern @ LMIC, Massachusetts General Hospital / Harvard Medical School experience (About window, terminal `whoami`, Person JSON-LD); (4) general motion polish — window-open animation, start-menu pop, hover transitions, mobile section fades, `prefers-reduced-motion` guard.
+No active goal — repo is back in maintenance/iteration mode. Last shipped and deployed (2026-07-11): smooth boot fade (loading → fading → desktop overlay), motion polish pass (window-open animation, start-menu pop, hover/press transitions, mobile section fades, `prefers-reduced-motion` guard), episteme project copy rewritten to current-kernel reality (liveLink → https://www.epistemekernel.com/), and experience dates future-proofed — LMIC @ MGH/Harvard "Summer 2026", MONET Lab and MI2RL Asan marked previous. Operator will flag new updates when they happen.
 
 ## Stages
-1. **Explore** — read XP shell, CSS, data files, Resume.pdf, episteme repo README (done)
-2. **Plan** — this update
-3. **Implement** — XPDesktop boot sub-state + CSS motion pass + content updates
-4. **Review** — `npm run build`, `npm run lint`, browser smoke test of boot fade
-5. **Handoff** — update PROGRESS/NEXT_STEPS, conventional commit
+1. **Explore** — understand current state
+2. **Plan** — define next feature or fix
+3. **Implement** — make changes
+4. **Review** — verify build, check on mobile + desktop
+5. **Handoff** — update docs
 
 ## Active Stage
-- Handoff (implementation + build/lint verification complete; browser visual pass and push remain)
+- Explore (awaiting operator direction)
 
 ## Risks And Unknowns
-- Boot fade overlay must not leave pointer-events active after finishing, or the desktop is unclickable.
-- `epistemekernel.com` verified live (308 → www) on 2026-07-11; liveLink uses the www form.
-- Repo `main` is still ahead of `origin/main` from the 2026-04-22 session (squash + push remains outstanding).
+- Live-site boot fade verified only via served HTML/CSS + code inspection, not a manual browser pass; if a cold load of https://junjslee.github.io/ hard-cuts instead of fading, inspect `.xp-boot-screen.is-fading`.
+- GitHub Actions annotates that actions target deprecated Node 20 and are forced onto Node 24 — harmless today, but bump `actions/*` versions when convenient.
 
 ## Verification Plan
-1. `npm run build` — static export succeeds with zero errors
-2. `npm run lint` — no ESLint errors
-3. Serve `out/` and confirm: boot fades into desktop, windows animate open, About shows LMIC entry, Projects shows updated episteme copy
-4. Mobile width — section switch fades, taskbar unaffected
+1. `npm run build` — confirm static export succeeds
+2. `npm run lint` — confirm no ESLint errors
+3. Open `out/index.html` (or `npx serve out`) — confirm desktop shell renders and boot fades
+4. Resize to mobile — confirm mobile shell activates
