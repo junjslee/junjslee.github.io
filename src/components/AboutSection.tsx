@@ -7,9 +7,9 @@ interface AboutSectionProps {
 }
 
 const experiences = [
-  // 'Research Intern - Massachusetts General Hospital and Harvard Medical School',
-  'AI Research Engineer Intern @ Asan Medical Center',
-  'Sergeant - 8th U.S. Army (2ID KATUSA)',
+  'Research Intern @ LMIC, Massachusetts General Hospital & Harvard Medical School (2026 - Present)',
+  'AI Research Engineer Intern @ MI2RL, Asan Medical Center (2025 - 2026)',
+  'Sergeant / Squad Leader - 8th U.S. Army (2ID KATUSA) (2023 - 2025)',
 ]
 
 const AboutSection: React.FC<AboutSectionProps> = ({ onOpenHome }) => {
@@ -112,16 +112,16 @@ const AboutSection: React.FC<AboutSectionProps> = ({ onOpenHome }) => {
               <strong>Current Status</strong>
               <p>
                 Researching at{' '}
-                {/* <a href="https://lmic.mgh.harvard.edu/" target="_blank" rel="noopener noreferrer">
+                <a href="https://lmic.mgh.harvard.edu/" target="_blank" rel="noopener noreferrer">
                   LMIC @ Massachusetts General Hospital, Harvard Medical School
-                </a> */}
-                {/* ,{' '} */}
-                <a href="https://www.mi2rl.co/" target="_blank" rel="noopener noreferrer">
-                  MI2RL @ Asan Medical Center
                 </a>
-                , and{' '}
+                {' '}and{' '}
                 <a href="https://monet.cs.illinois.edu/" target="_blank" rel="noopener noreferrer">
                   MONET Lab @ University of Illinois Urbana-Champaign
+                </a>
+                . Previously at{' '}
+                <a href="https://www.mi2rl.co/" target="_blank" rel="noopener noreferrer">
+                  MI2RL @ Asan Medical Center
                 </a>
                 .
               </p>

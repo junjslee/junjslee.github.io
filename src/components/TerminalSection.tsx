@@ -83,7 +83,8 @@ function runCommand(input: string, onTriggerBsod: () => void): TerminalLine[] {
 
   if (cmd === 'whoami') {
     return [
-      { kind: 'output', text: 'Junseong Lee — AI Research Engineer @ Asan Medical Center.' },
+      { kind: 'output', text: 'Junseong Lee — Research Intern @ LMIC, Mass General Hospital / Harvard Medical School.' },
+      { kind: 'output', text: 'Also building episteme (epistemekernel.com).' },
       { kind: 'output', text: 'Likes: medical AI, calibrated reasoning, small useful tools.' },
       { kind: 'output', text: '' },
     ]

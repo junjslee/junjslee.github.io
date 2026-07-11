@@ -10,8 +10,12 @@ const Home: NextPage = () => {
     name: SITE_NAME,
     url: SITE_URL,
     image: SITE_IMAGE,
-    jobTitle: 'AI Research Engineer',
+    jobTitle: 'AI Researcher',
     alumniOf: 'University of Illinois Urbana-Champaign',
+    affiliation: [
+      { '@type': 'Organization', name: 'Massachusetts General Hospital' },
+      { '@type': 'Organization', name: 'Harvard Medical School' },
+    ],
     sameAs: [
       'https://github.com/junjslee',
       'https://www.linkedin.com/in/junseong-lee',

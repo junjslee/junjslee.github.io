@@ -12,10 +12,10 @@ export interface ProjectEntry {
 export const projects: ProjectEntry[] = [
   {
     title: "episteme",
-    description: "A cognitive governance layer for AI agents — protocols, skills, and memory that push agents toward calibrated reasoning instead of confident-wrong answers. Live: https://episteme-alpha.vercel.app",
-    techStack: ["TypeScript", "Next.js", "Claude Code / Agent SDK", "Vercel"],
+    description: "A cognitive-governance kernel that makes AI agents show their work before they act. Before any high-impact action (git push, deploy, migration), a deterministic hook requires the agent to commit its reasoning to disk — knowns, unknowns, assumptions, and a falsifiable disconfirmation — and refuses to proceed until the artifact is real. Verified lessons become hash-chained, context-scoped protocols that resurface at the next matching decision, so the agent gets sharper on your codebase over time. Ships as a Claude Code plugin and a Python kernel with a vendor-neutral adapter layer.",
+    techStack: ["Python", "Claude Code plugin (hooks / skills / agents)", "TypeScript", "Next.js", "Vercel"],
     repoLink: "https://github.com/junjslee/episteme",
-    liveLink: "https://episteme-alpha.vercel.app/",
+    liveLink: "https://www.epistemekernel.com/",
     category: "Agent OS",
   },
   {
