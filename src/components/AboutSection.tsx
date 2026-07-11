@@ -7,7 +7,8 @@ interface AboutSectionProps {
 }
 
 const experiences = [
-  'Research Intern @ LMIC, Massachusetts General Hospital & Harvard Medical School (2026 - Present)',
+  'Research Intern @ LMIC, Massachusetts General Hospital & Harvard Medical School (Summer 2026)',
+  'Undergraduate Researcher @ MONET Lab, UIUC (2025 - 2026)',
   'AI Research Engineer Intern @ MI2RL, Asan Medical Center (2025 - 2026)',
   'Sergeant / Squad Leader - 8th U.S. Army (2ID KATUSA) (2023 - 2025)',
 ]
@@ -111,15 +112,15 @@ const AboutSection: React.FC<AboutSectionProps> = ({ onOpenHome }) => {
               </p>
               <strong>Current Status</strong>
               <p>
-                Researching at{' '}
+                Summer 2026: Research Intern at{' '}
                 <a href="https://lmic.mgh.harvard.edu/" target="_blank" rel="noopener noreferrer">
                   LMIC @ Massachusetts General Hospital, Harvard Medical School
                 </a>
-                {' '}and{' '}
+                . Previously at{' '}
                 <a href="https://monet.cs.illinois.edu/" target="_blank" rel="noopener noreferrer">
                   MONET Lab @ University of Illinois Urbana-Champaign
                 </a>
-                . Previously at{' '}
+                {' '}and{' '}
                 <a href="https://www.mi2rl.co/" target="_blank" rel="noopener noreferrer">
                   MI2RL @ Asan Medical Center
                 </a>
