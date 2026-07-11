@@ -12,7 +12,7 @@ type ShortcutId = InternalWindowId | 'resume' | 'github' | 'linkedin';
 type IconKind = 'about' | 'home' | 'contact' | 'resume' | 'github' | 'linkedin' | 'reader' | 'terminal' | 'minesweeper';
 type MobileSection = 'about' | 'work' | 'contact';
 type SoundName = 'open' | 'close' | 'minimize' | 'maximize' | 'click';
-type BootPhase = 'loading' | 'desktop';
+type BootPhase = 'loading' | 'fading' | 'desktop';
 
 interface WindowDefinition {
   id: InternalWindowId;
@@ -969,6 +969,7 @@ function MobileShell({
     >
       <div className="xp-mobile-workspace">
         <MobileWindowPanel
+          key={activeSection}
           title={activePanel.title}
           icon={activePanel.icon}
           actionLabel={activePanel.actionLabel}
@@ -1050,9 +1051,9 @@ function MobileShell({
   );
 }
 
-function BootScreen(): React.ReactElement {
+function BootScreen({ fading = false }: { fading?: boolean }): React.ReactElement {
   return (
-    <div className="xp-boot-screen">
+    <div className={`xp-boot-screen${fading ? ' is-fading' : ''}`}>
       <div className="xp-boot-logo">
         <span className="xp-boot-windows">Windows</span>
         <span className="xp-boot-xp">XP</span>
@@ -1062,6 +1063,7 @@ function BootScreen(): React.ReactElement {
           <div className="xp-boot-progress-runner" />
         </div>
       </div>
+      <div className="xp-boot-footer">&copy; Junseong Lee</div>
     </div>
   );
 }
@@ -1135,7 +1137,7 @@ const XPDesktop: React.FC = () => {
     ]).finally(() => {
       setWallpaper(selectedWallpaper);
       setHasPreparedWallpaper(true);
-      setBootPhase('desktop');
+      setBootPhase('fading');
     });
 
     const timer = window.setInterval(() => {
@@ -1148,6 +1150,15 @@ const XPDesktop: React.FC = () => {
       window.clearInterval(timer);
     };
   }, []);
+
+  useEffect(() => {
+    if (bootPhase !== 'fading') {
+      return;
+    }
+
+    const timer = window.setTimeout(() => setBootPhase('desktop'), 650);
+    return () => window.clearTimeout(timer);
+  }, [bootPhase]);
 
   useEffect(() => {
     const parsedState = readDesktopSessionState();
@@ -1505,9 +1516,11 @@ const XPDesktop: React.FC = () => {
     .map((id) => windowStates[id])
     .filter((windowState) => windowState.open && !windowState.minimized);
 
-  if (!hasMountedClient || !hasHydratedDesktopState || bootPhase !== 'desktop') {
+  if (!hasMountedClient || !hasHydratedDesktopState || bootPhase === 'loading') {
     return <BootScreen />;
   }
+
+  const bootOverlay = bootPhase === 'fading' ? <BootScreen fading /> : null;
 
   if (isMobile) {
     return (
@@ -1550,6 +1563,7 @@ const XPDesktop: React.FC = () => {
           }}
         />
         {crtEnabled && <div className="xp-crt-overlay" />}
+        {bootOverlay}
         {bsodActive && <BSoD />}
       </>
     );
@@ -1626,6 +1640,7 @@ const XPDesktop: React.FC = () => {
         onTaskbarClick={toggleTaskbarWindow}
       />
       {crtEnabled && <div className="xp-crt-overlay" />}
+      {bootOverlay}
       {bsodActive && <BSoD />}
     </div>
   );
