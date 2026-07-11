@@ -1,7 +1,7 @@
 # Progress
 
 ## Last Updated
-- `2026-04-22`
+- `2026-07-11`
 
 ## Completed
 - Windows XP desktop shell (windows, taskbar, start menu, drag/resize, sound)
@@ -23,6 +23,10 @@
 - Login/welcome screen removed — boot flow is now `loading → desktop` (no click-through). `BootPhase` type simplified to `'loading' | 'desktop'`, welcome CSS deleted, `MIN_BOOT_DURATION_MS` trimmed 1600→900ms
 - Working Minesweeper (`MinesweeperSection.tsx`) — beginner (9×9/10) + intermediate (16×16/40), first-click safety, flood-fill reveal, right-click flag + Flag Mode toggle for touch, live mine/time counters with classic LCD styling, face states (smile/worried/dead/cool), win/lose detection, new-window type `minesweeper` in `XPDesktop.tsx` with desktop icon, start-menu entry, and SVG glyph
 - Window resize handles — 8-direction (4 edges + 4 corners) grips with proper cursors (`ns`, `ew`, `nesw`, `nwse`); SE corner shows a visible diagonal grip; `RESIZE_MIN_WIDTH: 320`, `RESIZE_MIN_HEIGHT: 240`; writes through to `state.restored` so maximize→restore returns to the user's custom size; localStorage persistence is transparent
+- Smooth boot (2026-07-11): `BootPhase` gained a `fading` sub-state — the boot screen now overlays the already-painted desktop and fades out over 0.6s (`xp-boot-fade-out`, pointer-events none) while the shell fades in (`xp-shell-reveal`); unmounts at 650ms; boot screen also gained a `© Junseong Lee` footer
+- Motion polish (2026-07-11): window-open animation (`xp-window-open`, 160ms scale+fade) + soft drop shadow on windows and start menu; start menu / mobile launcher pop (`xp-menu-pop`); hover/press transitions on desktop icons, taskbar buttons, start button/items, home folders, project/blog rows, and all XP action buttons; mobile section switches re-mount the panel with a fade (`key={activeSection}` + `xp-fade-in`); mobile overlay fade; all decorative motion disabled under `prefers-reduced-motion: reduce`
+- episteme copy refresh (2026-07-11): project entry rewritten to match the current repo — cognitive-governance kernel (reasoning gate before high-impact actions, hash-chained protocol memory), ships as Claude Code plugin + Python kernel; `liveLink` moved from episteme-alpha.vercel.app to https://www.epistemekernel.com/ (verified live); tech stack updated; propagates to XP explorer, IE toolbar, and `/projects` SEO page automatically
+- MGH/Harvard LMIC experience (2026-07-11): activated the prepared LMIC entry — About window Experience tab lists "Research Intern @ LMIC, Massachusetts General Hospital & Harvard Medical School (2026 - Present)" with lab link (lmic.mgh.harvard.edu, verified live); Current Status shows LMIC + MONET as current, MI2RL Asan as previous (its internship ended 2026-02 per Resume.pdf); terminal `whoami` updated; Person JSON-LD gained MGH + HMS `affiliation` and jobTitle "AI Researcher"
 
 ## In Progress
 - Nothing tracked.
@@ -33,7 +37,10 @@
 - SEO pages are separate Next.js pages (not part of XP shell) so crawlers can index content.
 
 ## Validation
-- `npm run build` — passes clean on 2026-04-22 (episteme + desktop icons + terminal simplification + mobile scroll)
+- `npm run build` — passes clean on 2026-07-11 (boot fade + motion polish + content refresh); 6/6 routes exported, CSS hash `2b3854e024a24854`
+- `npm run lint` — no warnings or errors (2026-07-11)
+- Static output grep-verified: epistemekernel.com liveLink on `/projects`, MGH affiliation JSON-LD on `/`, all new keyframes + reduced-motion guard in built CSS
+- Residual: boot fade not yet eyeballed in a real browser — recommend `npx serve out` visual pass before pushing
 - Deployed to https://junjslee.github.io via GitHub Actions
 
 ## Blockers

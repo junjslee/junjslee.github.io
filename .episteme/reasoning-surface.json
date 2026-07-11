@@ -1,30 +1,55 @@
 {
-  "timestamp": "2026-04-23T02:15:59Z",
-  "core_question": "Should we push the 2 clean commits to origin/main now, publishing this session's XP overhaul to the live portfolio?",
+  "timestamp": "2026-07-11T15:55:11Z",
+  "core_question": "How do we make the XP portfolio smoother (boot transition + window/UI motion) and factually current (episteme project copy, MGH/Harvard LMIC internship) without breaking the Next.js static export?",
   "knowns": [
-    "Working tree is clean; 2 commits (51b2b13 scaffold, 0227809 feat) ahead of origin/main after soft-reset + recommit",
-    "cs225sp26 course PDFs were removed from both working tree and staged index before recommit, so they never reach origin",
-    "Last `npm run build` on the exact HEAD we are pushing passed clean — 7 static pages exported, CSS hash 451710133516a162",
-    "No force-push required: origin/main has never seen the collapsed 8 checkpoint commits, so a regular push is sufficient",
-    "GitHub Pages deploys on push to main via GitHub Actions; a broken build there prevents the live site from updating rather than breaking it",
-    "All code paths touched (Minesweeper, resize, explorer polish, mobile scroll, boot flow) live in the XP desktop shell; SEO pages were smoke-built but not behaviorally changed"
+    "Boot flow swaps BootScreen -> desktop abruptly at bootPhase==='desktop' in XPDesktop.tsx line ~1508; no fade, so the black boot screen hard-cuts to the wallpaper",
+    "MIN_BOOT_DURATION_MS is 900 and the wallpaper is preloaded before the swap, so a fade overlay can ride on top of an already-painted desktop",
+    "Project data is single-sourced: projects[] in ProjectsSection.tsx and researchEntries[] in ResearchSection.tsx feed the XP explorer (JunLeeSection), the standalone windows, and the crawlable /projects and /research SEO pages",
+    "AboutSection.tsx lines 10 and 115-118 contain commented-out 'Research Intern - Massachusetts General Hospital and Harvard Medical School' and the LMIC lab link https://lmic.mgh.harvard.edu/ - the user prepared this entry earlier and now asked to add it",
+    "The episteme repo (~/episteme) has evolved into a cognitive-governance kernel: Claude Code plugin install, Python kernel + hooks, hash-chained protocol memory, doc lifecycle linting, canonical site epistemekernel.com per its README; the portfolio still describes it as 'TypeScript/Next.js/Vercel' with liveLink episteme-alpha.vercel.app",
+    "Resume.pdf (public/documents) confirms: MI2RL Asan internship Feb 2025 - Feb 2026 ended; KATUSA Oct 2023 - Apr 2025; MONET Lab Gaze-VQA Dec 2025 - present; so LMIC is the current 2026 position",
+    "npm run build (next static export) passed clean on HEAD d11be56; working tree is clean and main is ahead of origin from the previous session"
   ],
   "unknowns": [
-    "If the GitHub Actions build step exits non-zero within 5 minutes after push, the deploy fails and the Actions tab shows a red X — root cause is likely a Node major mismatch between local 20.14 and CI",
-    "When iOS Safari crosses the sticky-taskbar viewport seam, if scroll jitter exceeds 8 px per frame during a 5 seconds scroll test, the sticky rule regresses on real hardware",
-    "If 5 consecutive finger taps against the 4 px edge-resize strip produce 0 successful resize gestures, the touch target fails usability and mobile users cannot resize windows"
+    "If npm run build exits non-zero after the CSS/component edits, the static export is broken and the changes must be fixed before any commit",
+    "When epistemekernel.com replaces episteme-alpha.vercel.app as liveLink, if a curl -sI https://epistemekernel.com returns a non-2xx/3xx status, the URL swap is wrong and must revert to the vercel URL",
+    "If the boot fade overlay leaves pointer-events active after it finishes, desktop icons become unclickable for the fade duration and the smoke test (open about.txt right after boot) fails"
   ],
   "assumptions": [
-    "GitHub Actions deploy workflow is wired and hasn't rotted since the last successful deploy",
-    "Static export output on CI matches local output because Next.js static export is deterministic given identical inputs and Node majors",
-    "Removing PDFs that were only in local checkpoint commits has zero downstream impact because no code or markdown referenced them",
-    "Rolling back after push is cheap: `git revert <sha>` and redeploy take under 2 minutes each"
+    "epistemekernel.com is the canonical live URL for episteme because its README header links there; the vercel URL is the fallback if the domain check fails",
+    "The MGH/Harvard LMIC internship is current as of 2026-07 because the user asked to add it now and the commented-out code shows prepared intent; dates are stated as 2026 - Present without fabricated specifics",
+    "prefers-reduced-motion users should get instant transitions, so all new animation CSS is wrapped behind a reduced-motion guard"
   ],
-  "disconfirmation": "If the GitHub Actions deploy workflow exits non-zero within 5 minutes of this push, or if Minesweeper fails to open on the live site after deploy completes, revert commit 0227809 and redeploy",
-  "verification_trace": {
-    "command": "curl -sI https://junjslee.github.io/",
-    "threshold_observable": "http_status == 200",
-    "or_dashboard": "https://github.com/junjslee/junjslee.github.io/actions",
-    "window_seconds": 600
-  }
+  "disconfirmation": "If npm run build or npm run lint exits non-zero after the edits, or the boot->desktop fade visibly double-flashes when reloading the local build in a browser, the smoothness pass is defective and must be corrected before the session commit",
+  "flaw_classification": "stale-artifact",
+  "posture_selected": "patch",
+  "patch_vs_refactor_evaluation": "Bounded additive edits inside existing modules: XPDesktop.tsx gains one boot sub-state and CSS classes, globals.css gains transition/animation rules, ProjectsSection/AboutSection/ResearchSection/TerminalSection get content updates. No component boundaries, data flow, or export pipeline change, so patch - a refactor would only be justified if the window manager or data layer needed restructuring, which it does not.",
+  "blast_radius_map": [
+    {"surface": "src/components/xp/XPDesktop.tsx", "status": "needs_update"},
+    {"surface": "src/styles/globals.css", "status": "needs_update"},
+    {"surface": "src/components/ProjectsSection.tsx", "status": "needs_update"},
+    {"surface": "src/components/AboutSection.tsx", "status": "needs_update"},
+    {"surface": "src/components/ResearchSection.tsx", "status": "needs_update"},
+    {"surface": "src/components/TerminalSection.tsx", "status": "needs_update"},
+    {"surface": "src/pages/index.tsx", "status": "needs_update"},
+    {"surface": "docs/PLAN.md", "status": "needs_update"},
+    {"surface": "docs/PROGRESS.md", "status": "needs_update"},
+    {"surface": "docs/NEXT_STEPS.md", "status": "needs_update"},
+    {"surface": "src/pages/writing/[slug].tsx", "status": "not-applicable", "rationale": "blog content and routes are out of scope; no new pages added"},
+    {"surface": "public/sitemap.xml", "status": "not-applicable", "rationale": "no routes added or removed, sitemap stays accurate"},
+    {"surface": "src/components/MinesweeperSection.tsx", "status": "not-applicable", "rationale": "game logic untouched by content and motion changes"}
+  ],
+  "sync_plan": [
+    {"surface": "src/components/xp/XPDesktop.tsx", "action": "add fading boot sub-state so BootScreen fades out over the painted desktop; add window-open animation class"},
+    {"surface": "src/styles/globals.css", "action": "boot fade keyframes, window open/start-menu animations, hover transitions, prefers-reduced-motion guard"},
+    {"surface": "src/components/ProjectsSection.tsx", "action": "rewrite episteme entry: kernel description, epistemekernel.com liveLink, updated tech stack"},
+    {"surface": "src/components/AboutSection.tsx", "action": "activate MGH/Harvard LMIC entry in experiences and Current Status; mark Asan internship as past"},
+    {"surface": "src/components/ResearchSection.tsx", "action": "no entry fabricated; only touched if a factual LMIC affiliation line fits existing entries"},
+    {"surface": "src/components/TerminalSection.tsx", "action": "update whoami to current MGH/Harvard LMIC position"},
+    {"surface": "src/pages/index.tsx", "action": "add MGH/Harvard affiliation to Person JSON-LD"},
+    {"surface": "docs/PLAN.md", "action": "set active goal + stages for this session before implementation"},
+    {"surface": "docs/PROGRESS.md", "action": "record completed work and validation results at handoff"},
+    {"surface": "docs/NEXT_STEPS.md", "action": "REPLACE-form handoff with exact next action"}
+  ],
+  "deferred_discoveries": []
 }

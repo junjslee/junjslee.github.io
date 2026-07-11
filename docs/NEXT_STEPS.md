@@ -1,50 +1,29 @@
 # Next Steps
 
 ## Active Goal
-No active feature in progress. Main outstanding action: squash the 8 auto-checkpoint commits from the 2026-04-22 session into meaningful Conventional Commits and push to `origin/main`.
+No feature in progress. Session of 2026-07-11 shipped: smooth boot fade (loading → fading → desktop), motion polish pass (window-open animation, start-menu pop, hover/press transitions, mobile section fades, `prefers-reduced-motion` guard), episteme project copy rewritten to current-kernel reality (liveLink → https://www.epistemekernel.com/), and the MGH/Harvard LMIC research-intern experience activated across About, terminal `whoami`, and Person JSON-LD.
 
 ## Next Actions
-1. Squash the 8 checkpoint commits into a small number of readable commits (suggested split below), then `git push origin main` to deploy via GitHub Actions.
-2. Smoke-test the live site after deploy: desktop (resize handles, Minesweeper, cmd.exe, IE toolbar on Projects), mobile (scroll, sticky taskbar, IE label under 420px), SEO pages still indexed.
-3. Decide whether to keep the session's optional backlog (startup chime, Cmd/Ctrl+K palette, per-project case studies, MDX for blog) or close them out.
+1. Visual smoke test locally (`npx serve out`, or `npm run dev`): confirm the boot screen fades into the desktop with no double-flash, windows animate open, About → Experience shows the LMIC entry, Projects shows the new episteme copy and Live Site button opens epistemekernel.com.
+2. Push to deploy. The 2026-04-22 batch is already on `origin/main` (verified 2026-07-11); `main` is ahead by exactly this session's 3 commits (`9c77fbf` boot fade + motion, `1e656d8` content, `d7ae24d` docs). `git push origin main` deploys via GitHub Actions.
+3. After deploy, smoke-test live: boot fade on a cold load, mobile section-switch fade, `/projects` SEO page shows updated episteme entry.
+4. Optional backlog (carried over): startup chime, Cmd/Ctrl+K palette, per-project case studies, MDX blog. Consider a ResearchSection entry for LMIC work once there is a public artifact (repo/paper) — nothing was fabricated this session.
 
 ## Blockers
 - None.
 
 ## Suggested Commands
 ```bash
-# Interactive rebase to squash checkpoints (8 commits ahead of origin)
-git rebase -i origin/main
+# Visual pass on the exact export
+npx serve out
 
-# Suggested commit split:
-#   feat(xp): add Minesweeper window with beginner/intermediate, flag mode, classic LCD UI
-#   feat(xp): add 8-direction window resize handles with classic cursors
-#   feat(content): add episteme project with liveLink surfaced across explorer, IE toolbar, SEO page
-#   feat(xp): add GitHub and LinkedIn desktop icons
-#   feat(xp): simplify cmd.exe with ASCII banner, joke/coffee easter eggs
-#   fix(mobile): make page scrollable with sticky taskbar and stacked explorer panes
-#   refactor(xp): remove login/welcome screen, boot loading→desktop directly
-#   feat(xp): daily wallpaper rotation (one per UTC day)
-#   style(xp): explorer row glyphs, LIVE chips, preview hero tile, ellipsis titles
-
-# Then push
+# Deploy this session's 3 commits
+git log origin/main..HEAD --oneline
 git push origin main
-
-# Verify the build locally before push
-npm run build
 ```
 
 ## Handoff Notes
-- Session of 2026-04-22 shipped a large batch; `git log origin/main..HEAD` shows **8 auto-checkpoint commits** ahead of origin. Working tree is clean. Changes are safe in git but still unpushed and not squashed into meaningful commits.
-- Shipped this session (in rough order):
-  1. `episteme` project added with `liveLink` field; surfaced in XP explorer, IE toolbar, SEO `/projects`, standalone `ProjectsSection`
-  2. GitHub + LinkedIn desktop icons
-  3. `cmd.exe` simplified + fun (ASCII banner, `joke`/`coffee` commands, snarky fallback)
-  4. Mobile scrollability: body scroll enabled, sticky taskbar, `xp-home-main`/`xp-explorer-stack` stacked instead of grid-capped; `:active` press scale; clock pulse
-  5. Wallpaper rotation: random-per-session → deterministic one-per-UTC-day
-  6. Polish: mobile workspace `padding-bottom: 80px`; desktop shortcuts wrap to 2 columns under `max-height: 780px`; IE `Address` label hides under 420px
-  7. Explorer list polish: titles single-line + ellipsis + `title` tooltip; per-category glyph badges with color accent; `LIVE` chips; preview pane gained a 72px gradient hero tile
-  8. Login/welcome screen removed — boot is now `loading → desktop` directly; `MIN_BOOT_DURATION_MS` trimmed 1600→900ms
-  9. Working Minesweeper (`MinesweeperSection.tsx`) — beginner + intermediate, first-click safety, flood-fill reveal, right-click + flag-mode toggle, LCD counters, face states
-  10. Window resize handles — 8-direction, classic cursors, visible SE grip, 320×240 min, updates `restored` so maximize→restore returns to user-customised size
-- `npm run build` passed clean after every substantive change; last verified build hash `css/451710133516a162.css`.
+- All project data stays single-sourced: `projects[]` (ProjectsSection.tsx) and `researchEntries[]` (ResearchSection.tsx) feed the XP explorer, standalone windows, and SEO pages — edit once, propagates everywhere.
+- Boot flow: `BootPhase = 'loading' | 'fading' | 'desktop'`; the fading overlay unmounts via a 650ms timeout while the CSS animation runs 600ms with `forwards` fill — keep those in sync if retuning.
+- LMIC dates are stated as "2026 - Present"; MI2RL Asan marked previous per Resume.pdf (Feb 2025 – Feb 2026). Resume.pdf itself predates the LMIC internship — consider replacing `public/documents/Resume.pdf` with an updated version.
+- `npm run build` + `npm run lint` clean on 2026-07-11; last CSS hash `2b3854e024a24854`.
