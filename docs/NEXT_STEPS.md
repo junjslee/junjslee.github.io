@@ -3,13 +3,16 @@
 
 ## Status
 **Deployed and verified live** at https://junjslee.github.io.
-`main` = `origin/main` = `72f19d9`. Nothing is in flight.
+`main` = `origin/main` = `d145bf3`. Nothing is in flight.
 
 ## Verified live
-- Actions runs `35692523975` / `35692777482` / `35756174292` all concluded **success**.
-- Live bundle `css/ee9212d43a9b9117.css` (1 match); no `cmd.exe` string remains in the page.
-- `/images/gif/4_night_drive.gif` returns **404** — the 8.7MB asset is gone. Export weight
-  dropped **12MB → 3.8MB**.
+- Latest deploy run `35758293295` concluded **success** (earlier runs `35692523975`,
+  `35692777482`, `35756174292` also success).
+- `lang="en"` present; zero `emailjs` references in the served page; `/404.html` titled
+  "Page not found — Junseong Lee"; `/writing/` and `/writing/post-1/` return **404**;
+  `2_evening.gif` returns 404 while `2_evening.webp` returns 200; sitemap down to 3 URLs.
+- `/images/gif/4_night_drive.gif` also returns 404. Export weight across the two passes:
+  **12MB → 3.8MB → 2.9MB**.
 - Home page crawlable body text **674 chars** with an `<h1>` and 3 JSON-LD blocks (was 1 char).
 - Checked routes and assets return 200.
 
@@ -22,7 +25,8 @@
 3. **Publication record is understated** — the resume lists two npj Digital Medicine manuscripts and
    four presentations that `/research` does not carry. Deliberately not invented; needs the
    operator's call on what to surface.
-4. Backlog: startup chime, Cmd/Ctrl+K palette, MDX blog.
+4. Backlog: startup chime, Cmd/Ctrl+K palette. No analytics is installed, so there is no
+   measurement of what visitors actually open.
 
 **Closed by the operator:** BiomeTrail stays behind Cloudflare Access on purpose — the journal
 manuscript is unpublished and the wall is deliberate protection. The `ubuntu-latest` CI annotation
@@ -59,8 +63,14 @@ git push origin main && gh run watch "$(gh run list --limit 1 --json databaseId 
   one line of work that produced several papers, and its `href` is optional.
 - Social cards are JPEG on purpose (`*-card.jpg`); in-page images are WebP. Never point `og:image`
   at a `.webp`.
-- Writing is archived from the UI only. `/writing` and `/writing/post-1` still build and sit in the
-  sitemap; `blogPosts` and the `blogReader` window remain, so restoring it is trivial.
+- Writing is **fully retired**. The routes, `BlogSection`, the `blogReader` window and the blog CSS
+  are gone and the sitemap is down to 3 URLs. The post text is preserved verbatim at
+  `archive/writing/post-1.md` — restoring it means re-adding a route, not rewriting the prose.
+- The contact form has **no send service** and is not supposed to have one: it builds a `mailto:`
+  draft. Do not reintroduce EmailJS without also setting the three repository secrets, or it will
+  silently fall through again.
+- Wallpapers are **lossless** animated WebP. The art is palette-based, so lossless beats both GIF
+  and lossy WebP; re-encoding lossy makes them larger and adds artefacts.
 - `clampWindowToViewport` clamps **position only, never size**. Clamping size wrote the shrunken
   values back through the persistence effect, so one phone-width visit left desktop windows stuck
   small. Do not reintroduce a size clamp there.

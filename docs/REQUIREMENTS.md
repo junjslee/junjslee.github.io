@@ -11,10 +11,11 @@ Personal portfolio site for Junseong Lee — a Windows XP-themed interactive des
 ## Constraints
 - Static export only (GitHub Pages, no server-side runtime)
 - Next.js 15 static output via `next export`
-- Must remain crawlable for SEO (separate `/projects`, `/research`, `/writing` pages)
+- Must remain crawlable for SEO (separate `/projects`, `/research` pages)
 - Mobile must work via a separate XP-lite shell (not the full desktop UI)
 
 ## Non-Goals
+- Server-side email delivery (a static export has nowhere to hold a secret)
 - Backend API or database
 - User accounts or auth
 - CMS integration
@@ -23,8 +24,8 @@ Personal portfolio site for Junseong Lee — a Windows XP-themed interactive des
 - Desktop XP shell loads with working windows, taskbar, start menu, sound toggle
 - Mobile shell provides equivalent content access without drag-based windows
 - `/projects` and `/research` are crawlable, indexed, and linked from site navigation
-- `/writing` and `/writing/[slug]` stay crawlable and in the sitemap, but are archived out of the navigation as of 2026-09-22
 - The home page carries readable content and structured data without JavaScript
+- The contact form composes a draft in the visitor's own mail client; the site sends nothing itself
 - Sitemap is present and accurate
 - Build and static export succeed with zero errors
 
@@ -33,5 +34,4 @@ Personal portfolio site for Junseong Lee — a Windows XP-themed interactive des
 - React 19
 - TypeScript
 - xp.css (Windows XP stylesheet)
-- EmailJS (contact form)
 - GitHub Actions → GitHub Pages deployment

@@ -125,6 +125,32 @@
   manuscript is unpublished; the `ubuntu-latest` CI annotation is not actionable for a static build
   that pins Node through `actions/setup-node`.
 
+### 2026-09-22 — audit fixes (deployed, `d145bf3`)
+
+Found by auditing the live site rather than by request:
+
+- **The contact form never sent anything.** `gh secret list` is empty, so the three
+  `NEXT_PUBLIC_EMAILJS_*` vars were undefined at build; `isEmailJsConfigured` was false and every
+  visitor's Send fell through to `mailto:` while showing "EmailJS is not configured in this
+  environment". Composing a draft is now the stated design, `emailjs-com` (deprecated) is gone, and
+  the index chunk fell 24.5kB → 16.6kB.
+- **The mail toolbar's New / Send / Address Book had no handlers** — clicking "Send" there did
+  nothing. They are now `disabled` and `aria-hidden`, matching the IE toolbar precedent.
+- **`<html>` had no `lang`.** Added `_document.tsx`.
+- **404 was the Next.js default** with no way back. Replaced with an XP error dialog linking to the
+  desktop, research and projects.
+- **Writing fully retired** at the operator's instruction: routes, `BlogSection`, the `blogReader`
+  window, the reader glyph and the blog CSS removed; sitemap down to 3 URLs. The post is preserved
+  verbatim at `archive/writing/post-1.md`.
+- **Wallpapers converted to lossless animated WebP.** The art is palette-based, so lossless beat
+  both GIF and lossy WebP: 995KB → 181KB with no pixel changed. Lossy q80 was smaller only for the
+  totoro frame and was rejected for artefacts. Frame counts and infinite looping were verified
+  through the ANIM/ANMF chunks and Chrome's `ImageDecoder` (16 frames, 100ms, animated: true).
+- Export weight across the day: **12MB → 3.8MB → 2.9MB**.
+
+Checked and found sound: desktop icons carry `tabIndex`, `aria-label` and Enter/Space handling;
+every `img` has alt text; reduced-motion guards, `robots.txt` and JSON-LD are all in place.
+
 ## Validation
 - `npm run build` — clean, 6/6 routes exported, CSS hash `b5c038d9e368cc6e` (2026-09-22)
 - `npm run lint` — no warnings or errors (2026-09-22)
