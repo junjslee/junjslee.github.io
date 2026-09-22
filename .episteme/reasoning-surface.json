@@ -1,64 +1,119 @@
 {
-  "timestamp": "2026-09-22T05:43:45Z",
-  "core_question": "Is the design-and-content refresh on feat/design-refresh verified well enough to commit as a coherent unit, and what does the next session need to know that the code does not say by itself?",
+  "timestamp": "2026-09-22T05:50:54Z",
+  "core_question": "Should the four commits on feat/design-refresh be merged into main and pushed, publishing the redesigned portfolio to https://junjslee.github.io?",
   "knowns": [
-    "npm run build exports 6/6 routes cleanly and npm run lint reports zero warnings on the finished branch; CSS hash is b5c038d9e368cc6e",
-    "The static export was served locally and all twelve checked routes and assets returned 200, including the three new preview images and the replaced Resume.pdf",
-    "Desktop and mobile were both inspected in a real browser: the explorer renders as three columns, the architecture figures render at legible size, and the mobile wallpaper layer measures 483x726 fixed rather than stretching to document height",
-    "The home page's crawlable body text was measured at 674 characters with an h1 present and three JSON-LD blocks, up from a measured 1 character before this session",
-    "Every needs_update surface in the prior surface's blast_radius_map was actually touched; the session additionally touched src/lib/site.ts, src/pages/index.tsx, public/sitemap.xml, src/components/TerminalSection.tsx, src/components/JunLeeSection.tsx and docs/EVENTS.md because the operator widened scope mid-session to SEO, the shoulder-cascade figure, DJing, and archiving Writing",
-    "main and origin/main are untouched; all work sits on feat/design-refresh branched from 2785bf0",
-    "Two operator corrections landed after my initial reading: the LMIC internship ended in August 2026 despite the resume reading 'Present', and the mixes link will be supplied later so no Mixes entry was added"
+    "The operator asked for the deploy explicitly this turn, after reviewing the design direction, the BiomeTrail reclassification, and the scope decisions across the session",
+    "feat/design-refresh is 4 commits ahead of origin/main: 2785bf0 (an earlier checkpoint already on main), 3812afe (design and SEO), e343186 (docs), e394d6d (BiomeTrail to Research); the working tree is clean",
+    "npm run build exports 6/6 routes cleanly and npm run lint reports zero warnings on the exact tree being pushed",
+    "The static export was served locally and every checked route and asset returned 200; desktop, mobile, /projects and /research were all inspected in a browser",
+    "GitHub Pages deploys on push to main via GitHub Actions, and the same path succeeded on 2026-07-11 with run 29159260854, so the workflow is known-good on this repository",
+    "A failed CI build leaves the currently-live site serving the previous version rather than breaking it, because Pages only swaps the artifact on a successful run",
+    "This publishes a capture of the BiomeTrail app and the RAD-DINO and shoulder-cascade figures; the operator cleared the app capture this session, and both figures already live in a public GitHub repository",
+    "The repository's own deploy convention is a direct push to main — that is what the 2026-07-11 deploy did — rather than a pull request"
   ],
   "unknowns": [
-    "If the operator opens the site in Safari or Firefox and the explorer renders stacked rather than three-column, the container-query or :has() support assumption is wrong for their browser and the breakpoint needs a non-container fallback",
-    "When the branch is deployed, if the GitHub Actions run exits non-zero within 10 minutes the deploy failed and the Actions tab shows a red X on junjslee/junjslee.github.io",
-    "After deployment, if Search Console still reports the home page as thin content once recrawled, the pre-hydration shim is not being indexed and the content needs to move outside the hydration boundary",
-    "If a recruiter clicks the BiomeTrail link and lands on a Cloudflare Access login, the 'Private beta — access required' badge is not doing enough and the link should point somewhere public instead",
-    "Should the operator later restore the Writing folder, if blogPosts or the blogReader window have been pruned in the meantime the restore is no longer trivial and the archive decision has to be redone"
+    "If the GitHub Actions deploy run exits non-zero within 10 minutes of the push, the deploy failed and the Actions tab at github.com/junjslee/junjslee.github.io/actions shows a red X on the run",
+    "After the run reports success, if curl of https://junjslee.github.io/ returns 0 matches for the string css/e04c3c24b311d9c0.css, the Pages artifact did not swap and the old bundle is still being served",
+    "Should the live site be opened in Safari or Firefox at a window wider than 600px, if getComputedStyle on .xp-home-main returns gridTemplateColumns with a single track then the container query fails in that engine and the explorer falls back to the stacked layout",
+    "When Search Console next recrawls the site, if the rendered home page reports fewer than 600 characters of body text then indexing of the pre-hydration shim has failed and its content must move outside the hydration boundary",
+    "If a signed-out request to https://biometrail.com returns an HTTP 302 to junseonglee.cloudflareaccess.com, every visitor who clicks that link hits an auth wall and the access note is not doing enough"
   ],
   "assumptions": [
-    "A single feature commit plus a separate docs commit is the right granularity, because the CSS changes interleave across one file and splitting them further would produce commits that do not build on their own",
-    "The pre-hydration shim is not cloaking, because the content it carries is truthful, is the genuine no-JavaScript state of the page, and becomes visible to any visitor whose JavaScript does not run",
-    "Rollback stays cheap: main is untouched, so discarding the branch returns the site to the last deployed state without any remote operation"
+    "The merge will be a clean fast-forward, because origin/main is an ancestor of feat/design-refresh and nobody else pushes to this repository",
+    "The GitHub Actions workflow and its Node version still build this Next.js 15 project, because no workflow file, dependency or build script changed this session",
+    "Rollback is cheap by construction: git revert of the design commit plus a push redeploys the previous state in minutes, and the previous artifact stays live throughout any failed run"
   ],
-  "disconfirmation": "If the final staged tree fails npm run build or npm run lint, or git status shows a tracked file changed that no sync_plan entry accounts for, the commit is wrong and gets amended rather than pushed",
-  "flaw_classification": "core-logic-misalignment",
-  "posture_selected": "analysis",
-  "patch_vs_refactor_evaluation": "The refactor itself is finished; this phase only reads the working tree and writes the ledger, so analysis is the honest posture. The surfaces it touches are docs/PLAN.md, docs/PROGRESS.md, docs/NEXT_STEPS.md and docs/EVENTS.md, plus the git index for the files already changed under src/, public/ and .episteme/ — no module boundary moves and no runtime code is edited here.",
+  "disconfirmation": "If the Actions deploy run for this push exits non-zero within 10 minutes, or curl of https://junjslee.github.io/ returns 0 matches for css/e04c3c24b311d9c0.css after the run reports success, revert the offending commits on main and push the revert",
+  "flaw_classification": "stale-artifact",
+  "posture_selected": "patch",
+  "patch_vs_refactor_evaluation": "The refactor already happened and was verified; this operation only advances a git ref. It touches origin/main and, through GitHub Actions, the published artifact for junjslee.github.io — no source module, no build configuration and no dependency is edited here, so patch is the correct posture for the publish step even though the payload it carries was a refactor.",
   "blast_radius_map": [
-    {"surface": "docs/PROGRESS.md", "status": "needs_update"},
-    {"surface": "docs/NEXT_STEPS.md", "status": "needs_update"},
-    {"surface": "docs/PLAN.md", "status": "needs_update"},
-    {"surface": "docs/EVENTS.md", "status": "needs_update"},
-    {"surface": "git index (feat/design-refresh commits)", "status": "needs_update"},
-    {"surface": "origin/main (live site)", "status": "deferred", "rationale": "deploying is a separate operator-gated decision; it needs its own surface naming the deploy risk, and the operator has not asked for a push"},
-    {"surface": "docs/REQUIREMENTS.md", "status": "not-applicable", "rationale": "the objective, constraints and acceptance criteria are unchanged; this session refined execution, not requirements"},
-    {"surface": "docs/RUN_CONTEXT.md", "status": "not-applicable", "rationale": "no new external service, API or environment limit was introduced"},
-    {"surface": "src/**", "status": "not-applicable", "rationale": "source edits are complete and verified; this phase only stages and records them"}
+    {
+      "surface": "origin/main",
+      "status": "needs_update"
+    },
+    {
+      "surface": "https://junjslee.github.io (Pages artifact)",
+      "status": "needs_update"
+    },
+    {
+      "surface": "docs/NEXT_STEPS.md",
+      "status": "needs_update"
+    },
+    {
+      "surface": "docs/PROGRESS.md",
+      "status": "needs_update"
+    },
+    {
+      "surface": "docs/EVENTS.md",
+      "status": "needs_update"
+    },
+    {
+      "surface": "docs/PLAN.md",
+      "status": "needs_update"
+    },
+    {
+      "surface": "src/**",
+      "status": "not-applicable",
+      "rationale": "the source is frozen and verified; the push publishes the committed state without further edits"
+    },
+    {
+      "surface": ".github/workflows",
+      "status": "not-applicable",
+      "rationale": "the existing Pages workflow is known-good on this repository and needs no change to carry this payload"
+    },
+    {
+      "surface": "public/images/gif/4_night_drive.gif",
+      "status": "deferred",
+      "rationale": "8.7MB and unreferenced, so it ships for nothing; deleting an asset the operator may want reinstated is their call and belongs to its own change"
+    }
   ],
   "sync_plan": [
-    {"surface": "docs/PROGRESS.md", "action": "record the full refresh with measured before/after numbers and the xp.css heading root cause"},
-    {"surface": "docs/NEXT_STEPS.md", "action": "REPLACE-form handoff naming the branch, the verified state, the pending mixes link, and the deploy decision left open"},
-    {"surface": "docs/PLAN.md", "action": "set the active goal to the branch and list the residual cross-browser and asset-weight risks"},
-    {"surface": "docs/EVENTS.md", "action": "append exactly one E3 row for this handoff"},
-    {"surface": "git index (feat/design-refresh commits)", "action": "one feat commit for code and assets, one docs commit for the ledger, with no AI-attribution trailer"}
+    {
+      "surface": "origin/main",
+      "action": "fast-forward merge feat/design-refresh into main, then git push origin main"
+    },
+    {
+      "surface": "https://junjslee.github.io (Pages artifact)",
+      "action": "watch the Actions run to completion, then fetch the live page and confirm it serves the new CSS bundle and the new content"
+    },
+    {
+      "surface": "docs/NEXT_STEPS.md",
+      "action": "REPLACE-form handoff recording the deployed state, the verification result, and the pending mixes link"
+    },
+    {
+      "surface": "docs/PROGRESS.md",
+      "action": "record the deploy, the Actions run id, and the live-site verification"
+    },
+    {
+      "surface": "docs/EVENTS.md",
+      "action": "append exactly one E4 row for this deploy handoff"
+    },
+    {
+      "surface": "docs/PLAN.md",
+      "action": "mark the goal shipped and return the project to maintenance mode"
+    }
   ],
   "deferred_discoveries": [
     {
-      "description": "public/images/gif/4_night_drive.gif is 8.7MB, unreferenced since it was commented out of WALLPAPER_OPTIONS, and still ships in the static export",
-      "observable": "If the exported out/ directory is measured again and out/images/gif still reports around 9.3MB, the file was never removed or compressed",
-      "log_only_rationale": "Deleting an asset the operator may still want reinstated is their call, not a side effect of a design pass"
+      "description": "The explorer layout relies on CSS container queries and :has(), verified only in Chrome, so other engines fall back to the stacked layout without anyone having confirmed how that looks",
+      "observable": "If the live site is opened in Safari or Firefox and the sidebar, list and preview stack vertically in a window wider than 600px, the container query did not apply in that engine",
+      "log_only_rationale": "Cross-browser verification needs those browsers driven directly and is its own bounded task, not a blocker on publishing a verified Chrome build"
     },
     {
-      "description": "The explorer layout depends on CSS container queries and :has(), verified only in Chrome this session",
-      "observable": "When opened in Safari or Firefox, if the sidebar, list and preview stack vertically at a window wider than 600px then the container query did not apply in that engine",
-      "log_only_rationale": "Cross-browser verification needs those browsers driven directly, which is its own bounded task rather than part of the implementation"
+      "description": "public/images/gif/4_night_drive.gif is 8.7MB, unreferenced since it was commented out of WALLPAPER_OPTIONS, and is about to ship to production again",
+      "observable": "If the deployed site's repository size or the exported out/images/gif directory still measures around 9.3MB, the file was never removed or compressed",
+      "log_only_rationale": "Deleting an asset the operator may still want reinstated is their decision, and bundling it into a deploy would hide that decision inside an unrelated change"
     },
     {
-      "description": "The resume lists two npj Digital Medicine manuscripts and four presentations that the Research surface still does not carry, so the site understates the publication record",
-      "observable": "If the operator reviews /research and asks where the RSNA 2025 and NeurIPS workshop entries are, this deferral is the reason",
-      "log_only_rationale": "Adding publications is a content decision the operator has not been asked about; inventing entries is the failure this defers around"
+      "description": "The resume lists two npj Digital Medicine manuscripts and four presentations that the Research surface still does not carry, so the published site understates the publication record",
+      "observable": "If the operator reviews the live /research page and asks where the RSNA 2025 poster and the npj submissions are, this deferral is the reason",
+      "log_only_rationale": "Adding publications is a content decision the operator has not been asked about; inventing entries is exactly the failure this defers around"
     }
-  ]
+  ],
+  "verification_trace": {
+    "command": "curl -s https://junjslee.github.io/ | grep -c css/e04c3c24b311d9c0.css",
+    "threshold_observable": "match count >= 1 and exit code == 0",
+    "window_seconds": 600
+  }
 }
