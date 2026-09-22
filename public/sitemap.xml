@@ -32,16 +32,4 @@
       <image:title>Projects by Junseong Lee</image:title>
     </image:image>
   </url>
-  <url>
-    <loc>https://junjslee.github.io/writing/</loc>
-    <lastmod>2026-09-22</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  <url>
-    <loc>https://junjslee.github.io/writing/post-1/</loc>
-    <lastmod>2026-09-22</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
 </urlset>

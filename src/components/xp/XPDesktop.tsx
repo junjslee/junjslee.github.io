@@ -1,14 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import AboutSection from '../AboutSection';
-import { blogPosts } from '../BlogSection';
 import ContactSection from '../ContactSection';
 import JunLeeSection from '../JunLeeSection';
-import type { BlogPost } from '../BlogSection';
 
-type InternalWindowId = 'about' | 'home' | 'contact' | 'blogReader';
+type InternalWindowId = 'about' | 'home' | 'contact';
 type ShortcutId = InternalWindowId | 'resume' | 'github' | 'linkedin';
-type IconKind = 'about' | 'home' | 'contact' | 'resume' | 'github' | 'linkedin' | 'reader';
+type IconKind = 'about' | 'home' | 'contact' | 'resume' | 'github' | 'linkedin';
 type MobileSection = 'about' | 'work' | 'contact';
 type SoundName = 'open' | 'close' | 'minimize' | 'maximize' | 'click';
 
@@ -120,9 +118,6 @@ interface MobileShellProps {
   menuOpen: boolean;
   clock: string;
   renderMobileSection: (section: MobileSection) => React.ReactNode;
-  renderBlogReader: () => React.ReactNode;
-  isBlogReaderOpen: boolean;
-  onCloseBlogReader: () => void;
   onChangeSection: (section: MobileSection) => void;
   onLaunchShortcut: (id: ShortcutId) => void;
   onToggleMenu: () => void;
@@ -136,13 +131,15 @@ const MOBILE_BREAKPOINT = 720;
 const INITIAL_Z = 40;
 const DESKTOP_STATE_STORAGE_KEY = 'junlee-xp-desktop-state-v1';
 const CRT_STORAGE_KEY = 'junlee-xp-crt-v1';
-const WINDOW_IDS: InternalWindowId[] = ['about', 'home', 'contact', 'blogReader'];
+const WINDOW_IDS: InternalWindowId[] = ['about', 'home', 'contact'];
+/* Lossless animated WebP. The pixel art is palette-based, so lossless beats
+   both GIF and lossy WebP on size without touching a single pixel — 995KB of
+   GIF became 181KB. */
 const WALLPAPER_OPTIONS = [
-  // '/images/gif/1_day.gif',
-  '/images/gif/2_evening.gif',
-  '/images/gif/3_night_cityview.gif',
-  // '/images/gif/4_night_drive.gif',
-  '/images/gif/5_night_totoro.gif',
+  // '/images/gif/1_day.webp',
+  '/images/gif/2_evening.webp',
+  '/images/gif/3_night_cityview.webp',
+  '/images/gif/5_night_totoro.webp',
 ] as const;
 const DEFAULT_WALLPAPER = WALLPAPER_OPTIONS[0];
 
@@ -173,15 +170,6 @@ const WINDOW_DEFINITIONS: Record<InternalWindowId, WindowDefinition> = {
     height: 520,
     x: 668,
     y: 124,
-  },
-  blogReader: {
-    id: 'blogReader',
-    title: 'Blog Entry',
-    icon: 'reader',
-    width: 650,
-    height: 540,
-    x: 360,
-    y: 118,
   },
 };
 
@@ -232,7 +220,6 @@ const DESKTOP_SHORTCUTS = SHORTCUTS.filter((shortcut) => DESKTOP_SHORTCUT_IDS.in
 
 interface PersistedDesktopState {
   windowStates: Partial<Record<InternalWindowId, Partial<WindowState>>>;
-  selectedBlogPostSlug?: string;
 }
 
 function createWindowState(id: InternalWindowId, zIndex: number): WindowState {
@@ -262,7 +249,6 @@ function createDefaultWindowStates(): Record<InternalWindowId, WindowState> {
     about: createWindowState('about', INITIAL_Z + 1),
     home: createWindowState('home', INITIAL_Z + 2),
     contact: createWindowState('contact', INITIAL_Z + 3),
-    blogReader: createWindowState('blogReader', INITIAL_Z + 4),
   };
 }
 
@@ -491,16 +477,6 @@ function DesktopGlyph({ icon }: { icon: IconKind }): React.ReactElement {
           <rect x="14" y="20" width="5" height="14" fill="#fff" />
           <circle cx="16.5" cy="15.5" r="2.5" fill="#fff" />
           <path d="M24 20h5v2c1-2 3-3 5-3 4 0 6 3 6 8v7h-5v-7c0-2-1-4-3-4-3 0-3 2-3 4v7h-5Z" fill="#fff" />
-        </svg>
-      );
-    case 'reader':
-      return (
-        <svg viewBox="0 0 48 48" className="xp-desktop-glyph" aria-hidden="true">
-          <rect x="8" y="8" width="28" height="32" rx="2" fill="#fefcf2" stroke="#143f86" strokeWidth="2" />
-          <rect x="13" y="14" width="18" height="3" fill="#0d5db4" />
-          <rect x="13" y="21" width="14" height="2" fill="#6c7a8a" />
-          <rect x="13" y="26" width="16" height="2" fill="#6c7a8a" />
-          <path d="M36 14h4v20h-4" fill="#d95a3c" stroke="#143f86" strokeWidth="2" />
         </svg>
       );
   }
@@ -922,9 +898,6 @@ function MobileShell({
   menuOpen,
   clock,
   renderMobileSection,
-  renderBlogReader,
-  isBlogReaderOpen,
-  onCloseBlogReader,
   onChangeSection,
   onLaunchShortcut,
   onToggleMenu,
@@ -1022,15 +995,6 @@ function MobileShell({
           </div>
         ) : null}
 
-        {isBlogReaderOpen ? (
-          <div className="xp-mobile-overlay" onClick={onCloseBlogReader}>
-            <div className="xp-mobile-overlay-panel" onClick={(event) => event.stopPropagation()}>
-              <MobileWindowPanel title="Writing" icon="reader" onClose={onCloseBlogReader}>
-                {renderBlogReader()}
-              </MobileWindowPanel>
-            </div>
-          </div>
-        ) : null}
       </div>
 
       <MobileTaskbar
@@ -1098,7 +1062,6 @@ const XPDesktop: React.FC = () => {
   const [mobileSection, setMobileSection] = useState<MobileSection>('about');
   // Closing the mobile panel reveals the desktop, the way closing a window does.
   const [mobilePanelOpen, setMobilePanelOpen] = useState(true);
-  const [selectedBlogPost, setSelectedBlogPost] = useState<BlogPost>(blogPosts[0]);
   const [hasMountedClient, setHasMountedClient] = useState(false);
   const [hasHydratedDesktopState, setHasHydratedDesktopState] = useState(false);
   const zCounter = useRef(INITIAL_Z + 10);
@@ -1150,11 +1113,9 @@ const XPDesktop: React.FC = () => {
         },
         {} as Record<InternalWindowId, WindowState>
       );
-      const restoredBlogPost = blogPosts.find((post) => post.slug === parsedState.selectedBlogPostSlug) ?? blogPosts[0];
       const highestZIndex = Math.max(...Object.values(restoredWindowStates).map((windowState) => windowState.zIndex));
 
       setWindowStates(restoredWindowStates);
-      setSelectedBlogPost(restoredBlogPost);
       zCounter.current = Math.max(INITIAL_Z + 10, highestZIndex) + 1;
     } catch (error) {
       console.error('Failed to restore desktop state.', error);
@@ -1177,11 +1138,10 @@ const XPDesktop: React.FC = () => {
         },
         {} as PersistedDesktopState['windowStates']
       ),
-      selectedBlogPostSlug: selectedBlogPost.slug,
     };
 
     writeDesktopSessionState(persistedState);
-  }, [hasHydratedDesktopState, selectedBlogPost.slug, windowStates]);
+  }, [hasHydratedDesktopState, windowStates]);
 
   const toggleCrt = () => {
     setCrtEnabled((prev) => {
@@ -1418,47 +1378,16 @@ const XPDesktop: React.FC = () => {
     }
   };
 
-  const openBlogPost = (post: BlogPost) => {
-    setSelectedBlogPost(post);
-    setStartOpen(false);
-    setWindowStates((current) => ({
-      ...current,
-      blogReader: {
-        ...current.blogReader,
-        open: true,
-        minimized: false,
-        zIndex: ++zCounter.current,
-      },
-    }));
-    playSound('open');
-  };
 
-  const closeBlogReader = () => {
-    closeWindow('blogReader');
-  };
 
   const renderWindowContent = (id: InternalWindowId) => {
     switch (id) {
       case 'about':
         return <AboutSection onOpenHome={() => openWindow('home')} />;
       case 'home':
-        return <JunLeeSection onOpenPost={openBlogPost} />;
+        return <JunLeeSection />;
       case 'contact':
         return <ContactSection />;
-      case 'blogReader':
-        return (
-          <section className="xp-content xp-blog-reader">
-            <div className="xp-pane">
-              <h1>{selectedBlogPost.title}</h1>
-              <time>{selectedBlogPost.date}</time>
-            </div>
-            <div className="xp-pane xp-blog-reader-body">
-              {selectedBlogPost.content.split(/\n\s*\n/).map((paragraph, index) => (
-                <p key={`${selectedBlogPost.slug}-${index}`}>{paragraph.trim()}</p>
-              ))}
-            </div>
-          </section>
-        );
     }
   };
 
@@ -1475,7 +1404,7 @@ const XPDesktop: React.FC = () => {
           />
         );
       case 'work':
-        return <JunLeeSection onOpenPost={openBlogPost} />;
+        return <JunLeeSection />;
       case 'contact':
         return <ContactSection />;
     }
@@ -1506,9 +1435,6 @@ const XPDesktop: React.FC = () => {
           menuOpen={startOpen}
           clock={clock}
           renderMobileSection={renderMobileSection}
-          renderBlogReader={() => renderWindowContent('blogReader')}
-          isBlogReaderOpen={windowStates.blogReader.open && !windowStates.blogReader.minimized}
-          onCloseBlogReader={closeBlogReader}
           onChangeSection={(section) => {
             playSound('click');
             setMobileSection(section);

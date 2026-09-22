@@ -1,43 +1,65 @@
 {
-  "timestamp": "2026-09-22T16:37:13Z",
-  "core_question": "How do we remove the terminal and the unreferenced 8.7MB wallpaper, and give the mobile shell a padded wallpaper frame and a working close control, without breaking the deployed build?",
+  "timestamp": "2026-09-22T16:52:31Z",
+  "core_question": "How do we fix the contact form that silently never sends, give the site a language and a real 404, and cut the wallpaper weight, without regressing the deployed build?",
   "knowns": [
-    "The operator asked for four changes this turn: pad the mobile wallpaper so it reads as a frame, add an x close control on mobile panels, remove cmd.exe entirely, and delete public/images/gif/4_night_drive.gif",
-    "The operator explicitly ruled BiomeTrail out of scope — its Cloudflare Access wall is deliberate protection while the journal manuscript is unpublished, so no link or badge change is wanted",
-    "4_night_drive.gif is 8.7MB and already commented out of WALLPAPER_OPTIONS in XPDesktop.tsx, so deleting the file cannot change which wallpaper any visitor sees",
-    "Removing the terminal is the same leaf-feature shape as the Minesweeper removal earlier this session: one component file, one member of the InternalWindowId union, one shortcut, one start-menu entry, one icon glyph, and one CSS block",
-    "TerminalSection currently owns the only path that triggers the blue-screen easter egg through onTriggerBsod, so removing it strands the BSoD component unless that is handled",
-    "The mobile shell paints its wallpaper through a fixed .xp-mobile-wallpaper layer added earlier this session, and .xp-mobile-workspace pads content by only 12px, so the wallpaper currently shows as a thin border rather than a frame",
-    "main is at 8ce323d, in sync with origin/main, working tree clean, and the last deploy run 35692777482 concluded success"
+    "gh secret list returns empty with exit 0, so no NEXT_PUBLIC_EMAILJS_* secret is set; the env vars are undefined at build time, isEmailJsConfigured is false, and every visitor's Send falls back to mailto",
+    "The fallback shows the visitor an internal-sounding line, 'Opened your email client because EmailJS is not configured in this environment', which a recruiter reads as a broken form",
+    "emailjs-com is a deprecated package superseded by @emailjs/browser, and it is bundled into the 70KB index chunk while never being reachable",
+    "out/index.html renders <html> with no lang attribute because the project has no src/pages/_document.tsx",
+    "out/404.html is the unstyled Next.js default titled '404: This page could not be found' with no link back to the site",
+    "The active wallpapers are animated GIFs at 507KB (2_evening) and 409KB (5_night_totoro), the heaviest first-paint assets on the site",
+    "The operator chose three of the four offered items and left the orphaned blog post alone, so Writing stays archived from the UI",
+    "Verified sound this pass: desktop icons carry tabIndex, aria-label and Enter/Space handling; every img has alt text; reduced-motion guards, robots.txt, sitemap and JSON-LD are all in place",
+    "main is at ecd6285, in sync with origin/main, tree clean, and the last deploy run 35756174292 concluded success"
   ],
   "unknowns": [
-    "If npm run build exits non-zero after the terminal removal, a dangling import or an unhandled member of the InternalWindowId union remains and the TypeScript error names the file and symbol still referencing it",
-    "Should the BSoD component be left with no caller after the terminal is removed, npm run lint fails on an unused variable or the dead component ships as unreachable bytes in the bundle",
-    "When the mobile workspace padding is increased, if the panel content drops below roughly 320px of usable width on a 360px phone the padding is too aggressive and text starts wrapping badly",
-    "If the new close control is rendered on the mobile About panel, which has no window to close, tapping it errors or leaves the visitor on a blank screen because there is nothing to return to",
-    "After deleting 4_night_drive.gif, if grep still reports any reference to that filename in src or public the build errors on a missing asset at export time"
+    "If animated WebP conversion drops the wallpaper below acceptable quality, the visual check fails and the GIF has to be kept or re-encoded at a higher quality setting",
+    "Should a converted wallpaper fail to animate in the browser, PIL wrote a single-frame WebP and the loop parameters need to be passed explicitly",
+    "If npm run build exits non-zero after removing emailjs-com from package.json, an import of that module remains somewhere and the TypeScript error names the file",
+    "When the 404 route is added, if GitHub Pages still serves the default page for an unknown path then the export did not emit 404.html at the root and the deploy fails to pick it up",
+    "If the rendered html element still lacks lang after adding _document.tsx, the custom document was not picked up and accessibility tooling keeps reporting the error"
   ],
   "assumptions": [
-    "Deleting the gif is safe and effectively irreversible only in the working tree, because git retains the blob in history and the file can be restored with git checkout from an earlier commit if the operator changes their mind",
-    "The mobile close control should return the visitor to a sensible default panel rather than unmounting the shell, because a static site has no window manager to fall back to",
-    "Rollback is cheap by construction: the work lands as commits on main off a verified-green 8ce323d, and git revert plus a push restores the deployed state within minutes"
+    "Making mailto the intended contact path is the right call rather than wiring EmailJS, because the operator picked the removal option and a static site with no secret store gains little from a third-party sender",
+    "Animated WebP is safe to ship, because every browser that supports the container queries this site already relies on has supported animated WebP for longer",
+    "Rollback is cheap by construction: work lands as commits on main off a verified-green ecd6285, and git revert plus a push restores the deployed state within minutes"
   ],
-  "disconfirmation": "If npm run build or npm run lint exits non-zero on the finished tree, or a browser pass at 400px width shows the mobile panel without a reachable close control or with the wallpaper frame gone, the change failed and does not get committed as shipped",
+  "disconfirmation": "If npm run build or npm run lint exits non-zero, or the rendered html element still has no lang attribute, or a converted wallpaper fails to animate in the browser, the change failed and does not get committed as shipped",
   "verification_trace": {
-    "command": "npm run build && npm run lint",
-    "threshold_observable": "exit code == 0 and 6 of 6 routes exported",
+    "command": "npm run build && npm run lint && grep -c 'lang=\"en\"' out/index.html",
+    "threshold_observable": "exit code == 0 and match count >= 1",
     "window_seconds": 600
   },
-  "flaw_classification": "core-logic-misalignment",
+  "flaw_classification": "config-gap",
   "posture_selected": "patch",
-  "patch_vs_refactor_evaluation": "Each change is local and independent: src/components/TerminalSection.tsx is deleted with its references in src/components/xp/XPDesktop.tsx, public/images/gif/4_night_drive.gif is removed from the asset tree, and the mobile frame and close control are additive edits to the mobile branch of XPDesktop.tsx plus the .xp-mobile-* rules in src/styles/globals.css. No module boundary moves and no data shape changes, so patch is the right posture rather than refactor.",
+  "patch_vs_refactor_evaluation": "Four independent local changes: src/components/ContactForm.tsx drops the emailjs-com import and the env reads in favour of the mailto path it already contains, package.json and .github/workflows/nextjs.yml drop the now-unused dependency and secret block, a new src/pages/_document.tsx supplies the lang attribute, a new src/pages/404.tsx replaces the framework default, and public/images/gif/* plus WALLPAPER_OPTIONS in XPDesktop.tsx swap GIF for WebP. No module boundary moves and no data shape changes, so patch rather than refactor.",
   "blast_radius_map": [
     {
-      "surface": "src/components/xp/XPDesktop.tsx",
+      "surface": "src/components/ContactForm.tsx",
       "status": "needs_update"
     },
     {
-      "surface": "src/components/TerminalSection.tsx",
+      "surface": "package.json",
+      "status": "needs_update"
+    },
+    {
+      "surface": ".github/workflows/nextjs.yml",
+      "status": "needs_update"
+    },
+    {
+      "surface": "src/pages/_document.tsx",
+      "status": "needs_update"
+    },
+    {
+      "surface": "src/pages/404.tsx",
+      "status": "needs_update"
+    },
+    {
+      "surface": "public/images/gif/",
+      "status": "needs_update"
+    },
+    {
+      "surface": "src/components/xp/XPDesktop.tsx",
       "status": "needs_update"
     },
     {
@@ -45,7 +67,7 @@
       "status": "needs_update"
     },
     {
-      "surface": "public/images/gif/4_night_drive.gif",
+      "surface": "docs/REQUIREMENTS.md",
       "status": "needs_update"
     },
     {
@@ -61,50 +83,65 @@
       "status": "needs_update"
     },
     {
-      "surface": "src/components/ProjectsSection.tsx",
+      "surface": "public/sitemap.xml",
       "status": "not-applicable",
-      "rationale": "the project list is unchanged this turn; the terminal was never one of its entries"
+      "rationale": "404 is not a canonical route and no listed URL changes; the wallpaper is not a sitemap image entry"
+    },
+    {
+      "surface": "src/components/BlogSection.tsx",
+      "status": "not-applicable",
+      "rationale": "the operator left the orphaned blog post out of scope this turn, so Writing stays archived from the UI"
     },
     {
       "surface": "src/components/ResearchSection.tsx",
       "status": "not-applicable",
-      "rationale": "the operator ruled BiomeTrail out of scope, so the research data stays exactly as deployed"
-    },
-    {
-      "surface": "public/sitemap.xml",
-      "status": "not-applicable",
-      "rationale": "no route is added or removed; the terminal was a window inside the shell, never a URL"
-    },
-    {
-      "surface": ".github/workflows",
-      "status": "not-applicable",
-      "rationale": "the ubuntu-latest and Node 20 annotations are informational for this static build, and the operator asked no pipeline change"
+      "rationale": "the publication backlog is a separate content decision the operator has not taken"
     }
   ],
   "sync_plan": [
     {
-      "surface": "src/components/xp/XPDesktop.tsx",
-      "action": "remove the terminal window type, shortcut, start-menu entry and glyph; handle the orphaned BSoD trigger; add the mobile close control and wire it to a sensible default panel"
+      "surface": "src/components/ContactForm.tsx",
+      "action": "remove the emailjs import and env reads, make mailto the intended path, and rewrite the status copy so it reads as designed behaviour"
     },
     {
-      "surface": "src/components/TerminalSection.tsx",
-      "action": "delete the file"
+      "surface": "package.json",
+      "action": "drop the deprecated emailjs-com dependency"
+    },
+    {
+      "surface": ".github/workflows/nextjs.yml",
+      "action": "remove the now-unused EMAILJS secret env block"
+    },
+    {
+      "surface": "src/pages/_document.tsx",
+      "action": "add a custom document supplying lang on the html element"
+    },
+    {
+      "surface": "src/pages/404.tsx",
+      "action": "add an XP-styled not-found page with a link back to the site"
+    },
+    {
+      "surface": "public/images/gif/",
+      "action": "convert the active animated GIFs to animated WebP and remove the GIF originals once verified"
+    },
+    {
+      "surface": "src/components/xp/XPDesktop.tsx",
+      "action": "point WALLPAPER_OPTIONS at the converted files"
     },
     {
       "surface": "src/styles/globals.css",
-      "action": "delete the terminal CSS block and widen the mobile workspace padding so the wallpaper reads as a frame; style the close control"
+      "action": "style the not-found page as an XP error dialog"
     },
     {
-      "surface": "public/images/gif/4_night_drive.gif",
-      "action": "delete the unreferenced 8.7MB asset from the tree"
+      "surface": "docs/REQUIREMENTS.md",
+      "action": "drop EmailJS from the tech stack and record mailto as the contact mechanism"
     },
     {
       "surface": "docs/NEXT_STEPS.md",
-      "action": "REPLACE-form handoff recording the removals, the mobile changes, and the items the operator closed out"
+      "action": "REPLACE-form handoff recording the fixes and what remains"
     },
     {
       "surface": "docs/PROGRESS.md",
-      "action": "record what was removed and why, with the verification result"
+      "action": "record the findings, the fixes, and the measured before/after sizes"
     },
     {
       "surface": "docs/EVENTS.md",
@@ -113,14 +150,19 @@
   ],
   "deferred_discoveries": [
     {
+      "description": "One real blog post exists but is unreachable from anywhere in the site UI while still listed in the sitemap, so it is findable by search engines and not by visitors",
+      "observable": "If a visitor lands on /writing/post-1 from search and tries to navigate to the rest of the site, no in-page link takes them there",
+      "log_only_rationale": "The operator deliberately left this out of scope this turn; restoring or fully retiring Writing is their decision"
+    },
+    {
+      "description": "The resume lists two npj Digital Medicine manuscripts and four presentations that the live /research page does not carry",
+      "observable": "If the operator reviews /research and asks where the RSNA 2025 poster and the npj submissions are, this deferral is the reason",
+      "log_only_rationale": "Which unpublished work to surface is the operator's call while manuscripts are under review"
+    },
+    {
       "description": "The explorer layout relies on CSS container queries and :has(), verified in Chrome only, so Safari and Firefox behaviour on the live site is still unconfirmed",
       "observable": "If Safari or Firefox reports gridTemplateColumns on .xp-home-main with a single track at a window wider than 600px, the container query fails in that engine",
       "log_only_rationale": "Cross-browser verification needs those browsers driven directly and is its own bounded task"
-    },
-    {
-      "description": "The resume lists two npj Digital Medicine manuscripts and four presentations that the live /research page still does not carry, so the published record understates the work",
-      "observable": "If the operator reviews /research and asks where the RSNA 2025 poster and the npj submissions are, this deferral is the reason",
-      "log_only_rationale": "Which unpublished work to surface is the operator's call, especially while manuscripts are under review"
     }
   ]
 }

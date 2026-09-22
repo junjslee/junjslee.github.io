@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
-import emailjs from 'emailjs-com'
 
+const CONTACT_EMAIL = 'junseong.lee652@gmail.com'
+
+/* This form composes a message and hands it to the visitor's own mail client.
+   There is no send service behind it: the site is a static export with nowhere
+   to keep a secret, and the previous EmailJS wiring had no credentials set, so
+   it silently fell through to this same path while telling the visitor it was
+   misconfigured. Composing a draft is now the intended behaviour, and the copy
+   says so. */
 const ContactForm: React.FC = () => {
-  const serviceID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID
-  const templateID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID
-  const userID = process.env.NEXT_PUBLIC_EMAILJS_USER_ID
-  const isEmailJsConfigured = Boolean(serviceID && templateID && userID)
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -22,34 +25,15 @@ const ContactForm: React.FC = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    if (!isEmailJsConfigured) {
-      const subject = encodeURIComponent(`[Website] ${formData.inquiry || 'General note'} from ${formData.name}`)
-      const body = encodeURIComponent(
-        `Name: ${formData.name}\nEmail: ${formData.email}\nReason: ${formData.inquiry}\n\n${formData.message}`
-      )
+    const subject = encodeURIComponent(
+      `[Website] ${formData.inquiry || 'General note'} from ${formData.name}`
+    )
+    const body = encodeURIComponent(
+      `Name: ${formData.name}\nEmail: ${formData.email}\nReason: ${formData.inquiry}\n\n${formData.message}`
+    )
 
-      window.location.href = `mailto:junseong.lee652@gmail.com?subject=${subject}&body=${body}`
-      setStatus('Opened your email client because EmailJS is not configured in this environment.')
-      return
-    }
-
-    emailjs
-      .send(serviceID!, templateID!, formData, userID!)
-      .then(
-        () => {
-          setStatus('Message sent successfully.')
-          setFormData({
-            name: '',
-            email: '',
-            inquiry: '',
-            message: '',
-          })
-        },
-        (error) => {
-          console.error(error.text)
-          setStatus('Failed to send message.')
-        }
-      )
+    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`
+    setStatus(`Draft opened in your email client, addressed to ${CONTACT_EMAIL}.`)
   }
 
   return (
@@ -57,7 +41,7 @@ const ContactForm: React.FC = () => {
       <div className="xp-mail-fields">
         <div className="xp-mail-row">
           <label htmlFor="to">To</label>
-          <input id="to" value="junseong.lee652@gmail.com" readOnly />
+          <input id="to" value={CONTACT_EMAIL} readOnly />
         </div>
         <div className="xp-mail-row">
           <label htmlFor="name">Name</label>
@@ -112,12 +96,10 @@ const ContactForm: React.FC = () => {
 
       <div className="xp-mail-footer">
         <div className="xp-mail-links">
-          <a href="mailto:junseong.lee652@gmail.com">Direct Email</a>
+          <a href={`mailto:${CONTACT_EMAIL}`}>Email directly instead</a>
         </div>
         <div className="xp-form-actions">
-          <button type="submit">
-            {isEmailJsConfigured ? 'Send Message' : 'Open Email Draft'}
-          </button>
+          <button type="submit">Compose in my email app</button>
           {status ? <span className="xp-form-status">{status}</span> : null}
         </div>
       </div>

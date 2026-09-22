@@ -29,15 +29,10 @@ function getKindVisual(folder: FolderId, kind: string): KindVisual {
   if (k.includes('operation')) return { icon: '⚙', accent: '#5b6472' }
   return { icon: '▣', accent: '#546b8a' }
 }
-import type { BlogPost } from './BlogSection'
 import { projects } from './ProjectsSection'
 import { researchEntries } from './ResearchSection'
 
 type FolderId = 'projects' | 'research' | 'writing'
-
-interface JunLeeSectionProps {
-  onOpenPost?: (post: BlogPost) => void
-}
 
 interface ExplorerEntry {
   id: string
@@ -55,7 +50,6 @@ interface ExplorerEntry {
   authors?: string
   image?: string
   imageAlt?: string
-  post?: BlogPost
 }
 
 const folderCopy: Record<FolderId, { label: string; description: string }> = {
@@ -114,7 +108,7 @@ const explorerEntries: ExplorerEntry[] = [
    folder is no longer surfaced in the shell. */
 const folderOrder: FolderId[] = ['research', 'projects']
 
-const JunLeeSection: React.FC<JunLeeSectionProps> = ({ onOpenPost }) => {
+const JunLeeSection: React.FC = () => {
   const [activeFolder, setActiveFolder] = useState<FolderId>('research')
   const visibleEntries = useMemo(
     () => explorerEntries.filter((entry) => entry.folder === activeFolder),
@@ -135,11 +129,6 @@ const JunLeeSection: React.FC<JunLeeSectionProps> = ({ onOpenPost }) => {
 
   const openEntry = (entry: ExplorerEntry | undefined) => {
     if (!entry) {
-      return
-    }
-
-    if (entry.post) {
-      onOpenPost?.(entry.post)
       return
     }
 
@@ -294,7 +283,7 @@ const JunLeeSection: React.FC<JunLeeSectionProps> = ({ onOpenPost }) => {
                     {selectedEntry.liveLabel ?? 'Open Live Site'}
                   </button>
                 ) : null}
-                {selectedEntry.href || selectedEntry.post ? (
+                {selectedEntry.href ? (
                   <button type="button" onClick={handlePrimaryAction}>
                     {selectedEntry.actionLabel}
                   </button>

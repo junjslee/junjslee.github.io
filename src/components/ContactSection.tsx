@@ -4,18 +4,28 @@ import ContactForm from './ContactForm'
 const ContactSection: React.FC = () => {
   return (
     <section className="xp-content xp-mail-shell">
-      <div className="xp-mail-toolbar" aria-label="Mail toolbar">
-        <button type="button">New</button>
-        <button type="button">Send</button>
-        <button type="button">Address Book</button>
+      {/* Chrome, not controls. These carried no handlers, so a visitor could
+          click "Send" here and get nothing; disabled matches how the IE
+          toolbar's back and forward buttons already behave. */}
+      <div className="xp-mail-toolbar" aria-hidden="true">
+        <button type="button" disabled>
+          New
+        </button>
+        <button type="button" disabled>
+          Send
+        </button>
+        <button type="button" disabled>
+          Address Book
+        </button>
       </div>
 
       <div className="xp-pane xp-mail-panel">
         <div className="xp-mail-header-copy">
           <h1>Contact</h1>
           <p>
-            This window is styled like a simple mail composer. Send through EmailJS when configured,
-            or fall back to a drafted email in local environments.
+            Fill this in and it opens a pre-written draft in your own email app — nothing is sent
+            from this page. Prefer to skip the form? Write to{' '}
+            <a href="mailto:junseong.lee652@gmail.com">junseong.lee652@gmail.com</a> directly.
           </p>
         </div>
 
