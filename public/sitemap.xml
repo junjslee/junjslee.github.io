@@ -18,8 +18,8 @@
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>https://junjslee.github.io/images/projects/rad-dino-architecture.webp</image:loc>
-      <image:title>RAD-DINO with LoRA adapters — neonatal pneumoperitoneum model architecture</image:title>
+      <image:loc>https://junjslee.github.io/images/projects/biometrail.webp</image:loc>
+      <image:title>BiomeTrail — provenance-gated biomedical knowledge graph</image:title>
     </image:image>
   </url>
   <url>
@@ -28,8 +28,8 @@
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>https://junjslee.github.io/images/projects/biometrail.webp</image:loc>
-      <image:title>BiomeTrail — provenance-gated biomedical knowledge graph</image:title>
+      <image:loc>https://junjslee.github.io/images/og-card.jpg</image:loc>
+      <image:title>Projects by Junseong Lee</image:title>
     </image:image>
   </url>
   <url>

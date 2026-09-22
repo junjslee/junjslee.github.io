@@ -51,6 +51,8 @@ interface ExplorerEntry {
   liveLink?: string
   liveLabel?: string
   liveNote?: string
+  outputs?: Array<{ title: string; venue: string }>
+  authors?: string
   image?: string
   imageAlt?: string
   post?: BlogPost
@@ -100,6 +102,9 @@ const explorerEntries: ExplorerEntry[] = [
     href: entry.href,
     liveLink: entry.liveLink,
     liveLabel: entry.liveLabel,
+    liveNote: entry.liveNote,
+    outputs: entry.outputs,
+    authors: entry.authors,
     image: entry.image,
     imageAlt: entry.imageAlt,
   })),
@@ -264,6 +269,22 @@ const JunLeeSection: React.FC<JunLeeSectionProps> = ({ onOpenPost }) => {
                 </figure>
               ) : null}
               <p>{selectedEntry.summary}</p>
+              {selectedEntry.outputs ? (
+                <div className="xp-project-meta">
+                  <strong>Papers from this work</strong>
+                  <ul className="xp-list">
+                    {selectedEntry.outputs.map((output) => (
+                      <li key={output.title}>
+                        {output.title}
+                        <span className="xp-subtle"> — {output.venue}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  {selectedEntry.authors ? (
+                    <p className="xp-subtle">{selectedEntry.authors}</p>
+                  ) : null}
+                </div>
+              ) : null}
               <div className="xp-project-actions">
                 {selectedEntry.liveLink ? (
                   <button

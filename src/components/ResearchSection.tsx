@@ -3,18 +3,51 @@ import React, { useState } from 'react'
 export interface ResearchEntry {
   title: string
   year: string
-  href: string
+  /** Omitted when nothing public exists to link to yet. */
+  href?: string
   kind: string
   venue: string
   summary: string
   linkLabel: string
   liveLink?: string
   liveLabel?: string
+  /** Shown beside the live link when it is not openly reachable. */
+  liveNote?: string
+  /** Papers that came out of one line of work. */
+  outputs?: Array<{ title: string; venue: string }>
+  authors?: string
   image?: string
   imageAlt?: string
 }
 
 export const researchEntries: ResearchEntry[] = [
+  {
+    title: 'BiomeTrail: a provenance-gated biomedical knowledge graph',
+    year: '2026',
+    kind: 'First-Author Research',
+    venue: 'NeurIPS 2026 Workshops (under review)',
+    summary:
+      'A knowledge graph of the microbe to host interface — microbe, metabolite, receptor, pathway, outcome — built at LMIC (Massachusetts General Hospital / Harvard Medical School). Every edge keeps the source sentence that justified it, with its PMID and both endpoints grounded to standard ontologies, so a claim can be checked link by link rather than taken on trust. Two NeurIPS 2026 workshop papers came out of this work, with a journal manuscript in preparation.',
+    outputs: [
+      {
+        title: 'Demo: Preserving Evidence, Context, and Disagreement in Mechanistic Microbe-Host Graph QA',
+        venue: 'NeurIPS 2026 Workshop GenAI4Health · Demonstration Paper Track',
+      },
+      {
+        title: 'Bounded Verification and Asymmetric Recoverability in Biomedical Knowledge-Graph Construction',
+        venue: 'NeurIPS 2026 Workshop AI4Science',
+      },
+    ],
+    authors:
+      'Junseong Lee, Young-Tak Kim, Hyunji Kim, Niranjan Kulkarni, Emma Skybova, Victoria Kim, Jonathan Sheejin Choi, Synho Do',
+    linkLabel: 'Open BiomeTrail',
+    liveLink: 'https://biometrail.com',
+    liveLabel: 'Open BiomeTrail',
+    liveNote: 'Private beta — access required',
+    image: '/images/projects/biometrail.webp',
+    imageAlt:
+      'BiomeTrail interface: a 3D typed knowledge graph on the left, and an evidence panel on the right showing a microbe-produces-metabolite edge with its grounded identifiers, verbatim source sentence, and PubMed citation.',
+  },
   {
     title: 'Expertise modulates automation bias and sentinel behavior in human-AI collaborative diagnosis of neonatal pneumoperitoneum',
     year: '2025',
@@ -109,15 +142,34 @@ const ResearchSection: React.FC = () => {
             </figure>
           ) : null}
           <p>{selectedEntry.summary}</p>
+          {selectedEntry.outputs ? (
+            <div className="xp-project-meta">
+              <strong>Papers from this work</strong>
+              <ul className="xp-list">
+                {selectedEntry.outputs.map((output) => (
+                  <li key={output.title}>
+                    {output.title}
+                    <span className="xp-subtle"> — {output.venue}</span>
+                  </li>
+                ))}
+              </ul>
+              {selectedEntry.authors ? <p className="xp-subtle">{selectedEntry.authors}</p> : null}
+            </div>
+          ) : null}
           <div className="xp-project-actions">
             {selectedEntry.liveLink ? (
               <a href={selectedEntry.liveLink} target="_blank" rel="noopener noreferrer">
                 {selectedEntry.liveLabel ?? 'Open Live Site'}
               </a>
             ) : null}
-            <a href={selectedEntry.href} target="_blank" rel="noopener noreferrer">
-              {selectedEntry.linkLabel}
-            </a>
+            {selectedEntry.href ? (
+              <a href={selectedEntry.href} target="_blank" rel="noopener noreferrer">
+                {selectedEntry.linkLabel}
+              </a>
+            ) : null}
+            {selectedEntry.liveNote ? (
+              <span className="xp-action-note">{selectedEntry.liveNote}</span>
+            ) : null}
           </div>
         </article>
       </div>

@@ -54,7 +54,10 @@ git checkout main && git merge feat/design-refresh && git push origin main
   `.xp-research-section`. It measures the **window**, not the viewport.
 - Project and research data stay single-sourced: `projects[]` (`ProjectsSection.tsx`) and
   `researchEntries[]` (`ResearchSection.tsx`) feed the XP explorer, the standalone windows, and the
-  SEO pages. Both now carry optional `image`, `imageAlt`, `liveLink`, `liveLabel`.
+  SEO pages. Both now carry optional `image`, `imageAlt`, `liveLink`, `liveLabel`, `liveNote`.
+- `ResearchEntry` also carries optional `outputs[]` (`{title, venue}`) and `authors` for a line of
+  work that produced several papers — BiomeTrail is the current example. `href` is optional, so an
+  entry with nothing public to link to renders without a repository button.
 - Social cards are JPEG on purpose (`*-card.jpg`); the in-page images are WebP. Do not point
   `og:image` at a `.webp`.
 - Writing is archived from the UI only. `/writing` and `/writing/post-1` still build and sit in the

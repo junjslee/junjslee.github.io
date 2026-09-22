@@ -17,19 +17,6 @@ export interface ProjectEntry {
 
 export const projects: ProjectEntry[] = [
   {
-    title: "BiomeTrail",
-    description:
-      "A provenance-gated biomedical knowledge graph built at LMIC (Massachusetts General Hospital / Harvard Medical School). It mines microbe → metabolite → receptor → pathway → outcome mechanistic chains out of 240K+ papers, and every edge keeps the sentence that justified it: the verbatim source sentence, its PMID, and both endpoints grounded to standard ontologies (ChEBI, MONDO, NCBITaxon, UniProt). A cost-optimized two-stage pipeline pairs a deterministic NER and entity-grounding pass — a 2.5M-surface automaton that narrows 240K papers to an 8.5M candidate-relation pool — with targeted LLM relation extraction that checks each candidate edge back against its own source sentence. Served from Neo4j behind an interactive 3D graph explorer where any edge opens its evidence.",
-    techStack: ["Python", "Neo4j", "AWS Bedrock", "React", "Ontology grounding (ChEBI / MONDO / NCBITaxon / UniProt)"],
-    liveLink: "https://biometrail.com",
-    liveLabel: "Open BiomeTrail",
-    liveNote: "Private beta — access required",
-    category: "Knowledge Graph",
-    image: "/images/projects/biometrail.webp",
-    imageAlt:
-      "BiomeTrail interface: a 3D typed knowledge graph on the left, and an evidence panel on the right showing a microbe-produces-metabolite edge with its grounded identifiers, verbatim source sentence, and PubMed citation.",
-  },
-  {
     title: "episteme",
     description: "A cognitive-governance kernel that makes AI agents show their work before they act. Before any high-impact action (git push, deploy, migration), a deterministic hook requires the agent to commit its reasoning to disk — knowns, unknowns, assumptions, and a falsifiable disconfirmation — and refuses to proceed until the artifact is real. Verified lessons become hash-chained, context-scoped protocols that resurface at the next matching decision, so the agent gets sharper on your codebase over time. Ships as a Claude Code plugin and a Python kernel with a vendor-neutral adapter layer.",
     techStack: ["Python", "Claude Code plugin (hooks / skills / agents)", "TypeScript", "Next.js", "Vercel"],

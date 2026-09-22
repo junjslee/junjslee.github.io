@@ -59,9 +59,11 @@
 - `Resume.pdf` replaced with `resume_acad.pdf`.
 - About → Experience rebuilt from a flat 4-string array into a structured CV: education, four roles
   with PI / location / dates / bullets, recognitions, and key skills — all sourced from the resume.
-- BiomeTrail added as a project with a live capture of the running app; the neonatal study gained
-  the RAD-DINO + LoRA architecture figure and its sandbox link; the Medical Physics paper gained
-  the two-stage RetinaNet → U-Net cascade figure. Preview images open full size on click.
+- BiomeTrail added under **Research** (operator correction — it is research, not a project) with a
+  live capture of the running app, a short summary, and the two NeurIPS 2026 workshop papers that
+  came out of it listed with their venues and full author line. The neonatal study gained the
+  RAD-DINO + LoRA architecture figure and its sandbox link; the Medical Physics paper gained the
+  two-stage RetinaNet → U-Net cascade figure. Preview images open full size on click.
 - Gaze-VQA (MONET Lab) added to projects from the resume.
 - Minesweeper removed entirely (component, window type, icon, start-menu entry, glyph, 165 lines of CSS).
 - Writing archived out of the UI; `/writing` pages stay live and indexed.
@@ -80,6 +82,9 @@
   no-JavaScript state, not hidden text.
 - BiomeTrail links to `biometrail.com` with a "Private beta — access required" badge; the GitHub
   repo is private so it is not linked at all.
+- One line of work can produce several papers, so `ResearchEntry` gained an optional `outputs[]`
+  and `authors`. These render through the existing `xp-project-meta` / `xp-list` classes rather
+  than new components, per the operator's instruction to integrate into the current design.
 - The BiomeTrail preview is a fresh capture of the live app, not the under-review NeurIPS figure.
 
 ## Validation

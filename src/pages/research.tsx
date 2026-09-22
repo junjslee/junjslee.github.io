@@ -15,11 +15,13 @@ const ResearchPage: NextPage = () => {
         '@type': entry.kind === 'Publication' ? 'ScholarlyArticle' : 'CreativeWork',
         name: entry.title,
         description: entry.summary,
-        url: entry.href,
+        url: entry.href ?? entry.liveLink ?? `${SITE_URL}/research/`,
         datePublished: entry.year,
         isPartOf: entry.venue,
         ...(entry.image ? { image: `${SITE_URL}${entry.image}` } : {}),
-        author: { '@type': 'Person', '@id': `${SITE_URL}/#person`, name: 'Junseong Lee' },
+        ...(entry.authors
+          ? { author: entry.authors.split(', ').map((name) => ({ '@type': 'Person', name })) }
+          : { author: { '@type': 'Person', '@id': `${SITE_URL}/#person`, name: 'Junseong Lee' } }),
       },
     })),
   }
@@ -36,8 +38,8 @@ const ResearchPage: NextPage = () => {
       canonicalPath="/research/"
       heading="Research"
       intro="A crawlable index of research work, papers, and public repositories."
-      socialImage="/images/projects/rad-dino-architecture-card.jpg"
-      socialImageAlt="RAD-DINO with LoRA adapters: the model architecture used in the neonatal study."
+      socialImage="/images/projects/biometrail-card.jpg"
+      socialImageAlt="The BiomeTrail knowledge-graph interface showing an edge and its source evidence."
       jsonLd={[jsonLd, breadcrumbs]}
     >
       <div className="seo-entry-list">
@@ -54,9 +56,12 @@ const ResearchPage: NextPage = () => {
                     {entry.liveLabel ?? 'Live Site'}
                   </a>
                 ) : null}
-                <a href={entry.href} target="_blank" rel="noopener noreferrer">
-                  {entry.linkLabel}
-                </a>
+                {entry.href ? (
+                  <a href={entry.href} target="_blank" rel="noopener noreferrer">
+                    {entry.linkLabel}
+                  </a>
+                ) : null}
+                {entry.liveNote ? <span className="seo-entry-note">{entry.liveNote}</span> : null}
               </div>
             </div>
             {entry.image ? (
@@ -73,6 +78,20 @@ const ResearchPage: NextPage = () => {
               </figure>
             ) : null}
             <p>{entry.summary}</p>
+            {entry.outputs ? (
+              <div className="seo-entry-outputs">
+                <strong>Papers from this work</strong>
+                <ul>
+                  {entry.outputs.map((output) => (
+                    <li key={output.title}>
+                      {output.title}
+                      <span className="seo-entry-note"> — {output.venue}</span>
+                    </li>
+                  ))}
+                </ul>
+                {entry.authors ? <p className="seo-entry-note">{entry.authors}</p> : null}
+              </div>
+            ) : null}
           </article>
         ))}
       </div>

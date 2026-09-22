@@ -36,8 +36,6 @@ const ProjectsPage: NextPage = () => {
       canonicalPath="/projects/"
       heading="Projects"
       intro="A plain index of software and technical work, separate from the XP desktop UI, so it remains easy to read and easy to index."
-      socialImage="/images/projects/biometrail-card.jpg"
-      socialImageAlt="The BiomeTrail knowledge-graph interface showing an edge and its source evidence."
       jsonLd={[jsonLd, breadcrumbs]}
     >
       <div className="seo-entry-list">
