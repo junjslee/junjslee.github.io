@@ -1,47 +1,93 @@
 # Progress
 
 ## Last Updated
-- `2026-07-11`
+- `2026-09-22`
 
 ## Completed
 - Windows XP desktop shell (windows, taskbar, start menu, drag/resize, sound)
 - About, Projects, Research, Blog/Writing, Contact, JunLee sections
 - Mobile XP-lite shell (refactored, separate from desktop)
 - Crawlable SEO pages: `/projects`, `/research`, `/writing`, `/writing/[slug]`
-- Sitemap generation
-- Open Graph / Twitter card meta + JSON-LD Person schema
-- Randomized wallpapers on boot
-- Canonical name standardized to "Junseong Lee" on all profile surfaces
-- Boot/login sequence, CRT scanline toggle, cmd.exe terminal, window-state localStorage persistence, IE chrome on Projects folder (commit `0b27459`)
-- `episteme` project added with `liveLink` support — live site surfaced in XP explorer IE toolbar, SEO projects page, and standalone ProjectsSection
-- GitHub + LinkedIn desktop icons (open in new tab)
-- Terminal (cmd.exe) simplified: fewer commands, ASCII banner, `joke` / `coffee` easter eggs, snarkier fallback
-- Mobile made scrollable: page-level scroll enabled, sticky taskbar, `xp-home-main` / `xp-explorer-stack` stacked instead of grid-capped, added `:active` press and clock pulse for a less-static feel
-- Wallpaper rotation switched from random-per-session to deterministic one-per-day (`chooseDailyWallpaper`, UTC day index modulo wallpaper count); sessionStorage persistence removed
-- Polish: mobile workspace `padding-bottom: 80px` so sticky taskbar doesn't overlap trailing content during scroll; desktop shortcuts wrap to 2 columns on short viewports (`max-height: 780px`); IE "Address" label hides under 420px
-- Explorer list rows fixed: titles single-line with ellipsis + `title` tooltip; per-category SVG/Unicode glyph badge + color accent; `LIVE` chip on rows with a live site; preview pane gained a 72px gradient hero block using the category accent, plus a `LIVE` chip in the chip row
-- Login/welcome screen removed — boot flow is now `loading → desktop` (no click-through). `BootPhase` type simplified to `'loading' | 'desktop'`, welcome CSS deleted, `MIN_BOOT_DURATION_MS` trimmed 1600→900ms
-- Working Minesweeper (`MinesweeperSection.tsx`) — beginner (9×9/10) + intermediate (16×16/40), first-click safety, flood-fill reveal, right-click flag + Flag Mode toggle for touch, live mine/time counters with classic LCD styling, face states (smile/worried/dead/cool), win/lose detection, new-window type `minesweeper` in `XPDesktop.tsx` with desktop icon, start-menu entry, and SVG glyph
-- Window resize handles — 8-direction (4 edges + 4 corners) grips with proper cursors (`ns`, `ew`, `nesw`, `nwse`); SE corner shows a visible diagonal grip; `RESIZE_MIN_WIDTH: 320`, `RESIZE_MIN_HEIGHT: 240`; writes through to `state.restored` so maximize→restore returns to the user's custom size; localStorage persistence is transparent
-- Smooth boot (2026-07-11): `BootPhase` gained a `fading` sub-state — the boot screen now overlays the already-painted desktop and fades out over 0.6s (`xp-boot-fade-out`, pointer-events none) while the shell fades in (`xp-shell-reveal`); unmounts at 650ms; boot screen also gained a `© Junseong Lee` footer
-- Motion polish (2026-07-11): window-open animation (`xp-window-open`, 160ms scale+fade) + soft drop shadow on windows and start menu; start menu / mobile launcher pop (`xp-menu-pop`); hover/press transitions on desktop icons, taskbar buttons, start button/items, home folders, project/blog rows, and all XP action buttons; mobile section switches re-mount the panel with a fade (`key={activeSection}` + `xp-fade-in`); mobile overlay fade; all decorative motion disabled under `prefers-reduced-motion: reduce`
-- episteme copy refresh (2026-07-11): project entry rewritten to match the current repo — cognitive-governance kernel (reasoning gate before high-impact actions, hash-chained protocol memory), ships as Claude Code plugin + Python kernel; `liveLink` moved from episteme-alpha.vercel.app to https://www.epistemekernel.com/ (verified live); tech stack updated; propagates to XP explorer, IE toolbar, and `/projects` SEO page automatically
-- MGH/Harvard LMIC experience (2026-07-11): activated the prepared LMIC entry — About window Experience tab lists "Research Intern @ LMIC, Massachusetts General Hospital & Harvard Medical School (Summer 2026)" with lab link (lmic.mgh.harvard.edu, verified live); per operator correction the dates are future-proofed: LMIC runs through Aug 2026 and is written as a fixed range, MONET Lab (ended May 2026) added to highlights and marked previous alongside MI2RL Asan (ended Feb 2026); terminal `whoami` updated; Person JSON-LD gained MGH + HMS `affiliation` and jobTitle "AI Researcher"
+- Sitemap generation; Open Graph / Twitter card meta + JSON-LD
+- Deterministic one-per-day wallpaper, CRT toggle, cmd.exe terminal, window-state persistence,
+  8-direction window resize handles, IE chrome on the Projects folder
+
+### 2026-09-22 — design + content refresh (branch `feat/design-refresh`)
+
+**Design system**
+- Added a `:root` token layer to `globals.css` (type scale, ink, line, surface, spacing, measure,
+  shadow) — the file previously had **zero** custom properties across 2172 lines. Converted 27
+  scattered hex values to tokens.
+- UI chrome moved to Tahoma (hinted for small sizes); Trebuchet is now display-only.
+- Capped prose at `--measure: 68ch`. A maximised window previously produced ~150-character lines.
+- `.xp-lead` was `font-weight: 700` — bold body copy was the worst legibility offender in About.
+- Icon and type sizes brought down one step at the operator's request.
+
+**Root cause found: SEO page headings**
+- `xp.css` ships `h1{font-size:5rem}` and `h2{font-size:2.5rem}` globally. `.xp-content` overrode
+  them for the XP shell, but `.seo-page` never did — so `/projects` rendered its h1 at a measured
+  **80px** and each project title at **40px**. Both now have an explicit scale.
+
+**Explorer layout**
+- List and preview were stacked with the list capped at 260px and its own scrollbar *inside* a
+  window frame that also scrolled — two nested scroll regions. The frame now holds still
+  (`:has()`-scoped `overflow: hidden`) and each pane scrolls on its own.
+- Container queries lay the sidebar, list and preview side by side once the **window** (not the
+  viewport) passes 600px. `home` widened 860→1060, `about` 560→620.
+- Dropped the redundant "Info" column; row titles now stack over their kind and wrap to two lines
+  instead of truncating mid-word.
+- Restored window geometry is clamped to the current viewport on mount. Saved coordinates from a
+  wider monitor previously opened windows off-screen with no way to drag them back.
+
+**Boot screen removed**
+- The fake "Windows XP" boot existed to buffer wallpaper load, but the heaviest active wallpaper is
+  519KB, so the ~1.5s wait bought nothing. Replaced with a pre-hydration shim that carries the
+  page's real `<h1>`, summary and links, and fades in only after 250ms so a normal visitor never
+  sees it.
+
+**SEO**
+- `/` had **1 character** of crawlable body text (the shell is entirely client-rendered). It now has
+  **674**, with a real `<h1>` and three JSON-LD blocks (`Person`, `WebSite`, `ProfilePage`).
+- Added `BreadcrumbList` to `/projects` and `/research`, `ImageObject` and `author` to each item,
+  per-page `og:image` with dimensions and alt text, and descriptive page titles.
+- og:image switched from a 1.4MB portrait to a purpose-built 1200×630 card; social cards are JPEG
+  because several platforms do not render WebP previews.
+- `hero.jpg` 1375KB → 11KB (it renders at ~130px).
+- Sitemap refreshed with current `lastmod`, `changefreq`, `priority` and image extensions.
+
+**Content**
+- `Resume.pdf` replaced with `resume_acad.pdf`.
+- About → Experience rebuilt from a flat 4-string array into a structured CV: education, four roles
+  with PI / location / dates / bullets, recognitions, and key skills — all sourced from the resume.
+- BiomeTrail added as a project with a live capture of the running app; the neonatal study gained
+  the RAD-DINO + LoRA architecture figure and its sandbox link; the Medical Physics paper gained
+  the two-stage RetinaNet → U-Net cascade figure. Preview images open full size on click.
+- Gaze-VQA (MONET Lab) added to projects from the resume.
+- Minesweeper removed entirely (component, window type, icon, start-menu entry, glyph, 165 lines of CSS).
+- Writing archived out of the UI; `/writing` pages stay live and indexed.
+- DJing added to hobbies. LMIC bounded to May–Aug 2026 per operator correction.
+- Mobile wallpaper moved to a fixed layer so it scales to the viewport instead of stretching over
+  the full scroll height.
 
 ## In Progress
 - Nothing tracked.
 
 ## Decisions
 - Static export only: GitHub Pages has no server runtime; all data is inlined at build time.
-- Separate mobile shell: full XP desktop is not usable on touch; mobile gets a simpler tab-based layout.
-- SEO pages are separate Next.js pages (not part of XP shell) so crawlers can index content.
+- Separate mobile shell: full XP desktop is not usable on touch.
+- SEO pages are separate Next.js pages so crawlers can index content.
+- The pre-hydration shim carries real content rather than a splash screen — it is the honest
+  no-JavaScript state, not hidden text.
+- BiomeTrail links to `biometrail.com` with a "Private beta — access required" badge; the GitHub
+  repo is private so it is not linked at all.
+- The BiomeTrail preview is a fresh capture of the live app, not the under-review NeurIPS figure.
 
 ## Validation
-- `npm run build` — passes clean on 2026-07-11 (boot fade + motion polish + content refresh); 6/6 routes exported, CSS hash `2b3854e024a24854`
-- `npm run lint` — no warnings or errors (2026-07-11)
-- Static output grep-verified: epistemekernel.com liveLink on `/projects`, MGH affiliation JSON-LD on `/`, all new keyframes + reduced-motion guard in built CSS
-- Deployed 2026-07-11: push `d11be56..014d272`, GitHub Actions run `29159260854` success, live site confirmed serving new CSS hash `2b3854e024a24854`
-- Residual: boot fade verified in served HTML/CSS but not manually eyeballed in a browser — worth a glance on next visit to the live site
+- `npm run build` — clean, 6/6 routes exported, CSS hash `b5c038d9e368cc6e` (2026-09-22)
+- `npm run lint` — no warnings or errors (2026-09-22)
+- Static export served locally; all 12 checked routes and assets return 200
+- Desktop and mobile both verified in a browser (explorer 3-column, figures, mobile wallpaper)
+- `/` crawlable body text measured at 674 chars with `<h1>` present and 3 JSON-LD blocks
 
 ## Blockers
-- None known.
+- None. Not yet deployed — the deploy decision is the operator's.
