@@ -45,10 +45,7 @@ This repository deploys to GitHub Pages through [`.github/workflows/nextjs.yml`]
 
 ## Contact Form
 
-The contact window uses EmailJS when these environment variables are present:
-
-- `NEXT_PUBLIC_EMAILJS_SERVICE_ID`
-- `NEXT_PUBLIC_EMAILJS_TEMPLATE_ID`
-- `NEXT_PUBLIC_EMAILJS_USER_ID`
-
-If they are missing, the form falls back to a prefilled `mailto:` draft.
+The contact window composes a prefilled `mailto:` draft and hands it to the visitor's own mail
+client. Nothing is sent from the page and there is no send service or API key — a static export
+has nowhere to hold a secret. Changing that would mean adding a hosted endpoint, not an
+environment variable.

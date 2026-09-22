@@ -3,7 +3,7 @@
 
 ## Status
 **Deployed and verified live** at https://junjslee.github.io.
-`main` = `origin/main` = `d145bf3`. Nothing is in flight.
+`main` = `origin/main` = `cd1a692`. Nothing is in flight.
 
 ## Verified live
 - Latest deploy run `35758293295` concluded **success** (earlier runs `35692523975`,

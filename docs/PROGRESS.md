@@ -151,6 +151,16 @@ Found by auditing the live site rather than by request:
 Checked and found sound: desktop icons carry `tabIndex`, `aria-label` and Enter/Space handling;
 every `img` has alt text; reduced-motion guards, `robots.txt` and JSON-LD are all in place.
 
+**Docs sweep (handoff):** 11 tracked Markdown files enumerated. `README.md` was stale in a way that
+mattered — its whole "Contact Form" section documented three `NEXT_PUBLIC_EMAILJS_*` variables that
+no longer exist anywhere in the repository, so a reader would have configured machinery that was
+deleted hours earlier. Corrected. `PLAN.md` still listed two risks that today's work resolved
+(the 8.7MB wallpaper, the unlinked `/writing` pages); both removed. `docs/*.md` claims re-verified
+against reality rather than date-bumped: `package.json` no longer lists `emailjs-com`, the export
+emits exactly `index`, `projects`, `research` and `404`, and the live site returns 404 for
+`/writing/`. `HARNESS.md`, `AGENTS.md` and `CLAUDE.md` were read and are still accurate. Nothing
+archived or discarded this sweep — `archive/writing/post-1.md` was added earlier in the same day.
+
 ## Validation
 - `npm run build` — clean, 6/6 routes exported, CSS hash `b5c038d9e368cc6e` (2026-09-22)
 - `npm run lint` — no warnings or errors (2026-09-22)
