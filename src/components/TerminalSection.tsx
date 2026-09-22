@@ -84,7 +84,8 @@ function runCommand(input: string, onTriggerBsod: () => void): TerminalLine[] {
   if (cmd === 'whoami') {
     return [
       { kind: 'output', text: 'Junseong Lee — DS+Finance @ UIUC.' },
-      { kind: 'output', text: 'Summer 2026: Research Intern @ LMIC, Mass General Hospital / Harvard Medical School.' },
+      { kind: 'output', text: 'May-Aug 2026: Research Intern @ LMIC, Mass General Hospital / Harvard Medical School.' },
+      { kind: 'output', text: 'Built BiomeTrail there — a provenance-gated biomedical knowledge graph.' },
       { kind: 'output', text: 'Also building episteme (epistemekernel.com).' },
       { kind: 'output', text: 'Likes: medical AI, calibrated reasoning, small useful tools.' },
       { kind: 'output', text: '' },

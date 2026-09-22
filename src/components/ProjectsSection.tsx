@@ -4,12 +4,31 @@ export interface ProjectEntry {
   title: string
   description: string
   techStack: string[]
-  repoLink: string
   category: string
+  /** Omitted when the source is not public. */
+  repoLink?: string
   liveLink?: string
+  liveLabel?: string
+  /** Shown next to the live link when it is not openly reachable. */
+  liveNote?: string
+  image?: string
+  imageAlt?: string
 }
 
 export const projects: ProjectEntry[] = [
+  {
+    title: "BiomeTrail",
+    description:
+      "A provenance-gated biomedical knowledge graph built at LMIC (Massachusetts General Hospital / Harvard Medical School). It mines microbe → metabolite → receptor → pathway → outcome mechanistic chains out of 240K+ papers, and every edge keeps the sentence that justified it: the verbatim source sentence, its PMID, and both endpoints grounded to standard ontologies (ChEBI, MONDO, NCBITaxon, UniProt). A cost-optimized two-stage pipeline pairs a deterministic NER and entity-grounding pass — a 2.5M-surface automaton that narrows 240K papers to an 8.5M candidate-relation pool — with targeted LLM relation extraction that checks each candidate edge back against its own source sentence. Served from Neo4j behind an interactive 3D graph explorer where any edge opens its evidence.",
+    techStack: ["Python", "Neo4j", "AWS Bedrock", "React", "Ontology grounding (ChEBI / MONDO / NCBITaxon / UniProt)"],
+    liveLink: "https://biometrail.com",
+    liveLabel: "Open BiomeTrail",
+    liveNote: "Private beta — access required",
+    category: "Knowledge Graph",
+    image: "/images/projects/biometrail.webp",
+    imageAlt:
+      "BiomeTrail interface: a 3D typed knowledge graph on the left, and an evidence panel on the right showing a microbe-produces-metabolite edge with its grounded identifiers, verbatim source sentence, and PubMed citation.",
+  },
   {
     title: "episteme",
     description: "A cognitive-governance kernel that makes AI agents show their work before they act. Before any high-impact action (git push, deploy, migration), a deterministic hook requires the agent to commit its reasoning to disk — knowns, unknowns, assumptions, and a falsifiable disconfirmation — and refuses to proceed until the artifact is real. Verified lessons become hash-chained, context-scoped protocols that resurface at the next matching decision, so the agent gets sharper on your codebase over time. Ships as a Claude Code plugin and a Python kernel with a vendor-neutral adapter layer.",
@@ -19,39 +38,45 @@ export const projects: ProjectEntry[] = [
     category: "Agent OS",
   },
   {
-    title: "Will You Be My Valentine?",
-    description: "Made a website for my partner with Bugcat-Capoo GIFs",
-    techStack: ["HTML, CSS , Javascript"],
-    repoLink: "https://github.com/junjslee/will-you-be-my-valentine",
-    category: "Web App",
+    title: "Gaze-VQA: Multi-View Spatial Reasoning Benchmark",
+    description: "A benchmark probing how well vision-language models understand human gaze, across four tasks: gaze target recognition, relative orientation reasoning, cross-view visibility estimation, and viewpoint-based accessibility. Built at MONET Lab (UIUC) from the MVGT dataset, with an evaluation harness that combines standard text metrics with an LLM-as-a-judge scorer so semantic correctness counts for more than exact match.",
+    techStack: ["Python", "Vision-Language Models", "Benchmark design", "LLM-as-a-Judge"],
+    category: "Benchmark",
   },
   {
     title: "Web Application for 2nd Infantry Division, 8th U.S. Army",
-    description: "Developed and deployed a web application for my battalion's event management system",
-    techStack: ["Python (flask, smtp, pandas)", "HTML, CSS , Javascript", "AWS EC2", "Nginx", "Gunicorn"],
+    description: "An event-management web application built and deployed for my battalion, processing 800+ participants across 32 events. It cut manual reconciliation by 75% and data-entry errors by 95%, and earned an Army Commendation Medal.",
+    techStack: ["Python (Flask, SMTP, pandas)", "HTML, CSS, JavaScript", "OAuth2", "AWS EC2", "Nginx", "Gunicorn"],
     repoLink: "https://github.com/junjslee/UMTauto",
     category: "Operations",
   },
   {
     title: "Heart Disease Prediction using UCI Medical Data",
-    description: "Built ML models to predict heart disease. Learned about non-parametric approaches and its tradeoffs",
+    description: "Built ML models to predict heart disease. Learned about non-parametric approaches and their tradeoffs.",
     techStack: ["Python", "pandas", "numpy", "matplotlib", "scikit-learn", "Statistical Modeling"],
     repoLink: "https://github.com/junjslee/ml_heart_disease_prediction",
     category: "ML",
   },
   {
     title: "Facial Recognition using PCA",
-    description: "Learned how facial recognition system works through Principal Component Analysis in Linear Algebra",
+    description: "Learned how facial recognition systems work through Principal Component Analysis in Linear Algebra.",
     techStack: ["Dimensionality Reduction", "Linear Algebra", "Statistical Modeling"],
     repoLink: "https://github.com/junjslee/facial_recognition_pca/blob/main/PCA-FacialRecognition.ipynb",
     category: "Project",
   },
   {
     title: "S&P Index Prediction using Macroeconomic Indicators",
-    description: "First project to understand statistical modeling to predict S&P Index based on 15 macroeconomic indicators I extracted from TraidingView",
+    description: "First project to understand statistical modeling, predicting the S&P index from 15 macroeconomic indicators extracted from TradingView.",
     techStack: ["Time Series Analysis", "Linear Regression", "Augmented Dickey-Fuller Test", "Granger Causality Test"],
     repoLink: "https://github.com/junjslee/Predicting-S-P-500-Market-Trends-using-Macro-Economic-Indicators-with-Python/blob/master/Python-SPX%20Prediction%20using%20Macro-Economic%20Indicators.ipynb",
     category: "Finance",
+  },
+  {
+    title: "Will You Be My Valentine?",
+    description: "Made a website for my partner with Bugcat-Capoo GIFs.",
+    techStack: ["HTML, CSS, JavaScript"],
+    repoLink: "https://github.com/junjslee/will-you-be-my-valentine",
+    category: "Web App",
   },
 ]
 
@@ -63,8 +88,8 @@ const ProjectsSection: React.FC = () => {
       <div className="xp-pane">
         <h1>Projects</h1>
         <p>
-          A mix of research, applied ML, and software projects. I like building things that prove a point,
-          even if the first version is rough.
+          A mix of research infrastructure, applied ML, and software. I like building things that prove a
+          point, even if the first version is rough.
         </p>
       </div>
       <div className="xp-explorer-stack">
@@ -80,7 +105,10 @@ const ProjectsSection: React.FC = () => {
                 className={`xp-project-row${selectedProject.title === project.title ? ' is-selected' : ''}`}
                 onClick={() => setSelectedProject(project)}
               >
-                <strong className="xp-project-row-title">{project.title}</strong>
+                <strong className="xp-project-row-title" title={project.title}>
+                  {project.title}
+                </strong>
+                <span className="xp-project-row-kind">{project.category}</span>
               </button>
             ))}
           </div>
@@ -94,20 +122,22 @@ const ProjectsSection: React.FC = () => {
               <span className="xp-project-chip">{selectedProject.category}</span>
             </div>
           </div>
-          <div className="xp-project-details">
-            <div className="xp-project-detail-row">
-              <span>Type</span>
-              <strong>{selectedProject.category}</strong>
-            </div>
-            <div className="xp-project-detail-row">
-              <span>Destination</span>
-              <strong>GitHub Repository</strong>
-            </div>
-          </div>
+          {selectedProject.image ? (
+            <figure className="xp-preview-figure">
+              <a href={selectedProject.image} target="_blank" rel="noopener noreferrer">
+                <img
+                  src={selectedProject.image}
+                  alt={selectedProject.imageAlt ?? selectedProject.title}
+                  loading="lazy"
+                />
+              </a>
+              <figcaption>Click to view full size</figcaption>
+            </figure>
+          ) : null}
           <p>{selectedProject.description}</p>
           <div className="xp-project-meta">
             <strong>Tech stack</strong>
-            <ul className="xp-list">
+            <ul className="xp-chip-list">
               {selectedProject.techStack.map((item) => (
                 <li key={item}>{item}</li>
               ))}
@@ -116,12 +146,17 @@ const ProjectsSection: React.FC = () => {
           <div className="xp-project-actions">
             {selectedProject.liveLink ? (
               <a href={selectedProject.liveLink} target="_blank" rel="noopener noreferrer">
-                Open Live Site
+                {selectedProject.liveLabel ?? 'Open Live Site'}
               </a>
             ) : null}
-            <a href={selectedProject.repoLink} target="_blank" rel="noopener noreferrer">
-              Open on GitHub
-            </a>
+            {selectedProject.repoLink ? (
+              <a href={selectedProject.repoLink} target="_blank" rel="noopener noreferrer">
+                Open on GitHub
+              </a>
+            ) : null}
+            {selectedProject.liveNote ? (
+              <span className="xp-action-note">{selectedProject.liveNote}</span>
+            ) : null}
           </div>
         </article>
       </div>

@@ -9,6 +9,9 @@ interface ContentPageLayoutProps {
   canonicalPath: string
   heading: string
   intro: string
+  /** Absolute or root-relative image used for link previews on this page. */
+  socialImage?: string
+  socialImageAlt?: string
   jsonLd?: Record<string, unknown> | Array<Record<string, unknown>>
   children: React.ReactNode
 }
@@ -19,10 +22,17 @@ const ContentPageLayout: React.FC<ContentPageLayoutProps> = ({
   canonicalPath,
   heading,
   intro,
+  socialImage,
+  socialImageAlt,
   jsonLd,
   children,
 }) => {
   const canonicalUrl = `${SITE_URL}${canonicalPath}`
+  const previewImage = socialImage
+    ? socialImage.startsWith('http')
+      ? socialImage
+      : `${SITE_URL}${socialImage}`
+    : SITE_IMAGE
   const jsonLdEntries = Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : []
 
   return (
@@ -36,11 +46,16 @@ const ContentPageLayout: React.FC<ContentPageLayoutProps> = ({
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         <meta property="og:url" content={canonicalUrl} />
-        <meta property="og:image" content={SITE_IMAGE} />
+        <meta property="og:image" content={previewImage} />
+        <meta property="og:image:alt" content={socialImageAlt ?? heading} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:locale" content="en_US" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
-        <meta name="twitter:image" content={SITE_IMAGE} />
+        <meta name="twitter:image" content={previewImage} />
+        <meta name="twitter:image:alt" content={socialImageAlt ?? heading} />
         <link rel="canonical" href={canonicalUrl} />
         {jsonLdEntries.map((entry, index) => (
           <script
@@ -63,13 +78,15 @@ const ContentPageLayout: React.FC<ContentPageLayoutProps> = ({
             <Link href="/">Home</Link>
             <Link href="/research/">Research</Link>
             <Link href="/projects/">Projects</Link>
-            <Link href="/writing/">Writing</Link>
           </nav>
 
           <section className="seo-card seo-page-body">{children}</section>
 
           <footer className="seo-card seo-page-footer">
             <p>{SITE_DESCRIPTION}</p>
+            <p className="seo-note">
+              Interactive version: <a href={SITE_URL}>{SITE_URL}</a>
+            </p>
           </footer>
         </div>
       </main>

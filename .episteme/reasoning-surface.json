@@ -1,41 +1,64 @@
 {
-  "timestamp": "2026-07-11T16:08:53Z",
-  "core_question": "Should we push the 4 commits from the 2026-07-11 session (boot fade + motion polish, episteme/LMIC content, date corrections, docs) to origin/main, deploying to the live portfolio?",
+  "timestamp": "2026-09-22T05:43:45Z",
+  "core_question": "Is the design-and-content refresh on feat/design-refresh verified well enough to commit as a coherent unit, and what does the next session need to know that the code does not say by itself?",
   "knowns": [
-    "Operator explicitly instructed the push this turn ('push it and /handoff'), after correcting MONET (ended May 2026) and LMIC (through August 2026) dates",
-    "main is ahead of origin/main by exactly 4 commits: 9c77fbf (boot fade + motion), 1e656d8 (episteme + LMIC content), 14cb30d (docs), 014d272 (date corrections); working tree clean",
-    "npm run build passed clean on HEAD 014d272 (6/6 routes exported, CSS hash 2b3854e024a24854) and npm run lint reports zero warnings",
-    "origin/main is at d11be56, an ancestor of HEAD, so this is a fast-forward push with no force required",
-    "GitHub Pages deploys on push to main via GitHub Actions; a failed CI build leaves the currently-live site untouched rather than breaking it",
-    "Content dates were phrased as fixed ranges (Summer 2026, 2025 - 2026) so the site stays accurate after August without a follow-up edit"
+    "npm run build exports 6/6 routes cleanly and npm run lint reports zero warnings on the finished branch; CSS hash is b5c038d9e368cc6e",
+    "The static export was served locally and all twelve checked routes and assets returned 200, including the three new preview images and the replaced Resume.pdf",
+    "Desktop and mobile were both inspected in a real browser: the explorer renders as three columns, the architecture figures render at legible size, and the mobile wallpaper layer measures 483x726 fixed rather than stretching to document height",
+    "The home page's crawlable body text was measured at 674 characters with an h1 present and three JSON-LD blocks, up from a measured 1 character before this session",
+    "Every needs_update surface in the prior surface's blast_radius_map was actually touched; the session additionally touched src/lib/site.ts, src/pages/index.tsx, public/sitemap.xml, src/components/TerminalSection.tsx, src/components/JunLeeSection.tsx and docs/EVENTS.md because the operator widened scope mid-session to SEO, the shoulder-cascade figure, DJing, and archiving Writing",
+    "main and origin/main are untouched; all work sits on feat/design-refresh branched from 2785bf0",
+    "Two operator corrections landed after my initial reading: the LMIC internship ended in August 2026 despite the resume reading 'Present', and the mixes link will be supplied later so no Mixes entry was added"
   ],
   "unknowns": [
-    "If the GitHub Actions deploy run exits non-zero within 10 minutes of the push, the deploy failed and the Actions tab at github.com/junjslee/junjslee.github.io/actions shows a red X",
-    "When the deploy completes, if a cold load of https://junjslee.github.io/ hard-cuts from the boot screen to the desktop instead of fading, the boot overlay regressed in production and needs a browser-devtools look at .xp-boot-screen.is-fading"
+    "If the operator opens the site in Safari or Firefox and the explorer renders stacked rather than three-column, the container-query or :has() support assumption is wrong for their browser and the breakpoint needs a non-container fallback",
+    "When the branch is deployed, if the GitHub Actions run exits non-zero within 10 minutes the deploy failed and the Actions tab shows a red X on junjslee/junjslee.github.io",
+    "After deployment, if Search Console still reports the home page as thin content once recrawled, the pre-hydration shim is not being indexed and the content needs to move outside the hydration boundary",
+    "If a recruiter clicks the BiomeTrail link and lands on a Cloudflare Access login, the 'Private beta — access required' badge is not doing enough and the link should point somewhere public instead",
+    "Should the operator later restore the Writing folder, if blogPosts or the blogReader window have been pruned in the meantime the restore is no longer trivial and the archive decision has to be redone"
   ],
   "assumptions": [
-    "The GitHub Actions workflow that deployed d11be56 is still wired and CI Node version still builds this Next.js 15 project, because no workflow or dependency files changed this session",
-    "Rollback is cheap by construction: git revert of any of the 4 commits plus a push redeploys the previous state in under 2 minutes"
+    "A single feature commit plus a separate docs commit is the right granularity, because the CSS changes interleave across one file and splitting them further would produce commits that do not build on their own",
+    "The pre-hydration shim is not cloaking, because the content it carries is truthful, is the genuine no-JavaScript state of the page, and becomes visible to any visitor whose JavaScript does not run",
+    "Rollback stays cheap: main is untouched, so discarding the branch returns the site to the last deployed state without any remote operation"
   ],
-  "disconfirmation": "If the Actions deploy run for this push fails within 10 minutes, or the live site's boot screen fails to fade into the desktop on a cold load after deploy, revert the offending commit(s) on main and push the revert",
-  "flaw_classification": "stale-artifact",
-  "posture_selected": "patch",
-  "patch_vs_refactor_evaluation": "The push publishes already-verified bounded patches (XPDesktop boot sub-state, globals.css motion rules, content data in ProjectsSection/AboutSection/TerminalSection, docs). No module boundaries or pipeline changes are involved, so patch posture carries through to deployment.",
+  "disconfirmation": "If the final staged tree fails npm run build or npm run lint, or git status shows a tracked file changed that no sync_plan entry accounts for, the commit is wrong and gets amended rather than pushed",
+  "flaw_classification": "core-logic-misalignment",
+  "posture_selected": "analysis",
+  "patch_vs_refactor_evaluation": "The refactor itself is finished; this phase only reads the working tree and writes the ledger, so analysis is the honest posture. The surfaces it touches are docs/PLAN.md, docs/PROGRESS.md, docs/NEXT_STEPS.md and docs/EVENTS.md, plus the git index for the files already changed under src/, public/ and .episteme/ — no module boundary moves and no runtime code is edited here.",
   "blast_radius_map": [
-    {"surface": "origin/main (live site via GitHub Actions)", "status": "needs_update"},
-    {"surface": "docs/NEXT_STEPS.md", "status": "needs_update"},
     {"surface": "docs/PROGRESS.md", "status": "needs_update"},
-    {"surface": "docs/EVENTS.md", "status": "needs_update"},
+    {"surface": "docs/NEXT_STEPS.md", "status": "needs_update"},
     {"surface": "docs/PLAN.md", "status": "needs_update"},
-    {"surface": "src/**", "status": "not-applicable", "rationale": "no further source edits this turn; push publishes the committed state"},
-    {"surface": "public/sitemap.xml", "status": "not-applicable", "rationale": "no routes changed; sitemap remains accurate"}
+    {"surface": "docs/EVENTS.md", "status": "needs_update"},
+    {"surface": "git index (feat/design-refresh commits)", "status": "needs_update"},
+    {"surface": "origin/main (live site)", "status": "deferred", "rationale": "deploying is a separate operator-gated decision; it needs its own surface naming the deploy risk, and the operator has not asked for a push"},
+    {"surface": "docs/REQUIREMENTS.md", "status": "not-applicable", "rationale": "the objective, constraints and acceptance criteria are unchanged; this session refined execution, not requirements"},
+    {"surface": "docs/RUN_CONTEXT.md", "status": "not-applicable", "rationale": "no new external service, API or environment limit was introduced"},
+    {"surface": "src/**", "status": "not-applicable", "rationale": "source edits are complete and verified; this phase only stages and records them"}
   ],
   "sync_plan": [
-    {"surface": "origin/main (live site via GitHub Actions)", "action": "git push origin main (fast-forward), then verify Actions run and live site respond"},
-    {"surface": "docs/NEXT_STEPS.md", "action": "REPLACE-form handoff: pushed state, deploy verification result, remaining backlog"},
-    {"surface": "docs/PROGRESS.md", "action": "record date corrections, push, and deploy verification"},
-    {"surface": "docs/EVENTS.md", "action": "append exactly one E2 row for this handoff"},
-    {"surface": "docs/PLAN.md", "action": "mark goal shipped; return to maintenance mode"}
+    {"surface": "docs/PROGRESS.md", "action": "record the full refresh with measured before/after numbers and the xp.css heading root cause"},
+    {"surface": "docs/NEXT_STEPS.md", "action": "REPLACE-form handoff naming the branch, the verified state, the pending mixes link, and the deploy decision left open"},
+    {"surface": "docs/PLAN.md", "action": "set the active goal to the branch and list the residual cross-browser and asset-weight risks"},
+    {"surface": "docs/EVENTS.md", "action": "append exactly one E3 row for this handoff"},
+    {"surface": "git index (feat/design-refresh commits)", "action": "one feat commit for code and assets, one docs commit for the ledger, with no AI-attribution trailer"}
   ],
-  "deferred_discoveries": []
+  "deferred_discoveries": [
+    {
+      "description": "public/images/gif/4_night_drive.gif is 8.7MB, unreferenced since it was commented out of WALLPAPER_OPTIONS, and still ships in the static export",
+      "observable": "If the exported out/ directory is measured again and out/images/gif still reports around 9.3MB, the file was never removed or compressed",
+      "log_only_rationale": "Deleting an asset the operator may still want reinstated is their call, not a side effect of a design pass"
+    },
+    {
+      "description": "The explorer layout depends on CSS container queries and :has(), verified only in Chrome this session",
+      "observable": "When opened in Safari or Firefox, if the sidebar, list and preview stack vertically at a window wider than 600px then the container query did not apply in that engine",
+      "log_only_rationale": "Cross-browser verification needs those browsers driven directly, which is its own bounded task rather than part of the implementation"
+    },
+    {
+      "description": "The resume lists two npj Digital Medicine manuscripts and four presentations that the Research surface still does not carry, so the site understates the publication record",
+      "observable": "If the operator reviews /research and asks where the RSNA 2025 and NeurIPS workshop entries are, this deferral is the reason",
+      "log_only_rationale": "Adding publications is a content decision the operator has not been asked about; inventing entries is the failure this defers around"
+    }
+  ]
 }

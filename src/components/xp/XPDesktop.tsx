@@ -1,18 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import AboutSection from '../AboutSection';
 import { blogPosts } from '../BlogSection';
 import ContactSection from '../ContactSection';
 import JunLeeSection from '../JunLeeSection';
 import TerminalSection from '../TerminalSection';
-import MinesweeperSection from '../MinesweeperSection';
 import type { BlogPost } from '../BlogSection';
 
-type InternalWindowId = 'about' | 'home' | 'contact' | 'blogReader' | 'terminal' | 'minesweeper';
+type InternalWindowId = 'about' | 'home' | 'contact' | 'blogReader' | 'terminal';
 type ShortcutId = InternalWindowId | 'resume' | 'github' | 'linkedin';
-type IconKind = 'about' | 'home' | 'contact' | 'resume' | 'github' | 'linkedin' | 'reader' | 'terminal' | 'minesweeper';
+type IconKind = 'about' | 'home' | 'contact' | 'resume' | 'github' | 'linkedin' | 'reader' | 'terminal';
 type MobileSection = 'about' | 'work' | 'contact';
 type SoundName = 'open' | 'close' | 'minimize' | 'maximize' | 'click';
-type BootPhase = 'loading' | 'fading' | 'desktop';
 
 interface WindowDefinition {
   id: InternalWindowId;
@@ -66,6 +65,8 @@ type ResizeDirection = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw';
 
 const RESIZE_MIN_WIDTH = 320;
 const RESIZE_MIN_HEIGHT = 240;
+const WORKSPACE_INSET_X = 36;
+const WORKSPACE_INSET_Y = 72;
 
 interface DesktopIconProps {
   shortcut: ShortcutDefinition;
@@ -133,7 +134,7 @@ const MOBILE_BREAKPOINT = 720;
 const INITIAL_Z = 40;
 const DESKTOP_STATE_STORAGE_KEY = 'junlee-xp-desktop-state-v1';
 const CRT_STORAGE_KEY = 'junlee-xp-crt-v1';
-const WINDOW_IDS: InternalWindowId[] = ['about', 'home', 'contact', 'blogReader', 'terminal', 'minesweeper'];
+const WINDOW_IDS: InternalWindowId[] = ['about', 'home', 'contact', 'blogReader', 'terminal'];
 const WALLPAPER_OPTIONS = [
   // '/images/gif/1_day.gif',
   '/images/gif/2_evening.gif',
@@ -142,26 +143,25 @@ const WALLPAPER_OPTIONS = [
   '/images/gif/5_night_totoro.gif',
 ] as const;
 const DEFAULT_WALLPAPER = WALLPAPER_OPTIONS[0];
-const MIN_BOOT_DURATION_MS = 900;
 
 const WINDOW_DEFINITIONS: Record<InternalWindowId, WindowDefinition> = {
   about: {
     id: 'about',
     title: 'about.txt',
     icon: 'about',
-    width: 560,
-    height: 560,
-    x: 132,
-    y: 84,
+    width: 620,
+    height: 580,
+    x: 96,
+    y: 64,
   },
   home: {
     id: 'home',
     title: 'Jun Lee',
     icon: 'home',
-    width: 860,
-    height: 620,
-    x: 434,
-    y: 96,
+    width: 1060,
+    height: 660,
+    x: 300,
+    y: 72,
   },
   contact: {
     id: 'contact',
@@ -190,15 +190,6 @@ const WINDOW_DEFINITIONS: Record<InternalWindowId, WindowDefinition> = {
     x: 200,
     y: 130,
   },
-  minesweeper: {
-    id: 'minesweeper',
-    title: 'Minesweeper',
-    icon: 'minesweeper',
-    width: 440,
-    height: 560,
-    x: 260,
-    y: 110,
-  },
 };
 
 const SHORTCUTS: ShortcutDefinition[] = [
@@ -212,7 +203,7 @@ const SHORTCUTS: ShortcutDefinition[] = [
     id: 'home',
     label: 'Jun Lee',
     icon: 'home',
-    description: 'Browse projects, research, and writing.',
+    description: 'Browse research and projects.',
   },
   {
     id: 'contact',
@@ -247,15 +238,9 @@ const SHORTCUTS: ShortcutDefinition[] = [
     icon: 'terminal',
     description: 'Open the command prompt.',
   },
-  {
-    id: 'minesweeper',
-    label: 'Minesweeper',
-    icon: 'minesweeper',
-    description: 'Classic mine-clearing game.',
-  },
 ];
 
-const DESKTOP_SHORTCUT_IDS: ShortcutId[] = ['about', 'home', 'resume', 'contact', 'terminal', 'minesweeper', 'github', 'linkedin'];
+const DESKTOP_SHORTCUT_IDS: ShortcutId[] = ['about', 'home', 'resume', 'contact', 'terminal', 'github', 'linkedin'];
 const DESKTOP_SHORTCUTS = SHORTCUTS.filter((shortcut) => DESKTOP_SHORTCUT_IDS.includes(shortcut.id));
 
 interface PersistedDesktopState {
@@ -292,7 +277,6 @@ function createDefaultWindowStates(): Record<InternalWindowId, WindowState> {
     contact: createWindowState('contact', INITIAL_Z + 3),
     blogReader: createWindowState('blogReader', INITIAL_Z + 4),
     terminal: createWindowState('terminal', INITIAL_Z + 5),
-    minesweeper: createWindowState('minesweeper', INITIAL_Z + 6),
   };
 }
 
@@ -320,6 +304,32 @@ function restoreWindowState(
       height: typeof state?.restored?.height === 'number' ? state.restored.height : base.restored.height,
     },
   };
+}
+
+/* Saved window geometry is replayed into whatever viewport the visitor has
+   now, which is not the one it was saved in. Without this, a window stored
+   from a wide monitor opens off-screen on a laptop with no way to drag it
+   back. Clamp on restore so every window stays reachable. */
+function clampWindowToViewport(state: WindowState): WindowState {
+  if (typeof window === 'undefined') {
+    return state;
+  }
+
+  const workspaceWidth = Math.max(RESIZE_MIN_WIDTH, window.innerWidth - WORKSPACE_INSET_X);
+  const workspaceHeight = Math.max(RESIZE_MIN_HEIGHT, window.innerHeight - WORKSPACE_INSET_Y);
+
+  const clamp = (geometry: { x: number; y: number; width: number; height: number }) => {
+    const width = Math.min(geometry.width, workspaceWidth);
+    const height = Math.min(geometry.height, workspaceHeight);
+    return {
+      x: Math.max(0, Math.min(geometry.x, workspaceWidth - width)),
+      y: Math.max(0, Math.min(geometry.y, workspaceHeight - height)),
+      width,
+      height,
+    };
+  };
+
+  return { ...state, ...clamp(state), restored: clamp(state.restored) };
 }
 
 function readDesktopSessionState(): PersistedDesktopState | null {
@@ -384,13 +394,9 @@ function chooseDailyWallpaper(): string {
   return WALLPAPER_OPTIONS[index] ?? DEFAULT_WALLPAPER;
 }
 
-function preloadWallpaper(src: string): Promise<void> {
-  return new Promise((resolve) => {
-    const image = new Image();
-    image.onload = () => resolve();
-    image.onerror = () => resolve();
-    image.src = src;
-  });
+function warmWallpaperCache(src: string): void {
+  const image = new Image();
+  image.src = src;
 }
 
 function playToneSequence(context: AudioContext, tones: Array<{ frequency: number; length: number; delay: number }>): void {
@@ -518,17 +524,6 @@ function DesktopGlyph({ icon }: { icon: IconKind }): React.ReactElement {
           <rect x="19" y="19" width="8" height="10" rx="1" fill="#39d353" opacity="0.75" />
         </svg>
       );
-    case 'minesweeper':
-      return (
-        <svg viewBox="0 0 48 48" className="xp-desktop-glyph" aria-hidden="true">
-          <rect x="6" y="6" width="36" height="36" rx="2" fill="#c3c3c3" stroke="#6a6a6a" strokeWidth="1.5" />
-          <path d="M6 6 h36 M6 18 h36 M6 30 h36 M6 42 h36 M6 6 v36 M18 6 v36 M30 6 v36 M42 6 v36" stroke="#9a9a9a" strokeWidth="0.8" />
-          <circle cx="24" cy="24" r="7" fill="#1a1a1a" />
-          <rect x="22" y="14" width="4" height="3" fill="#1a1a1a" />
-          <circle cx="21.5" cy="21.5" r="1.6" fill="#ffffff" />
-          <path d="M14 14 L18 18 M34 34 L30 30" stroke="#1a1a1a" strokeWidth="1.5" strokeLinecap="round" />
-        </svg>
-      );
   }
 }
 
@@ -578,7 +573,7 @@ function StartMenu({ shortcuts, onLaunch }: StartMenuProps): React.ReactElement 
             <img src="/images/hero.jpg" alt="Junseong Lee" className="xp-start-avatar" />
             <div>
               <strong>Junseong Lee</strong>
-              <p>Research, projects, and writing</p>
+              <p>Research and projects</p>
             </div>
           </div>
           <div className="xp-start-items">
@@ -959,7 +954,6 @@ function MobileShell({
   return (
     <div
       className="xp-mobile-shell"
-      style={{ backgroundImage: `url(${wallpaper})` }}
       onClick={() => {
         onPrimeAudio();
         if (menuOpen) {
@@ -967,6 +961,10 @@ function MobileShell({
         }
       }}
     >
+      {/* The shell scrolls, so painting the wallpaper on it stretched the
+          image over the whole document height. A fixed layer keeps it
+          scaled to the viewport instead. */}
+      <div className="xp-mobile-wallpaper" style={{ backgroundImage: `url(${wallpaper})` }} aria-hidden="true" />
       <div className="xp-mobile-workspace">
         <MobileWindowPanel
           key={activeSection}
@@ -1051,19 +1049,44 @@ function MobileShell({
   );
 }
 
-function BootScreen({ fading = false }: { fading?: boolean }): React.ReactElement {
+/* Pre-hydration ground.
+   The XP shell is entirely client-rendered, which used to leave the static
+   HTML with no readable content at all — bad for anyone without JS and bad
+   for crawlers. This shim is the real pre-hydration state: it carries the
+   page's h1, summary and primary links. It fades in only after a short delay,
+   so a normal visitor never sees it flash before the desktop mounts. */
+function DesktopShim(): React.ReactElement {
   return (
-    <div className={`xp-boot-screen${fading ? ' is-fading' : ''}`}>
-      <div className="xp-boot-logo">
-        <span className="xp-boot-windows">Windows</span>
-        <span className="xp-boot-xp">XP</span>
+    <div className="xp-desktop-shim">
+      <div className="xp-desktop-shim-card">
+        <h1>Junseong Lee</h1>
+        <p>
+          AI researcher working on medical AI, human–AI interaction, and biomedical knowledge
+          graphs. Most recently a research intern at the Laboratory of Medical Imaging and
+          Computation, Massachusetts General Hospital and Harvard Medical School, where I built
+          BiomeTrail — a provenance-gated biomedical knowledge graph. Studying Data Science and
+          Finance at the University of Illinois Urbana-Champaign.
+        </p>
+        <p>
+          The full site is an interactive Windows XP desktop and needs JavaScript. These pages
+          carry the same content as plain documents:
+        </p>
+        <ul>
+          <li>
+<Link href="/research/">Research</Link> — publications and studies in medical AI
+          </li>
+          <li>
+<Link href="/projects/">Projects</Link> — software, benchmarks, and knowledge-graph work
+          </li>
+          <li>
+            <a href="/documents/Resume.pdf">Resume (PDF)</a>
+          </li>
+          <li>
+            <a href="https://github.com/junjslee">GitHub</a> ·{' '}
+            <a href="https://www.linkedin.com/in/junseong-lee">LinkedIn</a>
+          </li>
+        </ul>
       </div>
-      <div className="xp-boot-progress-wrap">
-        <div className="xp-boot-progress-track">
-          <div className="xp-boot-progress-runner" />
-        </div>
-      </div>
-      <div className="xp-boot-footer">&copy; Junseong Lee</div>
     </div>
   );
 }
@@ -1103,7 +1126,6 @@ const XPDesktop: React.FC = () => {
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [crtEnabled, setCrtEnabled] = useState(false);
   const [bsodActive, setBsodActive] = useState(false);
-  const [bootPhase, setBootPhase] = useState<BootPhase>('loading');
   const [clock, setClock] = useState('--:--');
   const [wallpaper, setWallpaper] = useState('');
   const [isMobile, setIsMobile] = useState(false);
@@ -1111,7 +1133,6 @@ const XPDesktop: React.FC = () => {
   const [selectedBlogPost, setSelectedBlogPost] = useState<BlogPost>(blogPosts[0]);
   const [hasMountedClient, setHasMountedClient] = useState(false);
   const [hasHydratedDesktopState, setHasHydratedDesktopState] = useState(false);
-  const [, setHasPreparedWallpaper] = useState(false);
   const zCounter = useRef(INITIAL_Z + 10);
   const audioContextRef = useRef<AudioContext | null>(null);
 
@@ -1130,15 +1151,8 @@ const XPDesktop: React.FC = () => {
     setCrtEnabled(readCrtChoice());
 
     const selectedWallpaper = chooseDailyWallpaper();
-
-    Promise.all([
-      preloadWallpaper(selectedWallpaper),
-      new Promise((resolve) => window.setTimeout(resolve, MIN_BOOT_DURATION_MS)),
-    ]).finally(() => {
-      setWallpaper(selectedWallpaper);
-      setHasPreparedWallpaper(true);
-      setBootPhase('fading');
-    });
+    setWallpaper(selectedWallpaper);
+    warmWallpaperCache(selectedWallpaper);
 
     const timer = window.setInterval(() => {
       const now = new Date();
@@ -1152,15 +1166,6 @@ const XPDesktop: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (bootPhase !== 'fading') {
-      return;
-    }
-
-    const timer = window.setTimeout(() => setBootPhase('desktop'), 650);
-    return () => window.clearTimeout(timer);
-  }, [bootPhase]);
-
-  useEffect(() => {
     const parsedState = readDesktopSessionState();
     if (!parsedState) {
       setHasHydratedDesktopState(true);
@@ -1170,7 +1175,9 @@ const XPDesktop: React.FC = () => {
     try {
       const restoredWindowStates = WINDOW_IDS.reduce(
         (accumulator, id, index) => {
-          accumulator[id] = restoreWindowState(id, parsedState.windowStates?.[id], INITIAL_Z + index + 1);
+          accumulator[id] = clampWindowToViewport(
+            restoreWindowState(id, parsedState.windowStates?.[id], INITIAL_Z + index + 1)
+          );
           return accumulator;
         },
         {} as Record<InternalWindowId, WindowState>
@@ -1434,7 +1441,6 @@ const XPDesktop: React.FC = () => {
       case 'home':
       case 'contact':
       case 'terminal':
-      case 'minesweeper':
         openWindow(id);
         return;
       case 'resume':
@@ -1474,8 +1480,6 @@ const XPDesktop: React.FC = () => {
         return <ContactSection />;
       case 'terminal':
         return <TerminalSection onTriggerBsod={() => setBsodActive(true)} />;
-      case 'minesweeper':
-        return <MinesweeperSection />;
       case 'blogReader':
         return (
           <section className="xp-content xp-blog-reader">
@@ -1516,11 +1520,9 @@ const XPDesktop: React.FC = () => {
     .map((id) => windowStates[id])
     .filter((windowState) => windowState.open && !windowState.minimized);
 
-  if (!hasMountedClient || !hasHydratedDesktopState || bootPhase === 'loading') {
-    return <BootScreen />;
+  if (!hasMountedClient || !hasHydratedDesktopState) {
+    return <DesktopShim />;
   }
-
-  const bootOverlay = bootPhase === 'fading' ? <BootScreen fading /> : null;
 
   if (isMobile) {
     return (
@@ -1563,7 +1565,6 @@ const XPDesktop: React.FC = () => {
           }}
         />
         {crtEnabled && <div className="xp-crt-overlay" />}
-        {bootOverlay}
         {bsodActive && <BSoD />}
       </>
     );
@@ -1640,7 +1641,6 @@ const XPDesktop: React.FC = () => {
         onTaskbarClick={toggleTaskbarWindow}
       />
       {crtEnabled && <div className="xp-crt-overlay" />}
-      {bootOverlay}
       {bsodActive && <BSoD />}
     </div>
   );

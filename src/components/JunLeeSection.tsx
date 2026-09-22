@@ -29,7 +29,7 @@ function getKindVisual(folder: FolderId, kind: string): KindVisual {
   if (k.includes('operation')) return { icon: '⚙', accent: '#5b6472' }
   return { icon: '▣', accent: '#546b8a' }
 }
-import { blogPosts, type BlogPost } from './BlogSection'
+import type { BlogPost } from './BlogSection'
 import { projects } from './ProjectsSection'
 import { researchEntries } from './ResearchSection'
 
@@ -49,6 +49,10 @@ interface ExplorerEntry {
   actionLabel: string
   href?: string
   liveLink?: string
+  liveLabel?: string
+  liveNote?: string
+  image?: string
+  imageAlt?: string
   post?: BlogPost
 }
 
@@ -73,11 +77,17 @@ const explorerEntries: ExplorerEntry[] = [
     title: project.title,
     folder: 'projects' as const,
     kind: project.category,
-    meta: project.liveLink ? 'GitHub + Live Site' : 'GitHub Repository',
+    meta: [project.repoLink ? 'GitHub' : null, project.liveLink ? 'Live Site' : null]
+      .filter(Boolean)
+      .join(' + ') || 'Case study',
     summary: project.description,
     actionLabel: 'Open on GitHub',
     href: project.repoLink,
     liveLink: project.liveLink,
+    liveLabel: project.liveLabel,
+    liveNote: project.liveNote,
+    image: project.image,
+    imageAlt: project.imageAlt,
   })),
   ...researchEntries.map((entry) => ({
     id: `research-${entry.title}`,
@@ -88,20 +98,16 @@ const explorerEntries: ExplorerEntry[] = [
     summary: entry.summary,
     actionLabel: entry.linkLabel,
     href: entry.href,
-  })),
-  ...blogPosts.map((post) => ({
-    id: `writing-${post.slug}`,
-    title: post.title,
-    folder: 'writing' as const,
-    kind: 'Essay',
-    meta: post.date,
-    summary: post.excerpt,
-    actionLabel: 'Open Entry',
-    post,
+    liveLink: entry.liveLink,
+    liveLabel: entry.liveLabel,
+    image: entry.image,
+    imageAlt: entry.imageAlt,
   })),
 ]
 
-const folderOrder: FolderId[] = ['research', 'projects', 'writing']
+/* Writing is archived: the /writing pages stay live and indexed, but the
+   folder is no longer surfaced in the shell. */
+const folderOrder: FolderId[] = ['research', 'projects']
 
 const JunLeeSection: React.FC<JunLeeSectionProps> = ({ onOpenPost }) => {
   const [activeFolder, setActiveFolder] = useState<FolderId>('research')
@@ -146,8 +152,8 @@ const JunLeeSection: React.FC<JunLeeSectionProps> = ({ onOpenPost }) => {
       <div className="xp-pane xp-home-header">
         <h1>Notes from Junseong Lee</h1>
         <p>
-          A running place for research, projects, and writing. Use the folders on the left to
-          browse what I have been learning, building, and thinking through.
+          A running place for research and projects. Use the folders on the left to browse what
+          I have been learning, building, and thinking through.
         </p>
       </div>
 
@@ -183,8 +189,7 @@ const JunLeeSection: React.FC<JunLeeSectionProps> = ({ onOpenPost }) => {
           <div className="xp-pane xp-home-browser">
             <div className="xp-listview-header">
               <span>Name</span>
-              <span>Kind</span>
-              <span>Info</span>
+              <span>{visibleEntries.length} item{visibleEntries.length === 1 ? '' : 's'}</span>
             </div>
             <div className="xp-home-list" role="listbox" aria-label={`${folderCopy[activeFolder].label} list`}>
               {visibleEntries.map((entry) => {
@@ -206,11 +211,14 @@ const JunLeeSection: React.FC<JunLeeSectionProps> = ({ onOpenPost }) => {
                       >
                         {visual.icon}
                       </span>
-                      <span className="xp-home-row-name">{entry.title}</span>
-                      {entry.liveLink ? <span className="xp-home-row-live">LIVE</span> : null}
+                      <span className="xp-home-row-copy">
+                        <span className="xp-home-row-name">
+                          {entry.title}
+                          {entry.liveLink ? <span className="xp-home-row-live">LIVE</span> : null}
+                        </span>
+                        <span className="xp-home-row-kind">{entry.kind}</span>
+                      </span>
                     </span>
-                    <span className="xp-home-row-kind">{entry.kind}</span>
-                    <span className="xp-home-row-meta">{entry.meta}</span>
                   </button>
                 )
               })}
@@ -220,17 +228,19 @@ const JunLeeSection: React.FC<JunLeeSectionProps> = ({ onOpenPost }) => {
           {selectedEntry ? (
             <article className="xp-pane xp-home-preview">
               <div className="xp-project-preview-header">
-                <div
-                  className="xp-preview-hero"
-                  style={{
-                    background: `linear-gradient(135deg, ${getKindVisual(selectedEntry.folder, selectedEntry.kind).accent} 0%, #0f1b3a 100%)`,
-                  }}
-                  aria-hidden="true"
-                >
-                  <span className="xp-preview-hero-glyph">
-                    {getKindVisual(selectedEntry.folder, selectedEntry.kind).icon}
-                  </span>
-                </div>
+                {selectedEntry.image ? null : (
+                  <div
+                    className="xp-preview-hero"
+                    style={{
+                      background: `linear-gradient(135deg, ${getKindVisual(selectedEntry.folder, selectedEntry.kind).accent} 0%, #0f1b3a 100%)`,
+                    }}
+                    aria-hidden="true"
+                  >
+                    <span className="xp-preview-hero-glyph">
+                      {getKindVisual(selectedEntry.folder, selectedEntry.kind).icon}
+                    </span>
+                  </div>
+                )}
                 <div className="xp-preview-copy">
                   <span className="xp-preview-label">{folderCopy[activeFolder].label}</span>
                   <h2>{selectedEntry.title}</h2>
@@ -241,6 +251,18 @@ const JunLeeSection: React.FC<JunLeeSectionProps> = ({ onOpenPost }) => {
                   </div>
                 </div>
               </div>
+              {selectedEntry.image ? (
+                <figure className="xp-preview-figure">
+                  <a href={selectedEntry.image} target="_blank" rel="noopener noreferrer">
+                    <img
+                      src={selectedEntry.image}
+                      alt={selectedEntry.imageAlt ?? selectedEntry.title}
+                      loading="lazy"
+                    />
+                  </a>
+                  <figcaption>Click to view full size</figcaption>
+                </figure>
+              ) : null}
               <p>{selectedEntry.summary}</p>
               <div className="xp-project-actions">
                 {selectedEntry.liveLink ? (
@@ -248,12 +270,17 @@ const JunLeeSection: React.FC<JunLeeSectionProps> = ({ onOpenPost }) => {
                     type="button"
                     onClick={() => window.open(selectedEntry.liveLink!, '_blank', 'noopener,noreferrer')}
                   >
-                    Open Live Site
+                    {selectedEntry.liveLabel ?? 'Open Live Site'}
                   </button>
                 ) : null}
-                <button type="button" onClick={handlePrimaryAction}>
-                  {selectedEntry.actionLabel}
-                </button>
+                {selectedEntry.href || selectedEntry.post ? (
+                  <button type="button" onClick={handlePrimaryAction}>
+                    {selectedEntry.actionLabel}
+                  </button>
+                ) : null}
+                {selectedEntry.liveNote ? (
+                  <span className="xp-action-note">{selectedEntry.liveNote}</span>
+                ) : null}
               </div>
             </article>
           ) : null}
