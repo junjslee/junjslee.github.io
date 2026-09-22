@@ -1,3 +1,4 @@
+<!-- status: live · reviewed_as_of: 2026-09-22 · mandated by AGENTS.md -->
 # Progress
 
 ## Last Updated
@@ -86,6 +87,20 @@
   and `authors`. These render through the existing `xp-project-meta` / `xp-list` classes rather
   than new components, per the operator's instruction to integrate into the current design.
 - The BiomeTrail preview is a fresh capture of the live app, not the under-review NeurIPS figure.
+
+### 2026-09-22 — deployed
+- Merged `feat/design-refresh` into `main` as a fast-forward and pushed `8e289e2..0441196`.
+- GitHub Actions run `35692523975` ("Deploy Next.js site to Pages") concluded **success**.
+- Live verification: `https://junjslee.github.io/` serves `css/e04c3c24b311d9c0.css`, the new title
+  and `og:image`, 674 characters of crawlable body text, an `<h1>`, and 3 JSON-LD blocks. All 11
+  checked routes and assets return 200.
+- CI annotates that five `actions/*` target the deprecated Node 20 and are forced onto Node 24, and
+  that `ubuntu-latest` migrates to Ubuntu 26 from 2026-10-19. Harmless today; worth a bump.
+- Docs sweep: all 6 tracked `docs/*.md` had **no lifecycle marker** and were given one. `RUN_CONTEXT.md`
+  pins re-measured — macOS `15.7.3`→`15.7.7`, Claude Code `2.1.81`→`2.1.278`, Cursor `2.6.21`→`3.18.9`;
+  node, npm and git re-measured and unchanged. `REQUIREMENTS.md` acceptance criteria corrected to say
+  Writing is archived out of navigation while staying crawlable. Nothing archived or discarded —
+  every doc is live and in use.
 
 ## Validation
 - `npm run build` — clean, 6/6 routes exported, CSS hash `b5c038d9e368cc6e` (2026-09-22)

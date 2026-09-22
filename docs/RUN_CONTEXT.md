@@ -1,17 +1,18 @@
+<!-- status: live · reviewed_as_of: 2026-09-22 · tool versions re-measured on this machine -->
 # Run Context
 
-Last generated: `2026-03-26`
+Last generated: `2026-09-22`
 
 ## Local Machine
-- OS: macOS `15.7.3` (`24G419`)
+- OS: macOS `15.7.7` (`24G720`)
 - CPU: `Apple M2`
 - Memory: `8 GB` unified memory
 - Architecture: `arm64`
 - Shell: `/bin/zsh`
 
 ## Local Tooling
-- Claude Code: `2.1.81 (Claude Code)`
-- Cursor: `2.6.21`
+- Claude Code: `2.1.278`
+- Cursor: `3.18.9`
 - Git: `git version 2.45.2`
 - Node: `v20.14.0`
 - npm: `10.7.0`

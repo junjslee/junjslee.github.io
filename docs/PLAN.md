@@ -1,8 +1,9 @@
+<!-- status: live · reviewed_as_of: 2026-09-22 -->
 # Plan
 
 ## Current Goal
-Design + content refresh on branch `feat/design-refresh` — verified locally, **not yet deployed**.
-Direction chosen by the operator: keep the Windows XP identity, raise the craft.
+None — the design + content refresh shipped on 2026-09-22 (`0441196`, Actions run `35692523975`).
+Back in maintenance mode; the operator will flag the next change.
 
 ## Stages
 1. **Explore** — understand current state
@@ -12,7 +13,7 @@ Direction chosen by the operator: keep the Windows XP identity, raise the craft.
 5. **Handoff** — update docs
 
 ## Active Stage
-- Review complete; awaiting the operator's deploy decision.
+- Explore (awaiting operator direction)
 
 ## Risks And Unknowns
 - The explorer's side-by-side layout uses CSS container queries and `:has()`. Both are supported in
@@ -23,6 +24,7 @@ Direction chosen by the operator: keep the Windows XP identity, raise the craft.
 - `public/images/gif/4_night_drive.gif` is 8.7MB and unreferenced (commented out of `WALLPAPER_OPTIONS`),
   so it ships in the export for nothing. Deleting or compressing it is an operator call.
 - `/writing` pages are still built and in the sitemap but no longer linked from any navigation.
+- The "Listen to my mixes" entry is still pending a URL from the operator.
 
 ## Verification Plan
 1. `npm run build` — confirm static export succeeds

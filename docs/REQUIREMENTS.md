@@ -1,3 +1,4 @@
+<!-- status: live · reviewed_as_of: 2026-09-22 · tech-stack pins verified against package.json -->
 # Requirements
 
 ## Objective
@@ -21,7 +22,9 @@ Personal portfolio site for Junseong Lee — a Windows XP-themed interactive des
 ## Acceptance Criteria
 - Desktop XP shell loads with working windows, taskbar, start menu, sound toggle
 - Mobile shell provides equivalent content access without drag-based windows
-- `/projects`, `/research`, `/writing/[slug]` pages are crawlable and indexed
+- `/projects` and `/research` are crawlable, indexed, and linked from site navigation
+- `/writing` and `/writing/[slug]` stay crawlable and in the sitemap, but are archived out of the navigation as of 2026-09-22
+- The home page carries readable content and structured data without JavaScript
 - Sitemap is present and accurate
 - Build and static export succeed with zero errors
 
