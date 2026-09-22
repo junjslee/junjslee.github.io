@@ -1241,8 +1241,9 @@ a {
   position: fixed;
   inset: 0;
   z-index: 0;
+  background-color: #101c33;
   background-position: center;
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
   pointer-events: none;
 }
@@ -1259,9 +1260,11 @@ a {
   z-index: 1;
   flex: 1;
   min-height: 0;
-  padding: 12px 12px 8px;
+  padding: 18px 16px 12px;
   display: flex;
 }
+
+/* Panel closed: the workspace is just wallpaper, the way a cleared desktop is. */
 
 .xp-mobile-panel {
   width: 100%;
@@ -1502,10 +1505,16 @@ a {
     gap: 10px;
   }
 
-  /* The folder list is as tall as its content on a phone; stretching it
-     left a block of empty panel under the last folder. */
+  /* On a phone the shell stacks, so grid row sizing only left a gap between
+     the folder list and the browser. Let the panes size to their content. */
+  .xp-home-shell {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
   .xp-home-sidebar {
-    align-self: start;
+    align-self: stretch;
   }
 
   .xp-home-row {
@@ -1546,7 +1555,7 @@ a {
   .xp-mobile-workspace {
     flex: none;
     min-height: calc(100dvh - 72px);
-    padding: 12px 12px 80px;
+    padding: 18px 16px 84px;
   }
 
   .xp-mobile-panel {
@@ -1693,102 +1702,6 @@ a {
     rgba(0, 0, 0, 0.055) 1px,
     rgba(0, 0, 0, 0.055) 2px
   );
-}
-
-/* Blue Screen of Death */
-.xp-bsod {
-  position: fixed;
-  inset: 0;
-  z-index: 9999999;
-  background: #000080;
-  color: #fff;
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 13px;
-  line-height: 1.65;
-  padding: 48px 72px;
-  overflow: hidden;
-}
-
-.xp-bsod p {
-  margin: 0;
-}
-
-@media (max-width: 719px) {
-  .xp-bsod {
-    padding: 32px 20px;
-    font-size: 11px;
-  }
-}
-
-/* Terminal */
-.xp-terminal {
-  margin: -14px -16px;
-  padding: 8px 10px;
-  min-height: calc(100% + 28px);
-  background: #0c0c0c;
-  color: #c0c0c0;
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 12px;
-  cursor: text;
-  box-sizing: border-box;
-}
-
-.xp-terminal-lines {
-  display: flex;
-  flex-direction: column;
-}
-
-.xp-terminal-line {
-  line-height: 1.5;
-  white-space: pre-wrap;
-  word-break: break-all;
-  min-height: 1.5em;
-}
-
-.xp-term-input {
-  color: #c0c0c0;
-}
-
-.xp-term-output {
-  color: #c0c0c0;
-}
-
-.xp-term-error {
-  color: #ff5555;
-}
-
-.xp-term-ascii {
-  color: #7dd3fc;
-  white-space: pre;
-  line-height: 1.15;
-}
-
-.xp-terminal-current-prompt {
-  display: flex;
-  align-items: center;
-  line-height: 1.5;
-  color: #c0c0c0;
-}
-
-.xp-terminal-prompt-text {
-  white-space: pre;
-  flex-shrink: 0;
-}
-
-.xp-terminal-cursor-wrap {
-  flex: 1;
-  min-width: 0;
-}
-
-.xp-terminal-field {
-  width: 100%;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: #c0c0c0;
-  font: inherit;
-  caret-color: #c0c0c0;
-  padding: 0;
 }
 
 /* Window resize handles */
@@ -2465,4 +2378,30 @@ a {
   flex-direction: column;
   gap: var(--sp-1);
   max-width: var(--measure);
+}
+
+/* Mobile title-bar close control — a real target, not a 16px XP hit box.
+   xp.css sets `.title-bar button` with a background sprite and fixed
+   dimensions, so this has to out-specify it and clear the image. */
+.xp-mobile-panel .title-bar .xp-mobile-close {
+  min-width: 30px;
+  min-height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--sp-2);
+  border: 1px solid #8ea6c9;
+  border-radius: 3px;
+  background-image: none;
+  background: linear-gradient(180deg, #f76d5a 0%, #d63a22 100%);
+  box-shadow: none;
+  color: #fff;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.xp-mobile-panel .title-bar .xp-mobile-close:active {
+  filter: brightness(0.9);
 }

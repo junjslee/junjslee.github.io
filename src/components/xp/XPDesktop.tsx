@@ -4,12 +4,11 @@ import AboutSection from '../AboutSection';
 import { blogPosts } from '../BlogSection';
 import ContactSection from '../ContactSection';
 import JunLeeSection from '../JunLeeSection';
-import TerminalSection from '../TerminalSection';
 import type { BlogPost } from '../BlogSection';
 
-type InternalWindowId = 'about' | 'home' | 'contact' | 'blogReader' | 'terminal';
+type InternalWindowId = 'about' | 'home' | 'contact' | 'blogReader';
 type ShortcutId = InternalWindowId | 'resume' | 'github' | 'linkedin';
-type IconKind = 'about' | 'home' | 'contact' | 'resume' | 'github' | 'linkedin' | 'reader' | 'terminal';
+type IconKind = 'about' | 'home' | 'contact' | 'resume' | 'github' | 'linkedin' | 'reader';
 type MobileSection = 'about' | 'work' | 'contact';
 type SoundName = 'open' | 'close' | 'minimize' | 'maximize' | 'click';
 
@@ -107,10 +106,13 @@ interface MobilePanelProps {
   children: React.ReactNode;
   actionLabel?: string;
   onAction?: () => void;
+  onClose?: () => void;
 }
 
 interface MobileShellProps {
   wallpaper: string;
+  panelOpen: boolean;
+  onClosePanel: () => void;
   shortcuts: ShortcutDefinition[];
   activeSection: MobileSection;
   soundEnabled: boolean;
@@ -134,7 +136,7 @@ const MOBILE_BREAKPOINT = 720;
 const INITIAL_Z = 40;
 const DESKTOP_STATE_STORAGE_KEY = 'junlee-xp-desktop-state-v1';
 const CRT_STORAGE_KEY = 'junlee-xp-crt-v1';
-const WINDOW_IDS: InternalWindowId[] = ['about', 'home', 'contact', 'blogReader', 'terminal'];
+const WINDOW_IDS: InternalWindowId[] = ['about', 'home', 'contact', 'blogReader'];
 const WALLPAPER_OPTIONS = [
   // '/images/gif/1_day.gif',
   '/images/gif/2_evening.gif',
@@ -181,15 +183,6 @@ const WINDOW_DEFINITIONS: Record<InternalWindowId, WindowDefinition> = {
     x: 360,
     y: 118,
   },
-  terminal: {
-    id: 'terminal',
-    title: 'Command Prompt',
-    icon: 'terminal',
-    width: 600,
-    height: 400,
-    x: 200,
-    y: 130,
-  },
 };
 
 const SHORTCUTS: ShortcutDefinition[] = [
@@ -232,15 +225,9 @@ const SHORTCUTS: ShortcutDefinition[] = [
     description: 'Professional profile and updates.',
     href: 'https://www.linkedin.com/in/junseong-lee',
   },
-  {
-    id: 'terminal',
-    label: 'cmd.exe',
-    icon: 'terminal',
-    description: 'Open the command prompt.',
-  },
 ];
 
-const DESKTOP_SHORTCUT_IDS: ShortcutId[] = ['about', 'home', 'resume', 'contact', 'terminal', 'github', 'linkedin'];
+const DESKTOP_SHORTCUT_IDS: ShortcutId[] = ['about', 'home', 'resume', 'contact', 'github', 'linkedin'];
 const DESKTOP_SHORTCUTS = SHORTCUTS.filter((shortcut) => DESKTOP_SHORTCUT_IDS.includes(shortcut.id));
 
 interface PersistedDesktopState {
@@ -276,7 +263,6 @@ function createDefaultWindowStates(): Record<InternalWindowId, WindowState> {
     home: createWindowState('home', INITIAL_Z + 2),
     contact: createWindowState('contact', INITIAL_Z + 3),
     blogReader: createWindowState('blogReader', INITIAL_Z + 4),
-    terminal: createWindowState('terminal', INITIAL_Z + 5),
   };
 }
 
@@ -309,7 +295,13 @@ function restoreWindowState(
 /* Saved window geometry is replayed into whatever viewport the visitor has
    now, which is not the one it was saved in. Without this, a window stored
    from a wide monitor opens off-screen on a laptop with no way to drag it
-   back. Clamp on restore so every window stays reachable. */
+   back.
+
+   Position only. Clamping width and height here was a mistake: the clamped
+   values are what the persistence effect writes back, so a single visit at a
+   narrow width permanently shrank every window — a phone-sized visit left the
+   About window stuck at 524px on a 1400px desktop. Size is the visitor's to
+   choose and is already bounded by the resize handles. */
 function clampWindowToViewport(state: WindowState): WindowState {
   if (typeof window === 'undefined') {
     return state;
@@ -318,18 +310,15 @@ function clampWindowToViewport(state: WindowState): WindowState {
   const workspaceWidth = Math.max(RESIZE_MIN_WIDTH, window.innerWidth - WORKSPACE_INSET_X);
   const workspaceHeight = Math.max(RESIZE_MIN_HEIGHT, window.innerHeight - WORKSPACE_INSET_Y);
 
-  const clamp = (geometry: { x: number; y: number; width: number; height: number }) => {
-    const width = Math.min(geometry.width, workspaceWidth);
-    const height = Math.min(geometry.height, workspaceHeight);
-    return {
-      x: Math.max(0, Math.min(geometry.x, workspaceWidth - width)),
-      y: Math.max(0, Math.min(geometry.y, workspaceHeight - height)),
-      width,
-      height,
-    };
-  };
+  /* Keep at least this much of the title bar reachable so the window can
+     always be dragged back into view. */
+  const MIN_VISIBLE = 96;
 
-  return { ...state, ...clamp(state), restored: clamp(state.restored) };
+  return {
+    ...state,
+    x: Math.max(0, Math.min(state.x, Math.max(0, workspaceWidth - MIN_VISIBLE))),
+    y: Math.max(0, Math.min(state.y, Math.max(0, workspaceHeight - MIN_VISIBLE))),
+  };
 }
 
 function readDesktopSessionState(): PersistedDesktopState | null {
@@ -512,16 +501,6 @@ function DesktopGlyph({ icon }: { icon: IconKind }): React.ReactElement {
           <rect x="13" y="21" width="14" height="2" fill="#6c7a8a" />
           <rect x="13" y="26" width="16" height="2" fill="#6c7a8a" />
           <path d="M36 14h4v20h-4" fill="#d95a3c" stroke="#143f86" strokeWidth="2" />
-        </svg>
-      );
-    case 'terminal':
-      return (
-        <svg viewBox="0 0 48 48" className="xp-desktop-glyph" aria-hidden="true">
-          <rect x="4" y="8" width="40" height="30" rx="2" fill="#0c0c0c" stroke="#3d6394" strokeWidth="1.5" />
-          <rect x="4" y="8" width="40" height="6" rx="2" fill="#1c3c6e" />
-          <rect x="4" y="11" width="40" height="3" fill="#1c3c6e" />
-          <path d="M11 24 l6 -4 -6 -4" fill="none" stroke="#39d353" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          <rect x="19" y="19" width="8" height="10" rx="1" fill="#39d353" opacity="0.75" />
         </svg>
       );
   }
@@ -896,6 +875,7 @@ function MobileWindowPanel({
   children,
   actionLabel,
   onAction,
+  onClose,
 }: MobilePanelProps): React.ReactElement {
   return (
     <div className="window xp-mobile-panel" onClick={(event) => event.stopPropagation()}>
@@ -906,13 +886,23 @@ function MobileWindowPanel({
           </span>
           <span>{title}</span>
         </div>
-        {actionLabel && onAction ? (
-          <div className="xp-mobile-panel-actions">
+        <div className="xp-mobile-panel-actions">
+          {actionLabel && onAction ? (
             <button type="button" onClick={onAction}>
               {actionLabel}
             </button>
-          </div>
-        ) : null}
+          ) : null}
+          {onClose ? (
+            <button
+              type="button"
+              className="xp-mobile-close"
+              aria-label={`Close ${title}`}
+              onClick={onClose}
+            >
+              &#10005;
+            </button>
+          ) : null}
+        </div>
       </div>
       <div className="window-body xp-window-body xp-mobile-window-body">
         <div className="xp-window-content">{children}</div>
@@ -923,6 +913,8 @@ function MobileWindowPanel({
 
 function MobileShell({
   wallpaper,
+  panelOpen,
+  onClosePanel,
   shortcuts,
   activeSection,
   soundEnabled,
@@ -965,16 +957,19 @@ function MobileShell({
           image over the whole document height. A fixed layer keeps it
           scaled to the viewport instead. */}
       <div className="xp-mobile-wallpaper" style={{ backgroundImage: `url(${wallpaper})` }} aria-hidden="true" />
-      <div className="xp-mobile-workspace">
-        <MobileWindowPanel
-          key={activeSection}
-          title={activePanel.title}
-          icon={activePanel.icon}
-          actionLabel={activePanel.actionLabel}
-          onAction={activePanel.onAction}
-        >
-          {renderMobileSection(activeSection)}
-        </MobileWindowPanel>
+      <div className={`xp-mobile-workspace${panelOpen ? '' : ' is-empty'}`}>
+        {panelOpen ? (
+          <MobileWindowPanel
+            key={activeSection}
+            title={activePanel.title}
+            icon={activePanel.icon}
+            actionLabel={activePanel.actionLabel}
+            onAction={activePanel.onAction}
+            onClose={onClosePanel}
+          >
+            {renderMobileSection(activeSection)}
+          </MobileWindowPanel>
+        ) : null}
 
         {menuOpen ? (
           <div className="window xp-mobile-launcher" onClick={(event) => event.stopPropagation()}>
@@ -1030,7 +1025,7 @@ function MobileShell({
         {isBlogReaderOpen ? (
           <div className="xp-mobile-overlay" onClick={onCloseBlogReader}>
             <div className="xp-mobile-overlay-panel" onClick={(event) => event.stopPropagation()}>
-              <MobileWindowPanel title="Writing" icon="reader" actionLabel="Back" onAction={onCloseBlogReader}>
+              <MobileWindowPanel title="Writing" icon="reader" onClose={onCloseBlogReader}>
                 {renderBlogReader()}
               </MobileWindowPanel>
             </div>
@@ -1091,45 +1086,18 @@ function DesktopShim(): React.ReactElement {
   );
 }
 
-function BSoD(): React.ReactElement {
-  useEffect(() => {
-    const timer = window.setTimeout(() => window.location.reload(), 3500);
-    return () => window.clearTimeout(timer);
-  }, []);
-
-  return (
-    <div className="xp-bsod">
-      <p>A problem has been detected and Windows has been shut down to prevent damage to your computer.</p>
-      <br />
-      <p>IRQL_NOT_LESS_OR_EQUAL</p>
-      <br />
-      <p>If this is the first time you have seen this Stop error screen, restart your computer. If this screen appears again, follow these steps:</p>
-      <br />
-      <p>Check to make sure any new hardware or software is properly installed. If this is a new installation, ask your hardware or software manufacturer for any Windows updates you might need.</p>
-      <br />
-      <p>Technical information:</p>
-      <br />
-      <p>{'*** STOP: 0x0000000A (0x00000004, 0x00000002, 0x00000001, 0x8050A388)'}</p>
-      <br />
-      <p>{'*** sudo_rm.sys - Address BF800B62 base at BF800000, DateStamp 3edd3e29'}</p>
-      <br />
-      <p>Beginning dump of physical memory</p>
-      <p>Physical memory dump complete.</p>
-    </div>
-  );
-}
-
 const XPDesktop: React.FC = () => {
   const [windowStates, setWindowStates] = useState<Record<InternalWindowId, WindowState>>(createDefaultWindowStates);
   const [selectedShortcut, setSelectedShortcut] = useState<ShortcutId | null>(null);
   const [startOpen, setStartOpen] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [crtEnabled, setCrtEnabled] = useState(false);
-  const [bsodActive, setBsodActive] = useState(false);
   const [clock, setClock] = useState('--:--');
   const [wallpaper, setWallpaper] = useState('');
   const [isMobile, setIsMobile] = useState(false);
   const [mobileSection, setMobileSection] = useState<MobileSection>('about');
+  // Closing the mobile panel reveals the desktop, the way closing a window does.
+  const [mobilePanelOpen, setMobilePanelOpen] = useState(true);
   const [selectedBlogPost, setSelectedBlogPost] = useState<BlogPost>(blogPosts[0]);
   const [hasMountedClient, setHasMountedClient] = useState(false);
   const [hasHydratedDesktopState, setHasHydratedDesktopState] = useState(false);
@@ -1440,7 +1408,6 @@ const XPDesktop: React.FC = () => {
       case 'about':
       case 'home':
       case 'contact':
-      case 'terminal':
         openWindow(id);
         return;
       case 'resume':
@@ -1478,8 +1445,6 @@ const XPDesktop: React.FC = () => {
         return <JunLeeSection onOpenPost={openBlogPost} />;
       case 'contact':
         return <ContactSection />;
-      case 'terminal':
-        return <TerminalSection onTriggerBsod={() => setBsodActive(true)} />;
       case 'blogReader':
         return (
           <section className="xp-content xp-blog-reader">
@@ -1531,6 +1496,11 @@ const XPDesktop: React.FC = () => {
           wallpaper={wallpaper}
           shortcuts={SHORTCUTS}
           activeSection={mobileSection}
+          panelOpen={mobilePanelOpen}
+          onClosePanel={() => {
+            playSound('close');
+            setMobilePanelOpen(false);
+          }}
           soundEnabled={soundEnabled}
           crtEnabled={crtEnabled}
           menuOpen={startOpen}
@@ -1542,6 +1512,7 @@ const XPDesktop: React.FC = () => {
           onChangeSection={(section) => {
             playSound('click');
             setMobileSection(section);
+            setMobilePanelOpen(true);
             setStartOpen(false);
           }}
           onLaunchShortcut={launchShortcut}
@@ -1561,11 +1532,11 @@ const XPDesktop: React.FC = () => {
           onOpenWork={() => {
             playSound('open');
             setMobileSection('work');
+            setMobilePanelOpen(true);
             setStartOpen(false);
           }}
         />
         {crtEnabled && <div className="xp-crt-overlay" />}
-        {bsodActive && <BSoD />}
       </>
     );
   }
@@ -1641,7 +1612,6 @@ const XPDesktop: React.FC = () => {
         onTaskbarClick={toggleTaskbarWindow}
       />
       {crtEnabled && <div className="xp-crt-overlay" />}
-      {bsodActive && <BSoD />}
     </div>
   );
 };

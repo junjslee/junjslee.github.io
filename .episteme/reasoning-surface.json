@@ -1,70 +1,126 @@
 {
-  "timestamp": "2026-09-22T15:30:40Z",
-  "core_question": "Did the docs-handoff push also deploy cleanly, and is the live site still serving the verified build with its crawlable content intact?",
+  "timestamp": "2026-09-22T16:37:13Z",
+  "core_question": "How do we remove the terminal and the unreferenced 8.7MB wallpaper, and give the mobile shell a padded wallpaper frame and a working close control, without breaking the deployed build?",
   "knowns": [
-    "The design payload was already deployed and verified: Actions run 35692523975 concluded success on 0441196, and the live page served css/e04c3c24b311d9c0.css with 674 characters of crawlable body text",
-    "A second push 0441196..9005381 carried only docs changes — NEXT_STEPS, EVENTS, PLAN, PROGRESS, REQUIREMENTS and RUN_CONTEXT — with no source or asset edits",
-    "gh run watch on that second run exited 0, so the workflow reported success; only the pre-existing Node 20 deprecation and ubuntu-latest migration annotations were emitted",
-    "npm run build exported 6/6 routes and npm run lint reported zero warnings on the tree that was pushed",
-    "The merged branch feat/design-refresh was deleted locally after the fast-forward, and git status reported main in sync with origin/main",
-    "Because the docs commit touches no file under src/ or public/, the exported bundle hash cannot change, so the live CSS hash should still be e04c3c24b311d9c0"
+    "The operator asked for four changes this turn: pad the mobile wallpaper so it reads as a frame, add an x close control on mobile panels, remove cmd.exe entirely, and delete public/images/gif/4_night_drive.gif",
+    "The operator explicitly ruled BiomeTrail out of scope — its Cloudflare Access wall is deliberate protection while the journal manuscript is unpublished, so no link or badge change is wanted",
+    "4_night_drive.gif is 8.7MB and already commented out of WALLPAPER_OPTIONS in XPDesktop.tsx, so deleting the file cannot change which wallpaper any visitor sees",
+    "Removing the terminal is the same leaf-feature shape as the Minesweeper removal earlier this session: one component file, one member of the InternalWindowId union, one shortcut, one start-menu entry, one icon glyph, and one CSS block",
+    "TerminalSection currently owns the only path that triggers the blue-screen easter egg through onTriggerBsod, so removing it strands the BSoD component unless that is handled",
+    "The mobile shell paints its wallpaper through a fixed .xp-mobile-wallpaper layer added earlier this session, and .xp-mobile-workspace pads content by only 12px, so the wallpaper currently shows as a thin border rather than a frame",
+    "main is at 8ce323d, in sync with origin/main, working tree clean, and the last deploy run 35692777482 concluded success"
   ],
   "unknowns": [
-    "If curl of https://junjslee.github.io/ returns 0 matches for css/e04c3c24b311d9c0.css, the second deploy replaced the artifact with a different build and the assumption that a docs-only commit cannot move the bundle hash fails",
-    "If the live home page now reports fewer than 600 characters of crawlable body text, the pre-hydration shim was dropped from the artifact and indexing of the home page fails",
-    "Should gh run list report the most recent run with conclusion failure rather than success, the docs deploy errored and the previously deployed artifact is what visitors still see",
-    "When git status is checked, if main is reported ahead of origin/main by 1 or more commits then the final push did not land and the handoff fails to reach the remote"
+    "If npm run build exits non-zero after the terminal removal, a dangling import or an unhandled member of the InternalWindowId union remains and the TypeScript error names the file and symbol still referencing it",
+    "Should the BSoD component be left with no caller after the terminal is removed, npm run lint fails on an unused variable or the dead component ships as unreachable bytes in the bundle",
+    "When the mobile workspace padding is increased, if the panel content drops below roughly 320px of usable width on a 360px phone the padding is too aggressive and text starts wrapping badly",
+    "If the new close control is rendered on the mobile About panel, which has no window to close, tapping it errors or leaves the visitor on a blank screen because there is nothing to return to",
+    "After deleting 4_night_drive.gif, if grep still reports any reference to that filename in src or public the build errors on a missing asset at export time"
   ],
   "assumptions": [
-    "A docs-only commit is inert for the published site, because the Next.js export reads only src/ and public/ and the docs tree is outside both",
-    "Rollback stays cheap: git revert of the docs commit plus a push restores the previous state, and no source or asset change is involved to undo"
+    "Deleting the gif is safe and effectively irreversible only in the working tree, because git retains the blob in history and the file can be restored with git checkout from an earlier commit if the operator changes their mind",
+    "The mobile close control should return the visitor to a sensible default panel rather than unmounting the shell, because a static site has no window manager to fall back to",
+    "Rollback is cheap by construction: the work lands as commits on main off a verified-green 8ce323d, and git revert plus a push restores the deployed state within minutes"
   ],
-  "disconfirmation": "If curl of https://junjslee.github.io/ returns 0 matches for css/e04c3c24b311d9c0.css, or the latest Actions run reports conclusion failure, the deploy regressed and the offending commit gets reverted and pushed rather than left live",
+  "disconfirmation": "If npm run build or npm run lint exits non-zero on the finished tree, or a browser pass at 400px width shows the mobile panel without a reachable close control or with the wallpaper frame gone, the change failed and does not get committed as shipped",
   "verification_trace": {
-    "command": "curl -s https://junjslee.github.io/ | grep -c css/e04c3c24b311d9c0.css",
-    "threshold_observable": "match count >= 1 and exit code == 0",
-    "window_seconds": 300
+    "command": "npm run build && npm run lint",
+    "threshold_observable": "exit code == 0 and 6 of 6 routes exported",
+    "window_seconds": 600
   },
-  "flaw_classification": "stale-artifact",
-  "posture_selected": "analysis",
-  "patch_vs_refactor_evaluation": "Nothing is edited in this phase. It reads the GitHub Actions run status for the docs push, fetches https://junjslee.github.io/ and measures the served bundle hash and body-text length, and reads git status — no file under src/, public/ or docs/ is touched, so analysis is the honest posture.",
+  "flaw_classification": "core-logic-misalignment",
+  "posture_selected": "patch",
+  "patch_vs_refactor_evaluation": "Each change is local and independent: src/components/TerminalSection.tsx is deleted with its references in src/components/xp/XPDesktop.tsx, public/images/gif/4_night_drive.gif is removed from the asset tree, and the mobile frame and close control are additive edits to the mobile branch of XPDesktop.tsx plus the .xp-mobile-* rules in src/styles/globals.css. No module boundary moves and no data shape changes, so patch is the right posture rather than refactor.",
   "blast_radius_map": [
     {
-      "surface": ".episteme/reasoning-surface.json",
+      "surface": "src/components/xp/XPDesktop.tsx",
       "status": "needs_update"
     },
     {
-      "surface": "https://junjslee.github.io (Pages artifact)",
-      "status": "not-applicable",
-      "rationale": "read-only verification; the artifact is fetched and measured, never rewritten"
+      "surface": "src/components/TerminalSection.tsx",
+      "status": "needs_update"
+    },
+    {
+      "surface": "src/styles/globals.css",
+      "status": "needs_update"
+    },
+    {
+      "surface": "public/images/gif/4_night_drive.gif",
+      "status": "needs_update"
     },
     {
       "surface": "docs/NEXT_STEPS.md",
-      "status": "not-applicable",
-      "rationale": "already written and pushed in the handoff commit; re-editing it here would append to a REPLACE-form file"
+      "status": "needs_update"
+    },
+    {
+      "surface": "docs/PROGRESS.md",
+      "status": "needs_update"
     },
     {
       "surface": "docs/EVENTS.md",
-      "status": "not-applicable",
-      "rationale": "the E4 row for this handoff is already appended, and the contract allows exactly one row per handoff"
+      "status": "needs_update"
     },
     {
-      "surface": "src/**",
+      "surface": "src/components/ProjectsSection.tsx",
       "status": "not-applicable",
-      "rationale": "the deployed source is frozen and verified; this phase only observes the published result"
+      "rationale": "the project list is unchanged this turn; the terminal was never one of its entries"
+    },
+    {
+      "surface": "src/components/ResearchSection.tsx",
+      "status": "not-applicable",
+      "rationale": "the operator ruled BiomeTrail out of scope, so the research data stays exactly as deployed"
+    },
+    {
+      "surface": "public/sitemap.xml",
+      "status": "not-applicable",
+      "rationale": "no route is added or removed; the terminal was a window inside the shell, never a URL"
+    },
+    {
+      "surface": ".github/workflows",
+      "status": "not-applicable",
+      "rationale": "the ubuntu-latest and Node 20 annotations are informational for this static build, and the operator asked no pipeline change"
     }
   ],
   "sync_plan": [
     {
-      "surface": ".episteme/reasoning-surface.json",
-      "action": "re-author with the verification-phase posture and record the measured result in the session report"
+      "surface": "src/components/xp/XPDesktop.tsx",
+      "action": "remove the terminal window type, shortcut, start-menu entry and glyph; handle the orphaned BSoD trigger; add the mobile close control and wire it to a sensible default panel"
+    },
+    {
+      "surface": "src/components/TerminalSection.tsx",
+      "action": "delete the file"
+    },
+    {
+      "surface": "src/styles/globals.css",
+      "action": "delete the terminal CSS block and widen the mobile workspace padding so the wallpaper reads as a frame; style the close control"
+    },
+    {
+      "surface": "public/images/gif/4_night_drive.gif",
+      "action": "delete the unreferenced 8.7MB asset from the tree"
+    },
+    {
+      "surface": "docs/NEXT_STEPS.md",
+      "action": "REPLACE-form handoff recording the removals, the mobile changes, and the items the operator closed out"
+    },
+    {
+      "surface": "docs/PROGRESS.md",
+      "action": "record what was removed and why, with the verification result"
+    },
+    {
+      "surface": "docs/EVENTS.md",
+      "action": "append exactly one row for this handoff"
     }
   ],
   "deferred_discoveries": [
     {
-      "description": "Five actions/* steps in the Pages workflow target the deprecated Node 20 and are being forced onto Node 24, and ubuntu-latest migrates to Ubuntu 26 from 2026-10-19",
-      "observable": "If a future deploy run exits non-zero with a Node or runner-image error after 2026-10-19, these annotations became real failures rather than warnings",
-      "log_only_rationale": "Bumping action versions changes CI behaviour and belongs in its own change with its own verification, not appended to a deploy that already succeeded"
+      "description": "The explorer layout relies on CSS container queries and :has(), verified in Chrome only, so Safari and Firefox behaviour on the live site is still unconfirmed",
+      "observable": "If Safari or Firefox reports gridTemplateColumns on .xp-home-main with a single track at a window wider than 600px, the container query fails in that engine",
+      "log_only_rationale": "Cross-browser verification needs those browsers driven directly and is its own bounded task"
+    },
+    {
+      "description": "The resume lists two npj Digital Medicine manuscripts and four presentations that the live /research page still does not carry, so the published record understates the work",
+      "observable": "If the operator reviews /research and asks where the RSNA 2025 poster and the npj submissions are, this deferral is the reason",
+      "log_only_rationale": "Which unpublished work to surface is the operator's call, especially while manuscripts are under review"
     }
   ]
 }
