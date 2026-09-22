@@ -102,6 +102,29 @@
   Writing is archived out of navigation while staying crawlable. Nothing archived or discarded —
   every doc is live and in use.
 
+### 2026-09-22 — removals and mobile pass (deployed, `72f19d9`)
+- **cmd.exe removed**: `TerminalSection.tsx`, the window type, desktop shortcut, start-menu entry,
+  icon glyph and its CSS. The blue-screen easter egg went with it — the terminal was its only
+  trigger, so keeping it would have shipped unreachable code.
+- **`4_night_drive.gif` deleted** (8.7MB, commented out of `WALLPAPER_OPTIONS` for months but still
+  exported). Export weight **12MB → 3.8MB**; the live URL now returns 404.
+- **Mobile close control**: panels gained a real `✕` in the title bar. Closing reveals the
+  wallpaper the way closing the last window reveals the desktop; the taskbar reopens any section.
+  xp.css's `.title-bar button` sprite had to be out-specified and cleared or the button rendered
+  blank.
+- **Mobile wallpaper fitted**: `contain` on a dark ground instead of `cover`. A landscape pixel-art
+  scene cropped to a portrait phone lost most of the picture; it now letterboxes whole.
+- **Mobile explorer stacking**: flex instead of grid, removing a 36px gap between the folder list
+  and the browser.
+- **Bug fixed from earlier the same day**: `clampWindowToViewport` clamped width and height, and
+  those clamped values were written back by the persistence effect — a single phone-width visit
+  left the About window stuck at 524px on a 1400px desktop. It now clamps position only.
+- Verified: Actions run `35756174292` success; live bundle `css/ee9212d43a9b9117.css`; zero
+  `cmd.exe` strings in the served page; the deleted gif returns 404.
+- Operator decisions recorded: BiomeTrail keeps its Cloudflare Access wall while the journal
+  manuscript is unpublished; the `ubuntu-latest` CI annotation is not actionable for a static build
+  that pins Node through `actions/setup-node`.
+
 ## Validation
 - `npm run build` — clean, 6/6 routes exported, CSS hash `b5c038d9e368cc6e` (2026-09-22)
 - `npm run lint` — no warnings or errors (2026-09-22)

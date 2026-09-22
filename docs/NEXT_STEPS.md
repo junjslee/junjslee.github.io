@@ -2,16 +2,16 @@
 # Next Steps
 
 ## Status
-Design + content refresh is **deployed and verified live** at https://junjslee.github.io.
-`main` = `origin/main` = `0441196`. Nothing is in flight.
+**Deployed and verified live** at https://junjslee.github.io.
+`main` = `origin/main` = `72f19d9`. Nothing is in flight.
 
-## Verified this session
-- Actions run `35692523975` concluded **success** on `0441196`.
-- Live site serves the new bundle `css/e04c3c24b311d9c0.css` (1 match), title
-  "Junseong Lee — AI Researcher (Medical AI, Knowledge Graphs)", `og:image` → `/images/og-card.jpg`.
-- Home page crawlable body text measured at **674 chars** with an `<h1>` and 3 JSON-LD blocks
-  (was 1 char before this session).
-- All 11 checked live routes and assets return 200.
+## Verified live
+- Actions runs `35692523975` / `35692777482` / `35756174292` all concluded **success**.
+- Live bundle `css/ee9212d43a9b9117.css` (1 match); no `cmd.exe` string remains in the page.
+- `/images/gif/4_night_drive.gif` returns **404** — the 8.7MB asset is gone. Export weight
+  dropped **12MB → 3.8MB**.
+- Home page crawlable body text **674 chars** with an `<h1>` and 3 JSON-LD blocks (was 1 char).
+- Checked routes and assets return 200.
 
 ## Open items
 1. **"Listen to my mixes"** — the operator will supply the URL. Add a `mixes` entry to
@@ -19,15 +19,15 @@ Design + content refresh is **deployed and verified live** at https://junjslee.g
 2. **Cross-browser** — the explorer layout uses container queries and `:has()`, verified in Chrome
    only. Check Safari and Firefox: if `.xp-home-main` reports a single grid track above 600px, the
    query failed and needs a fallback.
-3. **`public/images/gif/4_night_drive.gif`** — 8.7MB, unreferenced (commented out of
-   `WALLPAPER_OPTIONS`), still shipping. Delete or compress.
-4. **`biometrail.com` sits behind Cloudflare Access** — visitors hit an auth wall. The badge says
-   "Private beta — access required"; a public landing page would serve the portfolio better.
-5. **Publication record is understated** — the resume lists two npj Digital Medicine manuscripts and
+3. **Publication record is understated** — the resume lists two npj Digital Medicine manuscripts and
    four presentations that `/research` does not carry. Deliberately not invented; needs the
    operator's call on what to surface.
-6. Backlog: startup chime, Cmd/Ctrl+K palette, MDX blog, bump the deprecated-Node `actions/*`
-   versions (CI annotates that five actions are forced onto Node 24).
+4. Backlog: startup chime, Cmd/Ctrl+K palette, MDX blog.
+
+**Closed by the operator:** BiomeTrail stays behind Cloudflare Access on purpose — the journal
+manuscript is unpublished and the wall is deliberate protection. The `ubuntu-latest` CI annotation
+is not actionable here: this workflow pins Node through `actions/setup-node` and only runs a static
+build, so the runner image migration does not affect it.
 
 ## Blockers
 None.
@@ -61,5 +61,10 @@ git push origin main && gh run watch "$(gh run list --limit 1 --json databaseId 
   at a `.webp`.
 - Writing is archived from the UI only. `/writing` and `/writing/post-1` still build and sit in the
   sitemap; `blogPosts` and the `blogReader` window remain, so restoring it is trivial.
+- `clampWindowToViewport` clamps **position only, never size**. Clamping size wrote the shrunken
+  values back through the persistence effect, so one phone-width visit left desktop windows stuck
+  small. Do not reintroduce a size clamp there.
+- xp.css styles `.title-bar button` with a sprite and a fixed 16x14 box. Any custom title-bar
+  control must out-specify it and set `background-image: none`, or it renders as a blank square.
 - The episteme gate rejects unknowns without a **failure verb** (`fail`/`error`/`exit`/`reject`) or a
   numeric threshold with units, and a `git`-flavoured op also needs `verification_trace`.
