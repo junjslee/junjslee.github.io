@@ -2,7 +2,7 @@
 # Progress
 
 ## Last Updated
-- `2026-09-22`
+- `2026-10-11`
 
 ## Completed
 - Windows XP desktop shell (windows, taskbar, start menu, drag/resize, sound)
@@ -160,6 +160,24 @@ against reality rather than date-bumped: `package.json` no longer lists `emailjs
 emits exactly `index`, `projects`, `research` and `404`, and the live site returns 404 for
 `/writing/`. `HARNESS.md`, `AGENTS.md` and `CLAUDE.md` were read and are still accurate. Nothing
 archived or discarded this sweep — `archive/writing/post-1.md` was added earlier in the same day.
+
+### 2026-10-11 — wallpaper swap, More close, NeurIPS posters, visibility
+
+- **Wallpaper rotation**: `3_night_cityview` removed (file deleted) and a pixel-art Bliss tribute
+  added as `4_bliss.webp`. The source arrived as a 460KB still JPEG, so it is lossy WebP q90 (83KB):
+  lossless re-encoding of a JPEG only preserves its artefacts. The JPEG is kept unexported at
+  `archive/wallpapers/4_windows_og_wallpaper.jpg`. Rotation is now evening → Bliss → totoro.
+- **Mobile "More" close**: the launcher's title bar gained the same `✕` as the section panels
+  (`.xp-mobile-close`, selector extended to `.xp-mobile-launcher`). It closes More only; an open
+  section panel stays.
+- **NeurIPS**: both BiomeTrail workshop papers were accepted as posters (operator report). Venue
+  strings, the summary, the About → Experience LMIC bullets and the crawlable home shim now say so.
+- **Visibility**: `Person` JSON-LD gained `alternateName` (`Jun Lee`, `junjslee`); each paper is now
+  its own `ScholarlyArticle` on `/research` so a paper-title search can land there; site and
+  `/research` descriptions name the NeurIPS posters; sitemap `lastmod` bumped.
+- Verified locally in Chrome in a 400px frame: More opens, `✕` measures 29×25px with the red
+  gradient (sprite cleared), clicking it closes More and keeps the panel; wallpaper resolves to
+  `4_bliss.webp`; `/research` carries 3 `ScholarlyArticle` blocks.
 
 ## Validation
 - `npm run build` — clean, 6/6 routes exported, CSS hash `b5c038d9e368cc6e` (2026-09-22)

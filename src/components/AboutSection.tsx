@@ -35,6 +35,7 @@ const roles: Role[] = [
       'Architecting BiomeTrail, a provenance-gated biomedical knowledge graph mining microbe–metabolite–receptor–disease mechanistic chains from 240K+ papers, grounding entities to standard ontologies (ChEBI, MONDO, NCBITaxon, UniProt) with per-edge PMID and verbatim-sentence provenance.',
       'Built a cost-optimized two-stage pipeline: a deterministic NER and entity-grounding stage (2.5M-surface automaton) narrows 240K papers to an 8.5M candidate-relation pool, then targeted LLM relation extraction verifies each edge against its source sentence. Served via Neo4j and an interactive 3D graph explorer.',
       'Enforced a type-safe ontology schema and LLM-based grounding validation under a measurement-first workflow, with independent precision audits and held-out gold sets gating each pipeline stage before paid scale-up.',
+      'First-authored two papers on BiomeTrail accepted as posters at NeurIPS 2026 workshops: GenAI4Health (Demonstration Paper Track) and AI4Science.',
     ],
   },
   {

@@ -26,6 +26,28 @@ const ResearchPage: NextPage = () => {
     })),
   }
 
+  /* Each paper that came out of a line of work gets its own ScholarlyArticle,
+     so a search for the paper title can land here, not just the project. */
+  const papersJsonLd = researchEntries.flatMap((entry) =>
+    (entry.outputs ?? []).map((output) => ({
+      '@context': 'https://schema.org',
+      '@type': 'ScholarlyArticle',
+      headline: output.title,
+      name: output.title,
+      isPartOf: output.venue,
+      datePublished: entry.year,
+      url: `${SITE_URL}/research/`,
+      about: entry.title,
+      author: (entry.authors ?? 'Junseong Lee')
+        .split(', ')
+        .map((name) =>
+          name === 'Junseong Lee'
+            ? { '@type': 'Person', '@id': `${SITE_URL}/#person`, name }
+            : { '@type': 'Person', name }
+        ),
+    }))
+  )
+
   const breadcrumbs = breadcrumbJsonLd([
     { name: 'Home', path: '/' },
     { name: 'Research', path: '/research/' },
@@ -34,13 +56,13 @@ const ResearchPage: NextPage = () => {
   return (
     <ContentPageLayout
       title="Research — Junseong Lee"
-      description="Research by Junseong Lee, including publications, repositories, and ongoing work in medical AI and human-AI interaction."
+      description="Research by Junseong Lee: BiomeTrail (two NeurIPS 2026 workshop posters), neonatal pneumoperitoneum human-AI study, and medical imaging publications."
       canonicalPath="/research/"
       heading="Research"
       intro="A crawlable index of research work, papers, and public repositories."
       socialImage="/images/projects/biometrail-card.jpg"
       socialImageAlt="The BiomeTrail knowledge-graph interface showing an edge and its source evidence."
-      jsonLd={[jsonLd, breadcrumbs]}
+      jsonLd={[jsonLd, ...papersJsonLd, breadcrumbs]}
     >
       <div className="seo-entry-list">
         {researchEntries.map((entry) => (

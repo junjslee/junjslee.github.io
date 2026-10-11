@@ -25,17 +25,17 @@ export const researchEntries: ResearchEntry[] = [
     title: 'BiomeTrail: a provenance-gated biomedical knowledge graph',
     year: '2026',
     kind: 'First-Author Research',
-    venue: 'NeurIPS 2026 Workshops (under review)',
+    venue: 'NeurIPS 2026 Workshops · Accepted posters',
     summary:
-      'A knowledge graph of the microbe to host interface — microbe, metabolite, receptor, pathway, outcome — built at LMIC (Massachusetts General Hospital / Harvard Medical School). Every edge keeps the source sentence that justified it, with its PMID and both endpoints grounded to standard ontologies, so a claim can be checked link by link rather than taken on trust. Two NeurIPS 2026 workshop papers came out of this work, with a journal manuscript in preparation.',
+      'A knowledge graph of the microbe to host interface — microbe, metabolite, receptor, pathway, outcome — built at LMIC (Massachusetts General Hospital / Harvard Medical School). Every edge keeps the source sentence that justified it, with its PMID and both endpoints grounded to standard ontologies, so a claim can be checked link by link rather than taken on trust. Two papers from this work were accepted as posters at NeurIPS 2026 workshops, with a journal manuscript in preparation.',
     outputs: [
       {
         title: 'Demo: Preserving Evidence, Context, and Disagreement in Mechanistic Microbe-Host Graph QA',
-        venue: 'NeurIPS 2026 Workshop GenAI4Health · Demonstration Paper Track',
+        venue: 'NeurIPS 2026 Workshop GenAI4Health · Demonstration Paper Track · Poster',
       },
       {
         title: 'Bounded Verification and Asymmetric Recoverability in Biomedical Knowledge-Graph Construction',
-        venue: 'NeurIPS 2026 Workshop AI4Science',
+        venue: 'NeurIPS 2026 Workshop AI4Science · Poster',
       },
     ],
     authors:

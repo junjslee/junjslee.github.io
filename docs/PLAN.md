@@ -1,10 +1,9 @@
-<!-- status: live · reviewed_as_of: 2026-09-22 -->
+<!-- status: live · reviewed_as_of: 2026-10-11 -->
 # Plan
 
 ## Current Goal
-None. Everything opened on 2026-09-22 shipped: the design + content refresh, the cmd.exe and
-wallpaper removals, and the audit fixes (contact form, `lang`, 404, blog retirement, WebP
-wallpapers). Head is `cd1a692`; back in maintenance mode until the operator flags the next change.
+None. The 2026-10-11 pass (wallpaper swap, mobile More close, NeurIPS poster status, visibility
+metadata) shipped; back in maintenance mode until the operator flags the next change.
 
 ## Stages
 1. **Explore** — understand current state

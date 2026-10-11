@@ -1,7 +1,7 @@
 export const SITE_URL = 'https://junjslee.github.io'
 export const SITE_NAME = 'Junseong Lee'
 export const SITE_DESCRIPTION =
-  'Personal site of Junseong Lee — AI researcher working on medical AI, human-AI interaction, and biomedical knowledge graphs.'
+  'Junseong (Jun) Lee — AI researcher in medical AI, human-AI interaction, and biomedical knowledge graphs. UIUC; MGH/Harvard LMIC; NeurIPS 2026 workshop posters.'
 /** Landscape card for link previews. A portrait crops badly at 1.91:1. */
 export const SITE_IMAGE = `${SITE_URL}/images/og-card.jpg`
 export const SITE_PORTRAIT = `${SITE_URL}/images/hero.jpg`

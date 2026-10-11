@@ -9,6 +9,7 @@ const Home: NextPage = () => {
     '@type': 'Person',
     '@id': `${SITE_URL}/#person`,
     name: SITE_NAME,
+    alternateName: ['Jun Lee', 'junjslee'],
     givenName: 'Junseong',
     familyName: 'Lee',
     url: SITE_URL,
@@ -36,6 +37,8 @@ const Home: NextPage = () => {
       'Automation bias',
       'Vision-language models',
       'Statistical learning',
+      'Knowledge graphs',
+      'Provenance',
     ],
     sameAs: SITE_SAME_AS,
   }

@@ -134,11 +134,12 @@ const CRT_STORAGE_KEY = 'junlee-xp-crt-v1';
 const WINDOW_IDS: InternalWindowId[] = ['about', 'home', 'contact'];
 /* Lossless animated WebP. The pixel art is palette-based, so lossless beats
    both GIF and lossy WebP on size without touching a single pixel — 995KB of
-   GIF became 181KB. */
+   GIF became 181KB. The Bliss tribute arrived as a still JPEG, so it is
+   lossy WebP: re-encoding JPEG artefacts losslessly only preserves them. */
 const WALLPAPER_OPTIONS = [
   // '/images/gif/1_day.webp',
   '/images/gif/2_evening.webp',
-  '/images/gif/3_night_cityview.webp',
+  '/images/gif/4_bliss.webp',
   '/images/gif/5_night_totoro.webp',
 ] as const;
 const DEFAULT_WALLPAPER = WALLPAPER_OPTIONS[0];
@@ -948,6 +949,16 @@ function MobileShell({
           <div className="window xp-mobile-launcher" onClick={(event) => event.stopPropagation()}>
             <div className="title-bar">
               <div className="title-bar-text">More</div>
+              <div className="xp-mobile-panel-actions">
+                <button
+                  type="button"
+                  className="xp-mobile-close"
+                  aria-label="Close More"
+                  onClick={onToggleMenu}
+                >
+                  &#10005;
+                </button>
+              </div>
             </div>
             <div className="window-body xp-mobile-launcher-body">
               <div className="xp-mobile-launch-section">
@@ -1023,8 +1034,9 @@ function DesktopShim(): React.ReactElement {
           AI researcher working on medical AI, human–AI interaction, and biomedical knowledge
           graphs. Most recently a research intern at the Laboratory of Medical Imaging and
           Computation, Massachusetts General Hospital and Harvard Medical School, where I built
-          BiomeTrail — a provenance-gated biomedical knowledge graph. Studying Data Science and
-          Finance at the University of Illinois Urbana-Champaign.
+          BiomeTrail — a provenance-gated biomedical knowledge graph. Two papers from that work
+          were accepted as posters at NeurIPS 2026 workshops (GenAI4Health and AI4Science).
+          Studying Data Science and Finance at the University of Illinois Urbana-Champaign.
         </p>
         <p>
           The full site is an interactive Windows XP desktop and needs JavaScript. These pages

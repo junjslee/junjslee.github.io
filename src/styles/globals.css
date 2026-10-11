@@ -2347,7 +2347,8 @@ a {
 /* Mobile title-bar close control — a real target, not a 16px XP hit box.
    xp.css sets `.title-bar button` with a background sprite and fixed
    dimensions, so this has to out-specify it and clear the image. */
-.xp-mobile-panel .title-bar .xp-mobile-close {
+.xp-mobile-panel .title-bar .xp-mobile-close,
+.xp-mobile-launcher .title-bar .xp-mobile-close {
   min-width: 30px;
   min-height: 26px;
   display: inline-flex;
@@ -2366,7 +2367,8 @@ a {
   cursor: pointer;
 }
 
-.xp-mobile-panel .title-bar .xp-mobile-close:active {
+.xp-mobile-panel .title-bar .xp-mobile-close:active,
+.xp-mobile-launcher .title-bar .xp-mobile-close:active {
   filter: brightness(0.9);
 }
 
