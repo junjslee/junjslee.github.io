@@ -1,20 +1,19 @@
-<!-- status: live · reviewed_as_of: 2026-09-22 · REPLACE-form handoff, never append -->
+<!-- status: live · reviewed_as_of: 2026-10-11 · REPLACE-form handoff, never append -->
 # Next Steps
 
 ## Status
 **Deployed and verified live** at https://junjslee.github.io.
-`main` = `origin/main` = `cd1a692`. Nothing is in flight.
+`main` = `origin/main` (deploy commit `6177df9`). Nothing is in flight.
 
-## Verified live
-- Latest deploy run `35758293295` concluded **success** (earlier runs `35692523975`,
-  `35692777482`, `35756174292` also success).
-- `lang="en"` present; zero `emailjs` references in the served page; `/404.html` titled
-  "Page not found — Junseong Lee"; `/writing/` and `/writing/post-1/` return **404**;
-  `2_evening.gif` returns 404 while `2_evening.webp` returns 200; sitemap down to 3 URLs.
-- `/images/gif/4_night_drive.gif` also returns 404. Export weight across the two passes:
-  **12MB → 3.8MB → 2.9MB**.
-- Home page crawlable body text **674 chars** with an `<h1>` and 3 JSON-LD blocks (was 1 char).
-- Checked routes and assets return 200.
+## Verified live (2026-10-11)
+- Deploy run `38182550752` concluded **success** on `6177df9`.
+- Wallpaper rotation is evening → Bliss → totoro: `4_bliss.webp` returns 200,
+  `3_night_cityview.webp` returns 404. The Bliss source JPEG lives unexported in `archive/wallpapers/`.
+- Mobile **More** launcher has a `✕` close control (closes More only; checked in a 400px frame).
+- NeurIPS 2026 workshop papers shown as **accepted posters** on `/research`, the explorer, About and
+  the home shim.
+- Visibility: `/research` serves 3 `ScholarlyArticle` blocks (one per paper plus the Medical Physics
+  publication); `Person` carries `alternateName` `Jun Lee` / `junjslee`; descriptions name the posters.
 
 ## Open items
 1. **"Listen to my mixes"** — the operator will supply the URL. Add a `mixes` entry to
@@ -25,7 +24,12 @@
 3. **Publication record is understated** — the resume lists two npj Digital Medicine manuscripts and
    four presentations that `/research` does not carry. Deliberately not invented; needs the
    operator's call on what to surface.
-4. Backlog: startup chime, Cmd/Ctrl+K palette. No analytics is installed, so there is no
+4. **Search Console** — the single biggest visibility lever left is operator-only: verify the site in
+   Google Search Console (HTML-file or meta-tag method), submit `sitemap.xml`, and request indexing
+   of `/` and `/research/`. Also add the site URL to the GitHub profile, LinkedIn and Google Scholar /
+   ORCID if they exist — inbound links from those profiles are what raises ranking for the name. If
+   the operator shares Scholar/ORCID URLs, add them to `SITE_SAME_AS` in `src/lib/site.ts`.
+5. Backlog: startup chime, Cmd/Ctrl+K palette. No analytics is installed, so there is no
    measurement of what visitors actually open.
 
 **Closed by the operator:** BiomeTrail stays behind Cloudflare Access on purpose — the journal
@@ -69,8 +73,11 @@ git push origin main && gh run watch "$(gh run list --limit 1 --json databaseId 
 - The contact form has **no send service** and is not supposed to have one: it builds a `mailto:`
   draft. Do not reintroduce EmailJS without also setting the three repository secrets, or it will
   silently fall through again.
-- Wallpapers are **lossless** animated WebP. The art is palette-based, so lossless beats both GIF
-  and lossy WebP; re-encoding lossy makes them larger and adds artefacts.
+- Animated wallpapers are **lossless** WebP (palette art: lossless beats GIF and lossy WebP). The
+  exception is `4_bliss.webp`, a still that arrived as JPEG — it is lossy q90, because lossless
+  re-encoding of JPEG artefacts only preserves them at 2.6× the size.
+- A local `chore(chkpt)` hook can auto-commit untracked files to `main` mid-session. Check
+  `git log origin/main..` before pushing; on 2026-10-11 it had committed a 460KB source JPEG.
 - `clampWindowToViewport` clamps **position only, never size**. Clamping size wrote the shrunken
   values back through the persistence effect, so one phone-width visit left desktop windows stuck
   small. Do not reintroduce a size clamp there.
