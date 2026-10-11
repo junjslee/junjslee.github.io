@@ -31,7 +31,7 @@ const ProjectsPage: NextPage = () => {
 
   return (
     <ContentPageLayout
-      title="Projects — Junseong Lee"
+      title="Junseong Lee — Projects"
       description="Projects by Junseong Lee across software, machine learning, quantitative analysis, and applied systems work."
       canonicalPath="/projects/"
       heading="Projects"

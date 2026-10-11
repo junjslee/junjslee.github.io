@@ -13,7 +13,9 @@
 - NeurIPS 2026 workshop papers shown as **accepted posters** on `/research`, the explorer, About and
   the home shim.
 - Visibility: `/research` serves 3 `ScholarlyArticle` blocks (one per paper plus the Medical Physics
-  publication); `Person` carries `alternateName` `Jun Lee` / `junjslee`; descriptions name the posters.
+  publication); descriptions name the posters.
+- Name search: every page title leads with the full name **Junseong Lee** (home adds "(Jun Lee)");
+  `Person.alternateName` lists `Jun Lee`, `Jun Seong Lee`, `Jun-Seong Lee`, `JunSeong Lee`, `junjslee`.
 
 ## Open items
 1. **"Listen to my mixes"** — the operator will supply the URL. Add a `mixes` entry to

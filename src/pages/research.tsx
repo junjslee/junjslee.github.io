@@ -55,7 +55,7 @@ const ResearchPage: NextPage = () => {
 
   return (
     <ContentPageLayout
-      title="Research — Junseong Lee"
+      title="Junseong Lee — Research & Publications"
       description="Research by Junseong Lee: BiomeTrail (two NeurIPS 2026 workshop posters), neonatal pneumoperitoneum human-AI study, and medical imaging publications."
       canonicalPath="/research/"
       heading="Research"

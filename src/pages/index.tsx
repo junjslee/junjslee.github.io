@@ -9,7 +9,7 @@ const Home: NextPage = () => {
     '@type': 'Person',
     '@id': `${SITE_URL}/#person`,
     name: SITE_NAME,
-    alternateName: ['Jun Lee', 'junjslee'],
+    alternateName: ['Jun Lee', 'Jun Seong Lee', 'Jun-Seong Lee', 'JunSeong Lee', 'junjslee'],
     givenName: 'Junseong',
     familyName: 'Lee',
     url: SITE_URL,
@@ -59,7 +59,7 @@ const Home: NextPage = () => {
     '@type': 'ProfilePage',
     '@id': `${SITE_URL}/#profilepage`,
     url: SITE_URL,
-    name: `${SITE_NAME} — AI Researcher`,
+    name: `${SITE_NAME} (Jun Lee) — AI Researcher`,
     isPartOf: { '@id': `${SITE_URL}/#website` },
     mainEntity: { '@id': `${SITE_URL}/#person` },
     hasPart: [
@@ -71,14 +71,14 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Junseong Lee — AI Researcher (Medical AI, Knowledge Graphs)</title>
+        <title>Junseong Lee (Jun Lee) — AI Researcher, Medical AI &amp; Knowledge Graphs</title>
         <meta name="description" content={SITE_DESCRIPTION} />
         <meta name="robots" content="index,follow,max-image-preview:large" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#2454bd" />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content={SITE_NAME} />
-        <meta property="og:title" content="Junseong Lee — AI Researcher" />
+        <meta property="og:title" content="Junseong Lee (Jun Lee) — AI Researcher" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content="The Junseong Lee portfolio, presented as a Windows XP desktop." />
@@ -87,7 +87,7 @@ const Home: NextPage = () => {
         <meta property="og:url" content={SITE_URL} />
         <meta property="og:image" content={SITE_IMAGE} />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Junseong Lee — AI Researcher" />
+        <meta name="twitter:title" content="Junseong Lee (Jun Lee) — AI Researcher" />
         <meta name="twitter:description" content={SITE_DESCRIPTION} />
         <meta name="twitter:image" content={SITE_IMAGE} />
         <link rel="canonical" href={SITE_URL} />
