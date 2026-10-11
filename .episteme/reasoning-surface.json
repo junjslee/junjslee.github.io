@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-10-11T22:55:00Z",
-  "core_question": "Which wallpaper leaves rotation, how does the new 4_windows_og_wallpaper join it, and what small changes (mobile More close, NeurIPS poster status, SEO visibility) ship in the same deploy?",
+  "timestamp": "2026-10-11T23:05:00Z",
+  "core_question": "How should the full name Junseong Lee and its spelling variants be strengthened in titles and structured data so name searches find the site?",
   "knowns": [
     "Wallpapers are deterministic one-per-day picks from WALLPAPER_OPTIONS; adding/removing entries changes which index each day maps to",
     "public/images/gif/4_windows_og_wallpaper.jpg is untracked and is the new wallpaper candidate",
@@ -18,43 +18,27 @@
   "patch_vs_refactor_evaluation": "Content and config edits inside the wallpaper option list, the mobile shell More panel, ResearchSection outputs, and head/meta files; no layer boundaries move, so patch is the proportionate posture",
   "blast_radius_map": [
     {
-      "surface": "src wallpaper config",
+      "surface": "src/pages titles and JSON-LD",
       "status": "needs_update"
     },
     {
-      "surface": "mobile shell component",
+      "surface": "docs/NEXT_STEPS.md",
       "status": "needs_update"
     },
     {
-      "surface": "ResearchSection.tsx",
-      "status": "needs_update"
-    },
-    {
-      "surface": "docs/NEXT_STEPS.md and docs/PROGRESS.md",
-      "status": "needs_update"
-    },
-    {
-      "surface": ".github/workflows",
+      "surface": "XP shell window labels",
       "status": "not-applicable",
-      "rationale": "deploy pipeline is unchanged"
+      "rationale": "client-rendered UI text does not affect crawled titles"
     }
   ],
   "sync_plan": [
     {
-      "surface": "src wallpaper config",
-      "action": "remove the named wallpaper, add the new one"
+      "surface": "src/pages titles and JSON-LD",
+      "action": "name-first titles, alternateName spelling variants"
     },
     {
-      "surface": "mobile shell component",
-      "action": "add close control to More panel"
-    },
-    {
-      "surface": "ResearchSection.tsx",
-      "action": "mark the two NeurIPS workshop papers as accepted posters"
-    },
-    {
-      "surface": "docs/NEXT_STEPS.md and docs/PROGRESS.md",
-      "action": "record the change and deploy evidence"
+      "surface": "docs/NEXT_STEPS.md",
+      "action": "record the change"
     }
   ],
   "deferred_discoveries": [],
