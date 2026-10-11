@@ -1,168 +1,62 @@
 {
-  "timestamp": "2026-09-22T16:52:31Z",
-  "core_question": "How do we fix the contact form that silently never sends, give the site a language and a real 404, and cut the wallpaper weight, without regressing the deployed build?",
+  "timestamp": "2026-10-11T22:55:00Z",
+  "core_question": "Which wallpaper leaves rotation, how does the new 4_windows_og_wallpaper join it, and what small changes (mobile More close, NeurIPS poster status, SEO visibility) ship in the same deploy?",
   "knowns": [
-    "gh secret list returns empty with exit 0, so no NEXT_PUBLIC_EMAILJS_* secret is set; the env vars are undefined at build time, isEmailJsConfigured is false, and every visitor's Send falls back to mailto",
-    "The fallback shows the visitor an internal-sounding line, 'Opened your email client because EmailJS is not configured in this environment', which a recruiter reads as a broken form",
-    "emailjs-com is a deprecated package superseded by @emailjs/browser, and it is bundled into the 70KB index chunk while never being reachable",
-    "out/index.html renders <html> with no lang attribute because the project has no src/pages/_document.tsx",
-    "out/404.html is the unstyled Next.js default titled '404: This page could not be found' with no link back to the site",
-    "The active wallpapers are animated GIFs at 507KB (2_evening) and 409KB (5_night_totoro), the heaviest first-paint assets on the site",
-    "The operator chose three of the four offered items and left the orphaned blog post alone, so Writing stays archived from the UI",
-    "Verified sound this pass: desktop icons carry tabIndex, aria-label and Enter/Space handling; every img has alt text; reduced-motion guards, robots.txt, sitemap and JSON-LD are all in place",
-    "main is at ecd6285, in sync with origin/main, tree clean, and the last deploy run 35756174292 concluded success"
+    "Wallpapers are deterministic one-per-day picks from WALLPAPER_OPTIONS; adding/removing entries changes which index each day maps to",
+    "public/images/gif/4_windows_og_wallpaper.jpg is untracked and is the new wallpaper candidate",
+    "Deploy is direct push to main triggering GitHub Actions Pages build"
   ],
   "unknowns": [
-    "If animated WebP conversion drops the wallpaper below acceptable quality, the visual check fails and the GIF has to be kept or re-encoded at a higher quality setting",
-    "Should a converted wallpaper fail to animate in the browser, PIL wrote a single-frame WebP and the loop parameters need to be passed explicitly",
-    "If npm run build exits non-zero after removing emailjs-com from package.json, an import of that module remains somewhere and the TypeScript error names the file",
-    "When the 404 route is added, if GitHub Pages still serves the default page for an unknown path then the export did not emit 404.html at the root and the deploy fails to pick it up",
-    "If the rendered html element still lacks lang after adding _document.tsx, the custom document was not picked up and accessibility tooling keeps reporting the error"
+    "If the build fails with an export error after editing WALLPAPER_OPTIONS, the referenced file path is wrong",
+    "If the new jpg exceeds 500 KB it should be re-encoded before it ships as a wallpaper"
   ],
   "assumptions": [
-    "Making mailto the intended contact path is the right call rather than wiring EmailJS, because the operator picked the removal option and a static site with no secret store gains little from a third-party sender",
-    "Animated WebP is safe to ship, because every browser that supports the container queries this site already relies on has supported animated WebP for longer",
-    "Rollback is cheap by construction: work lands as commits on main off a verified-green ecd6285, and git revert plus a push restores the deployed state within minutes"
+    "Image #3 in the operator message is the untracked 4_windows_og_wallpaper.jpg because it is the only new asset in the tree"
   ],
-  "disconfirmation": "If npm run build or npm run lint exits non-zero, or the rendered html element still has no lang attribute, or a converted wallpaper fails to animate in the browser, the change failed and does not get committed as shipped",
-  "verification_trace": {
-    "command": "npm run build && npm run lint && grep -c 'lang=\"en\"' out/index.html",
-    "threshold_observable": "exit code == 0 and match count >= 1",
-    "window_seconds": 600
-  },
-  "flaw_classification": "config-gap",
+  "disconfirmation": "If npm run build or npm run lint exits non-zero, or the live site returns 404 for the new wallpaper after deploy, the change is not complete",
   "posture_selected": "patch",
-  "patch_vs_refactor_evaluation": "Four independent local changes: src/components/ContactForm.tsx drops the emailjs-com import and the env reads in favour of the mailto path it already contains, package.json and .github/workflows/nextjs.yml drop the now-unused dependency and secret block, a new src/pages/_document.tsx supplies the lang attribute, a new src/pages/404.tsx replaces the framework default, and public/images/gif/* plus WALLPAPER_OPTIONS in XPDesktop.tsx swap GIF for WebP. No module boundary moves and no data shape changes, so patch rather than refactor.",
+  "patch_vs_refactor_evaluation": "Content and config edits inside the wallpaper option list, the mobile shell More panel, ResearchSection outputs, and head/meta files; no layer boundaries move, so patch is the proportionate posture",
   "blast_radius_map": [
     {
-      "surface": "src/components/ContactForm.tsx",
+      "surface": "src wallpaper config",
       "status": "needs_update"
     },
     {
-      "surface": "package.json",
+      "surface": "mobile shell component",
       "status": "needs_update"
     },
     {
-      "surface": ".github/workflows/nextjs.yml",
+      "surface": "ResearchSection.tsx",
       "status": "needs_update"
     },
     {
-      "surface": "src/pages/_document.tsx",
+      "surface": "docs/NEXT_STEPS.md and docs/PROGRESS.md",
       "status": "needs_update"
     },
     {
-      "surface": "src/pages/404.tsx",
-      "status": "needs_update"
-    },
-    {
-      "surface": "public/images/gif/",
-      "status": "needs_update"
-    },
-    {
-      "surface": "src/components/xp/XPDesktop.tsx",
-      "status": "needs_update"
-    },
-    {
-      "surface": "src/styles/globals.css",
-      "status": "needs_update"
-    },
-    {
-      "surface": "docs/REQUIREMENTS.md",
-      "status": "needs_update"
-    },
-    {
-      "surface": "docs/NEXT_STEPS.md",
-      "status": "needs_update"
-    },
-    {
-      "surface": "docs/PROGRESS.md",
-      "status": "needs_update"
-    },
-    {
-      "surface": "docs/EVENTS.md",
-      "status": "needs_update"
-    },
-    {
-      "surface": "public/sitemap.xml",
+      "surface": ".github/workflows",
       "status": "not-applicable",
-      "rationale": "404 is not a canonical route and no listed URL changes; the wallpaper is not a sitemap image entry"
-    },
-    {
-      "surface": "src/components/BlogSection.tsx",
-      "status": "not-applicable",
-      "rationale": "the operator left the orphaned blog post out of scope this turn, so Writing stays archived from the UI"
-    },
-    {
-      "surface": "src/components/ResearchSection.tsx",
-      "status": "not-applicable",
-      "rationale": "the publication backlog is a separate content decision the operator has not taken"
+      "rationale": "deploy pipeline is unchanged"
     }
   ],
   "sync_plan": [
     {
-      "surface": "src/components/ContactForm.tsx",
-      "action": "remove the emailjs import and env reads, make mailto the intended path, and rewrite the status copy so it reads as designed behaviour"
+      "surface": "src wallpaper config",
+      "action": "remove the named wallpaper, add the new one"
     },
     {
-      "surface": "package.json",
-      "action": "drop the deprecated emailjs-com dependency"
+      "surface": "mobile shell component",
+      "action": "add close control to More panel"
     },
     {
-      "surface": ".github/workflows/nextjs.yml",
-      "action": "remove the now-unused EMAILJS secret env block"
+      "surface": "ResearchSection.tsx",
+      "action": "mark the two NeurIPS workshop papers as accepted posters"
     },
     {
-      "surface": "src/pages/_document.tsx",
-      "action": "add a custom document supplying lang on the html element"
-    },
-    {
-      "surface": "src/pages/404.tsx",
-      "action": "add an XP-styled not-found page with a link back to the site"
-    },
-    {
-      "surface": "public/images/gif/",
-      "action": "convert the active animated GIFs to animated WebP and remove the GIF originals once verified"
-    },
-    {
-      "surface": "src/components/xp/XPDesktop.tsx",
-      "action": "point WALLPAPER_OPTIONS at the converted files"
-    },
-    {
-      "surface": "src/styles/globals.css",
-      "action": "style the not-found page as an XP error dialog"
-    },
-    {
-      "surface": "docs/REQUIREMENTS.md",
-      "action": "drop EmailJS from the tech stack and record mailto as the contact mechanism"
-    },
-    {
-      "surface": "docs/NEXT_STEPS.md",
-      "action": "REPLACE-form handoff recording the fixes and what remains"
-    },
-    {
-      "surface": "docs/PROGRESS.md",
-      "action": "record the findings, the fixes, and the measured before/after sizes"
-    },
-    {
-      "surface": "docs/EVENTS.md",
-      "action": "append exactly one row for this handoff"
+      "surface": "docs/NEXT_STEPS.md and docs/PROGRESS.md",
+      "action": "record the change and deploy evidence"
     }
   ],
-  "deferred_discoveries": [
-    {
-      "description": "One real blog post exists but is unreachable from anywhere in the site UI while still listed in the sitemap, so it is findable by search engines and not by visitors",
-      "observable": "If a visitor lands on /writing/post-1 from search and tries to navigate to the rest of the site, no in-page link takes them there",
-      "log_only_rationale": "The operator deliberately left this out of scope this turn; restoring or fully retiring Writing is their decision"
-    },
-    {
-      "description": "The resume lists two npj Digital Medicine manuscripts and four presentations that the live /research page does not carry",
-      "observable": "If the operator reviews /research and asks where the RSNA 2025 poster and the npj submissions are, this deferral is the reason",
-      "log_only_rationale": "Which unpublished work to surface is the operator's call while manuscripts are under review"
-    },
-    {
-      "description": "The explorer layout relies on CSS container queries and :has(), verified in Chrome only, so Safari and Firefox behaviour on the live site is still unconfirmed",
-      "observable": "If Safari or Firefox reports gridTemplateColumns on .xp-home-main with a single track at a window wider than 600px, the container query fails in that engine",
-      "log_only_rationale": "Cross-browser verification needs those browsers driven directly and is its own bounded task"
-    }
-  ]
+  "deferred_discoveries": [],
+  "flaw_classification": "other"
 }
