@@ -2309,6 +2309,43 @@ a {
   text-align: left;
 }
 
+/* Row type follows the list pane's own width, not a fixed size: a narrow
+   pane drops toward 12px so long titles fit in two lines, a wide one grows
+   toward 15px. The glyph is sized in em so it tracks the name. */
+.xp-home-browser,
+.xp-project-browser,
+.xp-research-browser {
+  container-type: inline-size;
+}
+
+.xp-home-row-title,
+.xp-project-row-title {
+  font-size: clamp(var(--fs-sm), 2.4cqi + 6px, 15px);
+}
+
+.xp-home-row-name,
+.xp-project-row-title {
+  text-wrap: pretty;
+}
+
+/* No line clamp: full paper titles run ~150 characters, and cutting them
+   mid-phrase hid exactly the words that distinguish one paper from another. */
+.xp-home-row-name {
+  display: block;
+  -webkit-line-clamp: unset;
+}
+
+.xp-home-row .xp-home-row-kind,
+.xp-project-row-kind {
+  font-size: clamp(10px, 1.2cqi + 7px, var(--fs-sm));
+}
+
+.xp-home-row-glyph {
+  width: 1.7em;
+  height: 1.7em;
+  font-size: 0.95em;
+}
+
 .xp-home-row-live {
   margin-left: var(--sp-2);
 }

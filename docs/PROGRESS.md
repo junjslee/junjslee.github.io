@@ -179,6 +179,17 @@ archived or discarded this sweep — `archive/writing/post-1.md` was added earli
   gradient (sprite cleared), clicking it closes More and keeps the panel; wallpaper resolves to
   `4_bliss.webp`; `/research` carries 3 `ScholarlyArticle` blocks.
 
+### 2026-10-21 — publication, public BiomeTrail, resume, fluid explorer rows
+
+- Neonatal study published in npj Digital Medicine: venue, year (2026), kind, summary and About
+  bullet updated; "Open Sandbox" replaced by "Open Publication" (doi.org link). Narrative-review
+  bullet now matches the resume ("manuscript in preparation for resubmission").
+- BiomeTrail is public: the "Private beta — access required" note removed.
+- `Resume.pdf` replaced with the current `resume_acad.pdf`, name kept.
+- Explorer row type scales with the list pane (12–15px via container units) and full titles show.
+- Verified: build + lint clean; `/research` serves 4 `ScholarlyArticle` blocks and no "Private beta";
+  in Chrome, no row name is clipped at 354px, and font measures 12 / 14.5 / 15px at 240 / 354 / 500px.
+
 ## Validation
 - `npm run build` — clean, 6/6 routes exported, CSS hash `b5c038d9e368cc6e` (2026-09-22)
 - `npm run lint` — no warnings or errors (2026-09-22)

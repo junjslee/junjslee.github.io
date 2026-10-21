@@ -34,8 +34,10 @@
 5. Backlog: startup chime, Cmd/Ctrl+K palette. No analytics is installed, so there is no
    measurement of what visitors actually open.
 
-**Closed by the operator:** BiomeTrail stays behind Cloudflare Access on purpose — the journal
-manuscript is unpublished and the wall is deliberate protection. The `ubuntu-latest` CI annotation
+**Closed by the operator:** BiomeTrail is public as of 2026-10-21 (the Cloudflare Access wall and
+the "Private beta" note are gone). The neonatal pneumoperitoneum paper is published in npj Digital
+Medicine (`10.1038/s41746-026-03399-3`); its "Open Sandbox" button became "Open Publication", since the
+sandbox is reachable from the paper and the repository. The `ubuntu-latest` CI annotation
 is not actionable here: this workflow pins Node through `actions/setup-node` and only runs a static
 build, so the runner image migration does not affect it.
 
@@ -55,6 +57,12 @@ git push origin main && gh run watch "$(gh run list --limit 1 --json databaseId 
 ```
 
 ## Handoff notes
+- Explorer row text sizes from the **list pane's** width (`cqi`, 12→15px; the browser panes are
+  inline-size containers). Row names are not line-clamped: paper titles run ~150 characters.
+- `ResearchEntry.doi` (bare DOI) makes `/research` emit that item as a `ScholarlyArticle` with a DOI
+  `identifier` and a doi.org `url`.
+- `public/documents/Resume.pdf` is a copy of `~/Documents/personal/resumes/resume_acad.pdf`; replace
+  the file in place to update it, never rename it (desktop icon, About and the shim link that path).
 - **Design tokens live at the top of `src/styles/globals.css`.** Add colours and sizes there, not
   inline — removing ~40 one-off hex values was the point of this pass.
 - `xp.css` sets `h1{font-size:5rem}` / `h2{font-size:2.5rem}` **globally**. Any new standalone page

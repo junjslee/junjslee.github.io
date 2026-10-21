@@ -1,46 +1,14 @@
 {
-  "timestamp": "2026-10-11T23:05:00Z",
-  "core_question": "How should the full name Junseong Lee and its spelling variants be strengthened in titles and structured data so name searches find the site?",
-  "knowns": [
-    "Wallpapers are deterministic one-per-day picks from WALLPAPER_OPTIONS; adding/removing entries changes which index each day maps to",
-    "public/images/gif/4_windows_og_wallpaper.jpg is untracked and is the new wallpaper candidate",
-    "Deploy is direct push to main triggering GitHub Actions Pages build"
-  ],
-  "unknowns": [
-    "If the build fails with an export error after editing WALLPAPER_OPTIONS, the referenced file path is wrong",
-    "If the new jpg exceeds 500 KB it should be re-encoded before it ships as a wallpaper"
-  ],
-  "assumptions": [
-    "Image #3 in the operator message is the untracked 4_windows_og_wallpaper.jpg because it is the only new asset in the tree"
-  ],
-  "disconfirmation": "If npm run build or npm run lint exits non-zero, or the live site returns 404 for the new wallpaper after deploy, the change is not complete",
+  "timestamp": "2026-10-21T21:23:23Z",
+  "core_question": "How should the site reflect the published npj Digital Medicine neonatal paper, the now-public BiomeTrail, the new resume, and dynamic text fitting in explorer rows?",
+  "knowns": ["researchEntries[] in ResearchSection.tsx is the single source for explorer, windows and /research SEO page, so editing it propagates to all three", "BiomeTrail liveNote carries the Private beta badge text which the operator says is no longer true", "Resume is served from public/ as resume_acad.pdf"],
+  "unknowns": ["If npm run build fails with a type error after removing liveNote or sandbox fields, the entry shape needs adjustment", "If explorer row titles still wrap to 3+ lines at 600px window width, the font clamp needs a smaller minimum"],
+  "assumptions": ["The DOI link resolves publicly to the Nature npj Digital Medicine article page", "Operator wants the existing resume filename kept so external links stay valid"],
+  "disconfirmation": "If the built /research page still contains the string 'Private beta' or 'sandbox' link text, or npm run lint exits non-zero, the change is incomplete",
+  "flaw_classification": "stale-artifact",
   "posture_selected": "patch",
-  "patch_vs_refactor_evaluation": "Content and config edits inside the wallpaper option list, the mobile shell More panel, ResearchSection outputs, and head/meta files; no layer boundaries move, so patch is the proportionate posture",
-  "blast_radius_map": [
-    {
-      "surface": "src/pages titles and JSON-LD",
-      "status": "needs_update"
-    },
-    {
-      "surface": "docs/NEXT_STEPS.md",
-      "status": "needs_update"
-    },
-    {
-      "surface": "XP shell window labels",
-      "status": "not-applicable",
-      "rationale": "client-rendered UI text does not affect crawled titles"
-    }
-  ],
-  "sync_plan": [
-    {
-      "surface": "src/pages titles and JSON-LD",
-      "action": "name-first titles, alternateName spelling variants"
-    },
-    {
-      "surface": "docs/NEXT_STEPS.md",
-      "action": "record the change"
-    }
-  ],
-  "deferred_discoveries": [],
-  "flaw_classification": "other"
+  "patch_vs_refactor_evaluation": "Content edits to ResearchSection.tsx data entries, a binary copy of the resume PDF into public/, and a CSS tweak to explorer row typography in globals.css; no component structure changes are needed",
+  "blast_radius_map": [{"surface": "src/components/sections/ResearchSection.tsx", "status": "needs_update"}, {"surface": "src/styles/globals.css", "status": "needs_update"}, {"surface": "public/resume_acad.pdf", "status": "needs_update"}, {"surface": "docs/NEXT_STEPS.md", "status": "needs_update"}, {"surface": "src/pages/research.tsx JSON-LD", "status": "needs_update"}, {"surface": ".github/workflows", "status": "not-applicable", "rationale": "deploy pipeline unaffected by content edits"}],
+  "sync_plan": [{"surface": "src/components/sections/ResearchSection.tsx", "action": "replace sandbox link with publication DOI, drop private beta note"}, {"surface": "src/styles/globals.css", "action": "make explorer row title sizing fluid"}, {"surface": "public/resume_acad.pdf", "action": "copy new resume over existing name"}, {"surface": "docs/NEXT_STEPS.md", "action": "record publication and BiomeTrail public status"}, {"surface": "src/pages/research.tsx JSON-LD", "action": "add DOI to ScholarlyArticle if present"}],
+  "deferred_discoveries": []
 }

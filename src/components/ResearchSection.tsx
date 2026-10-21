@@ -13,6 +13,8 @@ export interface ResearchEntry {
   liveLabel?: string
   /** Shown beside the live link when it is not openly reachable. */
   liveNote?: string
+  /** Bare DOI (no resolver prefix) once the paper is published. */
+  doi?: string
   /** Papers that came out of one line of work. */
   outputs?: Array<{ title: string; venue: string }>
   authors?: string
@@ -43,22 +45,22 @@ export const researchEntries: ResearchEntry[] = [
     linkLabel: 'Open BiomeTrail',
     liveLink: 'https://biometrail.com',
     liveLabel: 'Open BiomeTrail',
-    liveNote: 'Private beta — access required',
     image: '/images/projects/biometrail.webp',
     imageAlt:
       'BiomeTrail interface: a 3D typed knowledge graph on the left, and an evidence panel on the right showing a microbe-produces-metabolite edge with its grounded identifiers, verbatim source sentence, and PubMed citation.',
   },
   {
     title: 'Expertise modulates automation bias and sentinel behavior in human-AI collaborative diagnosis of neonatal pneumoperitoneum',
-    year: '2025',
+    year: '2026',
     href: 'https://github.com/junjslee/neonatal-ai-reliability',
-    kind: 'First-Author Research',
-    venue: 'npj Digital Medicine (under revision)',
+    kind: 'First-Author Publication',
+    venue: 'npj Digital Medicine',
     summary:
-      'A multi-reader, multi-case crossover study of how radiologists of differing expertise respond to a reliable versus an error-injected AI collaborator on cross-table lateral radiographs. The model is RAD-DINO (DINOv2 ViT-B/14) adapted with LoRA adapters (r=12) on the frozen backbone plus a trainable classification head, reaching AUC 0.948 on multi-center external validation. The public repository is the official codebase for the study, and an open educational sandbox lets students and residents practice AI-collaborative cognitive conflicts. Presented at RSNA 2025.',
+      'A multi-reader, multi-case crossover study of how radiologists of differing expertise respond to a reliable versus an error-injected AI collaborator on cross-table lateral radiographs. The model is RAD-DINO (DINOv2 ViT-B/14) adapted with LoRA adapters (r=12) on the frozen backbone plus a trainable classification head, reaching AUC 0.948 on multi-center external validation. Published in npj Digital Medicine; the public repository is the official codebase and links the open educational sandbox where students and residents practice AI-collaborative cognitive conflicts. Presented at RSNA 2025.',
     linkLabel: 'Open Repository',
-    liveLink: 'https://neonatal-ai-sandbox.pages.dev/',
-    liveLabel: 'Open Sandbox',
+    liveLink: 'https://doi.org/10.1038/s41746-026-03399-3',
+    liveLabel: 'Open Publication',
+    doi: '10.1038/s41746-026-03399-3',
     image: '/images/projects/rad-dino-architecture.webp',
     imageAlt:
       'Model architecture: a lateral-view abdominal radiograph is patch-embedded into a frozen RAD-DINO (DINOv2 ViT-B/14) backbone whose transformer blocks carry trainable LoRA adapters on the query and value projections; the CLS token feeds a trainable two-layer classification head ending in a sigmoid with a Youden threshold.',
@@ -68,6 +70,7 @@ export const researchEntries: ResearchEntry[] = [
     year: '2026',
     href: 'https://aapm.onlinelibrary.wiley.com/doi/10.1002/mp.70285',
     kind: 'Publication',
+    doi: '10.1002/mp.70285',
     venue: 'Medical Physics',
     summary:
       'Co-authored paper on a cascade deep learning framework for shoulder Grashey radiographs. Stage 1 uses RetinaNet with a ResNet101 backbone to propose 14 anatomical regions of interest; stage 2 runs a U-Net with an EfficientNet-Lite4 backbone and SCSE decoder blocks over each ROI, accumulating 14 landmark predictions that are then used to score view positioning. Validated across two centers.',

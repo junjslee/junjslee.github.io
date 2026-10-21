@@ -12,10 +12,11 @@ const ResearchPage: NextPage = () => {
       '@type': 'ListItem',
       position: index + 1,
       item: {
-        '@type': entry.kind === 'Publication' ? 'ScholarlyArticle' : 'CreativeWork',
+        '@type': entry.doi ? 'ScholarlyArticle' : 'CreativeWork',
         name: entry.title,
         description: entry.summary,
-        url: entry.href ?? entry.liveLink ?? `${SITE_URL}/research/`,
+        url: entry.doi ? `https://doi.org/${entry.doi}` : entry.href ?? entry.liveLink ?? `${SITE_URL}/research/`,
+        ...(entry.doi ? { identifier: { '@type': 'PropertyValue', propertyID: 'DOI', value: entry.doi } } : {}),
         datePublished: entry.year,
         isPartOf: entry.venue,
         ...(entry.image ? { image: `${SITE_URL}${entry.image}` } : {}),

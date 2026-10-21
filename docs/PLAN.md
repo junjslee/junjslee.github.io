@@ -19,8 +19,6 @@ metadata) shipped; back in maintenance mode until the operator flags the next ch
 - The explorer's side-by-side layout uses CSS container queries and `:has()`. Both are supported in
   Chrome 105+/Safari 16+/Firefox 110+; older browsers fall back to the stacked layout, which is still
   an improvement on the previous nested-scroll version. Not yet checked in Safari or Firefox.
-- `biometrail.com` sits behind Cloudflare Access by the operator's decision, protecting an
-  unpublished journal manuscript. The link carries a "Private beta — access required" note.
 - The "Listen to my mixes" entry is still pending a URL from the operator.
 - The contact form deliberately has no sender. If a future change wants real delivery it needs a
   hosted endpoint, not an environment variable.

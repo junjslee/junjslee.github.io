@@ -46,8 +46,8 @@ const roles: Role[] = [
     dates: 'Feb 2025 – Feb 2026',
     location: 'Seoul, South Korea',
     bullets: [
-      'First-authored a human–AI interaction study on neonatal pneumoperitoneum diagnosis (RAD-DINO fine-tuned with LoRA; AUC 0.948 on multi-center external validation), designing a multi-reader crossover with an error-injected model to quantify automation bias. Presented at RSNA 2025; manuscript under revision at npj Digital Medicine.',
-      'First-authored a narrative review formalizing behavioral acceptability and role separation for clinical AI (under review at npj Digital Medicine).',
+      'First-authored a human–AI interaction study on neonatal pneumoperitoneum diagnosis (RAD-DINO fine-tuned with LoRA; AUC 0.948 on multi-center external validation), designing a multi-reader crossover with an error-injected model to quantify automation bias. Presented at RSNA 2025; published in npj Digital Medicine (2026).',
+      'First-authored a narrative review formalizing behavioral acceptability and role separation for clinical AI (manuscript in preparation for resubmission).',
       'Developed and launched an open-source educational sandbox for medical students and residents to practice AI-collaborative cognitive conflicts.',
       'Engineered an imbalance-aware batch sampler for the vision-transformer classifier that improved learning of rare disease patterns, increasing sensitivity by 23% at matched specificity.',
     ],
