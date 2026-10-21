@@ -1,21 +1,19 @@
-<!-- status: live · reviewed_as_of: 2026-10-11 · REPLACE-form handoff, never append -->
+<!-- status: live · reviewed_as_of: 2026-10-21 · REPLACE-form handoff, never append -->
 # Next Steps
 
 ## Status
 **Deployed and verified live** at https://junjslee.github.io.
-`main` = `origin/main` (deploy commit `6177df9`). Nothing is in flight.
+`main` = `origin/main` (deploy commit `8d841ac`). Nothing is in flight.
 
-## Verified live (2026-10-11)
-- Deploy run `38182550752` concluded **success** on `6177df9`.
-- Wallpaper rotation is evening → Bliss → totoro: `4_bliss.webp` returns 200,
-  `3_night_cityview.webp` returns 404. The Bliss source JPEG lives unexported in `archive/wallpapers/`.
-- Mobile **More** launcher has a `✕` close control (closes More only; checked in a 400px frame).
-- NeurIPS 2026 workshop papers shown as **accepted posters** on `/research`, the explorer, About and
-  the home shim.
-- Visibility: `/research` serves 3 `ScholarlyArticle` blocks (one per paper plus the Medical Physics
-  publication); descriptions name the posters.
-- Name search: every page title leads with the full name **Junseong Lee** (home adds "(Jun Lee)");
-  `Person.alternateName` lists `Jun Lee`, `Jun Seong Lee`, `Jun-Seong Lee`, `JunSeong Lee`, `junjslee`.
+## Verified live (2026-10-21)
+- Deploy run `39679464767` concluded **success** on `8d841ac`; live CSS is `css/6db4933d4e16396f.css`,
+  matching the local build.
+- `/research` carries the npj Digital Medicine DOI `10.1038/s41746-026-03399-3`, serves 4
+  `ScholarlyArticle` blocks (2 NeurIPS posters + 2 DOI papers) and 0 "Private beta" strings.
+- Live `/documents/Resume.pdf` is byte-identical to the current `resume_acad.pdf`.
+- Explorer row text scales 12→15px with the list pane; no row name is clipped (Chrome, local export).
+- Still true from 2026-10-11: Bliss wallpaper rotation, More `✕` close, full-name page titles and
+  `Person.alternateName`.
 
 ## Open items
 1. **"Listen to my mixes"** — the operator will supply the URL. Add a `mixes` entry to
@@ -23,8 +21,9 @@
 2. **Cross-browser** — the explorer layout uses container queries and `:has()`, verified in Chrome
    only. Check Safari and Firefox: if `.xp-home-main` reports a single grid track above 600px, the
    query failed and needs a fallback.
-3. **Publication record is understated** — the resume lists two npj Digital Medicine manuscripts and
-   four presentations that `/research` does not carry. Deliberately not invented; needs the
+3. **Publication record is understated** — the current resume lists a co-authored npj Digital
+   Medicine paper (under revision), a narrative review in preparation, and the IPR 2026 and RSNA 2025
+   posters, none of which `/research` carries. Deliberately not invented; needs the
    operator's call on what to surface.
 4. **Search Console** — the single biggest visibility lever left is operator-only: verify the site in
    Google Search Console (HTML-file or meta-tag method), submit `sitemap.xml`, and request indexing

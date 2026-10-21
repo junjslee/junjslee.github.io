@@ -1,8 +1,8 @@
-<!-- status: live · reviewed_as_of: 2026-09-22 · mandated by AGENTS.md -->
+<!-- status: live · reviewed_as_of: 2026-10-21 · mandated by AGENTS.md -->
 # Progress
 
 ## Last Updated
-- `2026-10-11`
+- `2026-10-21`
 
 ## Completed
 - Windows XP desktop shell (windows, taskbar, start menu, drag/resize, sound)
@@ -189,6 +189,8 @@ archived or discarded this sweep — `archive/writing/post-1.md` was added earli
 - Explorer row type scales with the list pane (12–15px via container units) and full titles show.
 - Verified: build + lint clean; `/research` serves 4 `ScholarlyArticle` blocks and no "Private beta";
   in Chrome, no row name is clipped at 354px, and font measures 12 / 14.5 / 15px at 240 / 354 / 500px.
+- Deployed `8d841ac` (checkpoint commit rewritten as a Conventional Commit before push); run
+  `39679464767` success; live `/research` and `Resume.pdf` re-checked against the build.
 
 ## Validation
 - `npm run build` — clean, 6/6 routes exported, CSS hash `b5c038d9e368cc6e` (2026-09-22)
@@ -198,4 +200,4 @@ archived or discarded this sweep — `archive/writing/post-1.md` was added earli
 - `/` crawlable body text measured at 674 chars with `<h1>` present and 3 JSON-LD blocks
 
 ## Blockers
-- None. Not yet deployed — the deploy decision is the operator's.
+- None. Deployed and verified live on 2026-10-21 (`8d841ac`).

@@ -1,9 +1,9 @@
-<!-- status: live · reviewed_as_of: 2026-10-11 -->
+<!-- status: live · reviewed_as_of: 2026-10-21 -->
 # Plan
 
 ## Current Goal
-None. The 2026-10-11 pass (wallpaper swap, mobile More close, NeurIPS poster status, visibility
-metadata) shipped; back in maintenance mode until the operator flags the next change.
+None. The 2026-10-21 pass (npj publication, public BiomeTrail, new resume, fluid explorer rows)
+shipped; back in maintenance mode until the operator flags the next change.
 
 ## Stages
 1. **Explore** — understand current state
