@@ -5,7 +5,8 @@ export const SITE_DESCRIPTION =
 /** Landscape card for link previews. A portrait crops badly at 1.91:1. */
 export const SITE_IMAGE = `${SITE_URL}/images/og-card.jpg`
 export const SITE_PORTRAIT = `${SITE_URL}/images/hero.jpg`
-export const YOUTUBE_CHANNEL_URL = 'https://www.youtube.com/@junseong652'
+export const YOUTUBE_CHANNEL_HANDLE = '@seong652'
+export const YOUTUBE_CHANNEL_URL = 'https://www.youtube.com/channel/UCipZPq9_lNdBmdD_qvuT93g'
 
 export const SITE_SAME_AS = [
   'https://github.com/junjslee',

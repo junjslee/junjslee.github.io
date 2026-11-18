@@ -1,9 +1,10 @@
-<!-- status: live · reviewed_as_of: 2026-11-17 -->
+<!-- status: live · reviewed_as_of: 2026-11-18 -->
 # Plan
 
 ## Current Goal
-Add a YouTube shortcut to the XP desktop and mobile launcher, and feature SEØNG under
-“Listen to my mixes” in the existing portfolio explorer.
+Show both SEØNG mixes with clickable thumbnails, switch the display handle to `@seong652`,
+alternate the evening and Totoro wallpapers, link the official NeurIPS poster listings,
+remove the publication's LIVE badge, and replace the academic resume.
 
 ## Stages
 1. **Explore** — understand current state
@@ -13,7 +14,7 @@ Add a YouTube shortcut to the XP desktop and mobile launcher, and feature SEØNG
 5. **Handoff** — update docs
 
 ## Active Stage
-- Local verification complete. Publish via GitHub Pages and check the public homepage.
+- Local verification complete. The Pages workflow publishes from `main`.
 
 ## Risks And Unknowns
 - The explorer's side-by-side layout uses CSS container queries and `:has()`. Both are supported in

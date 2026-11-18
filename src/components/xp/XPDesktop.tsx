@@ -134,14 +134,8 @@ const INITIAL_Z = 40;
 const DESKTOP_STATE_STORAGE_KEY = 'junlee-xp-desktop-state-v1';
 const CRT_STORAGE_KEY = 'junlee-xp-crt-v1';
 const WINDOW_IDS: InternalWindowId[] = ['about', 'home', 'contact'];
-/* Lossless animated WebP. The pixel art is palette-based, so lossless beats
-   both GIF and lossy WebP on size without touching a single pixel — 995KB of
-   GIF became 181KB. The Bliss tribute arrived as a still JPEG, so it is
-   lossy WebP: re-encoding JPEG artefacts losslessly only preserves them. */
 const WALLPAPER_OPTIONS = [
-  // '/images/gif/1_day.webp',
   '/images/gif/2_evening.webp',
-  '/images/gif/4_bliss.webp',
   '/images/gif/5_night_totoro.webp',
 ] as const;
 const DEFAULT_WALLPAPER = WALLPAPER_OPTIONS[0];
@@ -370,8 +364,7 @@ function formatClock(date: Date): string {
   });
 }
 
-function chooseDailyWallpaper(): string {
-  const now = new Date();
+function chooseDailyWallpaper(now: Date): string {
   const dayIndex = Math.floor(
     Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) / 86400000
   );
@@ -1110,13 +1103,18 @@ const XPDesktop: React.FC = () => {
     setHasMountedClient(true);
     setCrtEnabled(readCrtChoice());
 
-    const selectedWallpaper = chooseDailyWallpaper();
+    let selectedWallpaper = chooseDailyWallpaper(initialNow);
     setWallpaper(selectedWallpaper);
     warmWallpaperCache(selectedWallpaper);
 
     const timer = window.setInterval(() => {
       const now = new Date();
       setClock(formatClock(now));
+      const nextWallpaper = chooseDailyWallpaper(now);
+      if (nextWallpaper !== selectedWallpaper) {
+        selectedWallpaper = nextWallpaper;
+        setWallpaper(nextWallpaper);
+      }
     }, 1000);
 
     return () => {

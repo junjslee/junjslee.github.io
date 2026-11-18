@@ -37,7 +37,7 @@ const ResearchPage: NextPage = () => {
       name: output.title,
       isPartOf: output.venue,
       datePublished: entry.year,
-      url: `${SITE_URL}/research/`,
+      url: output.href ?? `${SITE_URL}/research/`,
       about: entry.title,
       author: (entry.authors ?? 'Junseong Lee')
         .split(', ')
@@ -107,7 +107,9 @@ const ResearchPage: NextPage = () => {
                 <ul>
                   {entry.outputs.map((output) => (
                     <li key={output.title}>
-                      {output.title}
+                      {output.href ? (
+                        <a href={output.href} target="_blank" rel="noopener noreferrer">{output.title}</a>
+                      ) : output.title}
                       <span className="seo-entry-note"> — {output.venue}</span>
                     </li>
                   ))}

@@ -1,10 +1,11 @@
-<!-- status: live · reviewed_as_of: 2026-11-17 · REPLACE-form handoff, never append -->
+<!-- status: live · reviewed_as_of: 2026-11-18 · REPLACE-form handoff, never append -->
 # Next Steps
 
 ## Status
-SEØNG is available through the desktop YouTube icon, mobile More, and the portfolio’s “Listen to
-my mixes” folder. The production build and Chrome interaction checks passed locally. Check the
-GitHub Pages workflow and confirm the channel link on the public homepage after pushing.
+The hobby folder shows two direct YouTube links with thumbnails. The visible handle is
+`@seong652` and channel shortcuts use the permanent channel URL. The XP desktop and mobile
+alternate between evening and Totoro each local day. The research explorer and `/research/`
+link both official NeurIPS listings, and the npj paper keeps its publication and repository links.
 
 ## Verified live (2026-10-21)
 - Deploy run `39679464767` concluded **success** on `8d841ac`; live CSS is `css/6db4933d4e16396f.css`,
@@ -13,7 +14,7 @@ GitHub Pages workflow and confirm the channel link on the public homepage after 
   `ScholarlyArticle` blocks (2 NeurIPS posters + 2 DOI papers) and 0 "Private beta" strings.
 - Live `/documents/Resume.pdf` is byte-identical to the current `resume_acad.pdf`.
 - Explorer row text scales 12→15px with the list pane; no row name is clipped (Chrome, local export).
-- Still true from 2026-10-11: Bliss wallpaper rotation, More `✕` close, full-name page titles and
+- Still true from 2026-10-11: More `✕` close, full-name page titles and
   `Person.alternateName`.
 
 ## Open items
@@ -59,7 +60,7 @@ git push origin main && gh run watch "$(gh run list --limit 1 --json databaseId 
   inline-size containers). Row names are not line-clamped: paper titles run ~150 characters.
 - `ResearchEntry.doi` (bare DOI) makes `/research` emit that item as a `ScholarlyArticle` with a DOI
   `identifier` and a doi.org `url`.
-- `public/documents/Resume.pdf` is a copy of `~/Documents/personal/resumes/resume_acad.pdf`; replace
+- `public/documents/Resume.pdf` is a copy of `~/Documents/resumes/resume_acad.pdf`; replace
   the file in place to update it, never rename it (desktop icon, About and the shim link that path).
 - **Design tokens live at the top of `src/styles/globals.css`.** Add colours and sizes there, not
   inline — removing ~40 one-off hex values was the point of this pass.

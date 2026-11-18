@@ -16,7 +16,7 @@ export interface ResearchEntry {
   /** Bare DOI (no resolver prefix) once the paper is published. */
   doi?: string
   /** Papers that came out of one line of work. */
-  outputs?: Array<{ title: string; venue: string }>
+  outputs?: Array<{ title: string; venue: string; href?: string }>
   authors?: string
   image?: string
   imageAlt?: string
@@ -34,10 +34,12 @@ export const researchEntries: ResearchEntry[] = [
       {
         title: 'Demo: Preserving Evidence, Context, and Disagreement in Mechanistic Microbe-Host Graph QA',
         venue: 'NeurIPS 2026 Workshop GenAI4Health · Demonstration Paper Track · Poster',
+        href: 'https://neurips.cc/virtual/2026/loc/sydney/177616',
       },
       {
         title: 'Bounded Verification and Asymmetric Recoverability in Biomedical Knowledge-Graph Construction',
         venue: 'NeurIPS 2026 Workshop AI4Science · Poster',
+        href: 'https://neurips.cc/virtual/2026/loc/sydney/156546',
       },
     ],
     authors:
@@ -151,7 +153,9 @@ const ResearchSection: React.FC = () => {
               <ul className="xp-list">
                 {selectedEntry.outputs.map((output) => (
                   <li key={output.title}>
-                    {output.title}
+                    {output.href ? (
+                      <a href={output.href} target="_blank" rel="noopener noreferrer">{output.title}</a>
+                    ) : output.title}
                     <span className="xp-subtle"> — {output.venue}</span>
                   </li>
                 ))}

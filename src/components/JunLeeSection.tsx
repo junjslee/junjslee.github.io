@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react'
-import { YOUTUBE_CHANNEL_URL } from '../lib/site'
+import { YOUTUBE_CHANNEL_HANDLE, YOUTUBE_CHANNEL_URL } from '../lib/site'
 
 function IEToolbar({ url, onGo }: { url: string; onGo: () => void }): React.ReactElement {
   return (
@@ -31,7 +31,7 @@ function getKindVisual(folder: FolderId, kind: string): KindVisual {
   return { icon: '▣', accent: '#546b8a' }
 }
 import { projects } from './ProjectsSection'
-import { researchEntries } from './ResearchSection'
+import { researchEntries, type ResearchEntry } from './ResearchSection'
 
 type FolderId = 'projects' | 'research' | 'mixes'
 
@@ -47,7 +47,8 @@ interface ExplorerEntry {
   liveLink?: string
   liveLabel?: string
   liveNote?: string
-  outputs?: Array<{ title: string; venue: string }>
+  showLiveBadge?: boolean
+  outputs?: ResearchEntry['outputs']
   authors?: string
   image?: string
   imageAlt?: string
@@ -83,6 +84,7 @@ const explorerEntries: ExplorerEntry[] = [
     liveLink: project.liveLink,
     liveLabel: project.liveLabel,
     liveNote: project.liveNote,
+    showLiveBadge: Boolean(project.liveLink),
     image: project.image,
     imageAlt: project.imageAlt,
   })),
@@ -98,6 +100,7 @@ const explorerEntries: ExplorerEntry[] = [
     liveLink: entry.liveLink,
     liveLabel: entry.liveLabel,
     liveNote: entry.liveNote,
+    showLiveBadge: Boolean(entry.liveLink && !entry.doi),
     outputs: entry.outputs,
     authors: entry.authors,
     image: entry.image,
@@ -108,11 +111,16 @@ const explorerEntries: ExplorerEntry[] = [
     title: 'SEØNG',
     folder: 'mixes',
     kind: 'DJ mixes',
-    meta: '@junseong652',
+    meta: YOUTUBE_CHANNEL_HANDLE,
     summary: 'I DJ in my spare time and share mixes as SEØNG. Expect melodic house, techno, stutter house, and everything in between.',
-    actionLabel: 'Listen on YouTube',
+    actionLabel: 'View channel on YouTube',
     href: YOUTUBE_CHANNEL_URL,
   },
+]
+
+const mixes = [
+  { videoId: 'MKkbAn9Krrw', title: 'No. 2 · Melodic & Stutter House', thumbnail: '/images/mixes/mix-02.jpg' },
+  { videoId: 'DJCU3reYthY', title: 'No. 1 · Melodic House & Techno', thumbnail: '/images/mixes/mix-01.jpg' },
 ]
 
 const folderOrder: FolderId[] = ['research', 'projects', 'mixes']
@@ -187,45 +195,47 @@ const JunLeeSection: React.FC = () => {
               }}
             />
           )}
-        <div className="xp-home-main">
-          <div className="xp-pane xp-home-browser">
-            <div className="xp-listview-header">
-              <span>Name</span>
-              <span>{visibleEntries.length} item{visibleEntries.length === 1 ? '' : 's'}</span>
-            </div>
-            <div className="xp-home-list" role="listbox" aria-label={`${folderCopy[activeFolder].label} list`}>
-              {visibleEntries.map((entry) => {
-                const visual = getKindVisual(entry.folder, entry.kind)
-                return (
-                  <button
-                    key={entry.id}
-                    type="button"
-                    className={`xp-home-row${selectedEntry?.id === entry.id ? ' is-selected' : ''}`}
-                    onClick={() => setSelectedEntryId(entry.id)}
-                    onDoubleClick={() => openEntry(entry)}
-                    title={entry.title}
-                  >
-                    <span className="xp-home-row-title">
-                      <span
-                        className="xp-home-row-glyph"
-                        style={{ color: visual.accent, borderColor: visual.accent }}
-                        aria-hidden="true"
-                      >
-                        {visual.icon}
-                      </span>
-                      <span className="xp-home-row-copy">
-                        <span className="xp-home-row-name">
-                          {entry.title}
-                          {entry.liveLink ? <span className="xp-home-row-live">LIVE</span> : null}
+        <div className={`xp-home-main${activeFolder === 'mixes' ? ' is-mixes' : ''}`}>
+          {activeFolder !== 'mixes' && (
+            <div className="xp-pane xp-home-browser">
+              <div className="xp-listview-header">
+                <span>Name</span>
+                <span>{visibleEntries.length} item{visibleEntries.length === 1 ? '' : 's'}</span>
+              </div>
+              <div className="xp-home-list" role="listbox" aria-label={`${folderCopy[activeFolder].label} list`}>
+                {visibleEntries.map((entry) => {
+                  const visual = getKindVisual(entry.folder, entry.kind)
+                  return (
+                    <button
+                      key={entry.id}
+                      type="button"
+                      className={`xp-home-row${selectedEntry?.id === entry.id ? ' is-selected' : ''}`}
+                      onClick={() => setSelectedEntryId(entry.id)}
+                      onDoubleClick={() => openEntry(entry)}
+                      title={entry.title}
+                    >
+                      <span className="xp-home-row-title">
+                        <span
+                          className="xp-home-row-glyph"
+                          style={{ color: visual.accent, borderColor: visual.accent }}
+                          aria-hidden="true"
+                        >
+                          {visual.icon}
                         </span>
-                        <span className="xp-home-row-kind">{entry.kind}</span>
+                        <span className="xp-home-row-copy">
+                          <span className="xp-home-row-name">
+                            {entry.title}
+                            {entry.showLiveBadge ? <span className="xp-home-row-live">LIVE</span> : null}
+                          </span>
+                          <span className="xp-home-row-kind">{entry.kind}</span>
+                        </span>
                       </span>
-                    </span>
-                  </button>
-                )
-              })}
+                    </button>
+                  )
+                })}
+              </div>
             </div>
-          </div>
+          )}
 
           {selectedEntry ? (
             <article className="xp-pane xp-home-preview">
@@ -249,7 +259,7 @@ const JunLeeSection: React.FC = () => {
                   <div className="xp-research-chips">
                     <span className="xp-project-chip">{selectedEntry.kind}</span>
                     <span className="xp-project-chip">{selectedEntry.meta}</span>
-                    {selectedEntry.liveLink ? <span className="xp-project-chip is-live">LIVE</span> : null}
+                    {selectedEntry.showLiveBadge ? <span className="xp-project-chip is-live">LIVE</span> : null}
                   </div>
                 </div>
               </div>
@@ -266,13 +276,35 @@ const JunLeeSection: React.FC = () => {
                 </figure>
               ) : null}
               <p>{selectedEntry.summary}</p>
+              {activeFolder === 'mixes' && (
+                <ul className="xp-mix-list" aria-label="SEØNG mixes">
+                  {mixes.map((mix) => (
+                    <li key={mix.videoId}>
+                      <a
+                        href={`https://www.youtube.com/watch?v=${mix.videoId}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="xp-mix-card"
+                      >
+                        <span className="xp-mix-thumbnail">
+                          <img src={mix.thumbnail} alt="" width={320} height={180} />
+                          <span className="xp-mix-play" aria-hidden="true">▶</span>
+                        </span>
+                        <strong>{mix.title}</strong>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
               {selectedEntry.outputs ? (
                 <div className="xp-project-meta">
                   <strong>Papers from this work</strong>
                   <ul className="xp-list">
                     {selectedEntry.outputs.map((output) => (
                       <li key={output.title}>
-                        {output.title}
+                        {output.href ? (
+                          <a href={output.href} target="_blank" rel="noopener noreferrer">{output.title}</a>
+                        ) : output.title}
                         <span className="xp-subtle"> — {output.venue}</span>
                       </li>
                     ))}

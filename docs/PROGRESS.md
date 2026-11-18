@@ -1,8 +1,8 @@
-<!-- status: live · reviewed_as_of: 2026-11-17 · mandated by AGENTS.md -->
+<!-- status: live · reviewed_as_of: 2026-11-18 · mandated by AGENTS.md -->
 # Progress
 
 ## Last Updated
-- `2026-11-17`
+- `2026-11-18`
 
 ## Completed
 - Windows XP desktop shell (windows, taskbar, start menu, drag/resize, sound)
@@ -199,6 +199,15 @@ archived or discarded this sweep — `archive/writing/post-1.md` was added earli
 - Added “Listen to my mixes” to the portfolio explorer and reused its preview for the SEØNG hobby.
 - Kept desktop shortcuts in a single column so the About window cannot cover a wrapped icon.
 - Verified production build, lint, TypeScript, and the Chrome desktop and mobile launch paths.
+
+### 2026-11-18 — mix thumbnails, poster listings, and resume
+
+- Added both YouTube mix cards with the original thumbnails and individual watch links.
+- Displayed `@seong652` and switched channel shortcuts to the permanent YouTube channel URL.
+- Limited the wallpaper rotation to evening and Totoro, with rollover while the page is open.
+- Linked each BiomeTrail workshop paper to its official NeurIPS listing in the explorer and
+  on the research page. Removed the LIVE badge from the npj paper while retaining both actions.
+- Replaced the public resume with a byte-for-byte copy of the current academic resume.
 
 ## Validation
 - `npm run build` — clean, 6/6 routes exported, CSS hash `b5c038d9e368cc6e` (2026-09-22)

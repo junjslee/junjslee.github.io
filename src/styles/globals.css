@@ -2011,6 +2011,67 @@ a {
   min-height: 0;
 }
 
+.xp-home-main.is-mixes {
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+}
+
+.xp-mix-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 124px), 1fr));
+  gap: var(--sp-3);
+  max-width: 560px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.xp-mix-card {
+  display: block;
+  height: 100%;
+  border: 1px solid var(--line-1);
+  border-radius: 4px;
+  background: var(--surface-2);
+  color: var(--ink-1);
+  text-decoration: none;
+}
+
+.xp-mix-card:hover,
+.xp-mix-card:focus-visible {
+  border-color: var(--accent-strong);
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+  text-decoration: underline;
+}
+
+.xp-mix-thumbnail {
+  position: relative;
+  display: block;
+}
+
+.xp-mix-thumbnail img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 3px 3px 0 0;
+}
+
+.xp-mix-play {
+  position: absolute;
+  right: var(--sp-2);
+  bottom: var(--sp-2);
+  padding: var(--sp-1) var(--sp-2);
+  border-radius: 3px;
+  background: var(--ink-1);
+  color: var(--surface-1);
+  line-height: 1;
+}
+
+.xp-mix-card strong {
+  display: block;
+  padding: var(--sp-2);
+  line-height: var(--lh-tight);
+}
+
 .xp-home-browser,
 .xp-project-browser,
 .xp-research-browser {
