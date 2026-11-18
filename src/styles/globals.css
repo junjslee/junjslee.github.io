@@ -105,28 +105,35 @@ a {
 .xp-shortcuts {
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
   gap: var(--sp-2);
   align-items: flex-start;
-  align-content: flex-start;
-  width: 100px;
+  width: 76px;
   max-height: calc(100vh - 80px);
+  overflow-y: auto;
+  scrollbar-width: thin;
 }
 
 @media (max-height: 780px) and (min-width: 720px) {
   .xp-shortcuts {
-    flex-wrap: wrap;
-    width: 224px;
-    gap: 8px 10px;
+    gap: var(--sp-1);
   }
 
   .xp-shortcuts .xp-desktop-icon {
-    min-height: 84px;
+    min-height: 60px;
+    gap: var(--sp-1);
+    padding-block: var(--sp-1);
+  }
+
+  .xp-shortcuts .xp-desktop-icon .xp-icon-badge {
+    width: 34px;
+    height: 34px;
   }
 }
 
 .xp-desktop-icon {
-  width: 88px;
+  box-sizing: border-box;
+  width: 100%;
+  flex-shrink: 0;
   min-height: 80px;
   display: flex;
   flex-direction: column;

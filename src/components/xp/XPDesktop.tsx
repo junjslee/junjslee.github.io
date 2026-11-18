@@ -3,10 +3,12 @@ import Link from 'next/link';
 import AboutSection from '../AboutSection';
 import ContactSection from '../ContactSection';
 import JunLeeSection from '../JunLeeSection';
+import { YOUTUBE_CHANNEL_URL } from '../../lib/site';
 
 type InternalWindowId = 'about' | 'home' | 'contact';
-type ShortcutId = InternalWindowId | 'resume' | 'github' | 'linkedin';
-type IconKind = 'about' | 'home' | 'contact' | 'resume' | 'github' | 'linkedin';
+type ExternalShortcutId = 'resume' | 'github' | 'linkedin' | 'youtube';
+type ShortcutId = InternalWindowId | ExternalShortcutId;
+type IconKind = ShortcutId;
 type MobileSection = 'about' | 'work' | 'contact';
 type SoundName = 'open' | 'close' | 'minimize' | 'maximize' | 'click';
 
@@ -185,7 +187,7 @@ const SHORTCUTS: ShortcutDefinition[] = [
     id: 'home',
     label: 'Jun Lee',
     icon: 'home',
-    description: 'Browse research and projects.',
+    description: 'Browse research, projects, and DJ mixes.',
   },
   {
     id: 'contact',
@@ -214,9 +216,16 @@ const SHORTCUTS: ShortcutDefinition[] = [
     description: 'Professional profile and updates.',
     href: 'https://www.linkedin.com/in/junseong-lee',
   },
+  {
+    id: 'youtube',
+    label: 'YouTube',
+    icon: 'youtube',
+    description: 'YouTube channel for my SEØNG DJ mixes.',
+    href: YOUTUBE_CHANNEL_URL,
+  },
 ];
 
-const DESKTOP_SHORTCUT_IDS: ShortcutId[] = ['about', 'home', 'resume', 'contact', 'github', 'linkedin'];
+const DESKTOP_SHORTCUT_IDS: ShortcutId[] = ['about', 'home', 'resume', 'contact', 'github', 'linkedin', 'youtube'];
 const DESKTOP_SHORTCUTS = SHORTCUTS.filter((shortcut) => DESKTOP_SHORTCUT_IDS.includes(shortcut.id));
 
 interface PersistedDesktopState {
@@ -478,6 +487,13 @@ function DesktopGlyph({ icon }: { icon: IconKind }): React.ReactElement {
           <rect x="14" y="20" width="5" height="14" fill="#fff" />
           <circle cx="16.5" cy="15.5" r="2.5" fill="#fff" />
           <path d="M24 20h5v2c1-2 3-3 5-3 4 0 6 3 6 8v7h-5v-7c0-2-1-4-3-4-3 0-3 2-3 4v7h-5Z" fill="#fff" />
+        </svg>
+      );
+    case 'youtube':
+      return (
+        <svg viewBox="0 0 48 48" className="xp-desktop-glyph" aria-hidden="true">
+          <rect x="4" y="10" width="40" height="28" rx="8" fill="#e0002a" stroke="#a60020" strokeWidth="1.5" />
+          <path d="m20 17 12 7-12 7Z" fill="#fff" />
         </svg>
       );
   }
@@ -907,9 +923,7 @@ function MobileShell({
   onPrimeAudio,
   onOpenWork,
 }: MobileShellProps): React.ReactElement {
-  const menuShortcuts = shortcuts.filter(
-    (shortcut) => shortcut.id === 'resume' || shortcut.id === 'github' || shortcut.id === 'linkedin'
-  );
+  const menuShortcuts = shortcuts.filter((shortcut) => shortcut.href);
   const activePanel =
     activeSection === 'about'
       ? { title: 'about.txt', icon: 'about' as const, actionLabel: 'Open Work', onAction: onOpenWork }
@@ -1055,6 +1069,9 @@ function DesktopShim(): React.ReactElement {
           <li>
             <a href="https://github.com/junjslee">GitHub</a> ·{' '}
             <a href="https://www.linkedin.com/in/junseong-lee">LinkedIn</a>
+          </li>
+          <li>
+            <a href={YOUTUBE_CHANNEL_URL}>SEØNG on YouTube</a> — melodic house and techno DJ mixes
           </li>
         </ul>
       </div>
@@ -1363,7 +1380,7 @@ const XPDesktop: React.FC = () => {
     minimizeWindow(id);
   };
 
-  const openExternalShortcut = (id: Extract<ShortcutId, 'resume' | 'github' | 'linkedin'>) => {
+  const openExternalShortcut = (id: ExternalShortcutId) => {
     const shortcut = SHORTCUTS.find((entry) => entry.id === id);
     if (!shortcut?.href) {
       return;
@@ -1385,6 +1402,7 @@ const XPDesktop: React.FC = () => {
       case 'resume':
       case 'github':
       case 'linkedin':
+      case 'youtube':
         openExternalShortcut(id);
         return;
     }

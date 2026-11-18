@@ -1,8 +1,8 @@
-<!-- status: live · reviewed_as_of: 2026-10-21 · mandated by AGENTS.md -->
+<!-- status: live · reviewed_as_of: 2026-11-17 · mandated by AGENTS.md -->
 # Progress
 
 ## Last Updated
-- `2026-10-21`
+- `2026-11-17`
 
 ## Completed
 - Windows XP desktop shell (windows, taskbar, start menu, drag/resize, sound)
@@ -191,6 +191,14 @@ archived or discarded this sweep — `archive/writing/post-1.md` was added earli
   in Chrome, no row name is clipped at 354px, and font measures 12 / 14.5 / 15px at 240 / 354 / 500px.
 - Deployed `8d841ac` (checkpoint commit rewritten as a Conventional Commit before push); run
   `39679464767` success; live `/research` and `Resume.pdf` re-checked against the build.
+
+### 2026-11-17 — SEØNG DJ mixes
+
+- Added a YouTube shortcut to the desktop, Start menu, and mobile More menu. The static homepage
+  links to the same channel.
+- Added “Listen to my mixes” to the portfolio explorer and reused its preview for the SEØNG hobby.
+- Kept desktop shortcuts in a single column so the About window cannot cover a wrapped icon.
+- Verified production build, lint, TypeScript, and the Chrome desktop and mobile launch paths.
 
 ## Validation
 - `npm run build` — clean, 6/6 routes exported, CSS hash `b5c038d9e368cc6e` (2026-09-22)

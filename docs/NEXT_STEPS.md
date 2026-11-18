@@ -1,9 +1,10 @@
-<!-- status: live · reviewed_as_of: 2026-10-21 · REPLACE-form handoff, never append -->
+<!-- status: live · reviewed_as_of: 2026-11-17 · REPLACE-form handoff, never append -->
 # Next Steps
 
 ## Status
-**Deployed and verified live** at https://junjslee.github.io.
-`main` = `origin/main` (deploy commit `8d841ac`). Nothing is in flight.
+SEØNG is available through the desktop YouTube icon, mobile More, and the portfolio’s “Listen to
+my mixes” folder. The production build and Chrome interaction checks passed locally. Check the
+GitHub Pages workflow and confirm the channel link on the public homepage after pushing.
 
 ## Verified live (2026-10-21)
 - Deploy run `39679464767` concluded **success** on `8d841ac`; live CSS is `css/6db4933d4e16396f.css`,
@@ -16,21 +17,19 @@
   `Person.alternateName`.
 
 ## Open items
-1. **"Listen to my mixes"** — the operator will supply the URL. Add a `mixes` entry to
-   `folderOrder` / `folderCopy` in `JunLeeSection.tsx`; the Writing slot it replaces is already free.
-2. **Cross-browser** — the explorer layout uses container queries and `:has()`, verified in Chrome
+1. **Cross-browser** — the explorer layout uses container queries and `:has()`, verified in Chrome
    only. Check Safari and Firefox: if `.xp-home-main` reports a single grid track above 600px, the
    query failed and needs a fallback.
-3. **Publication record is understated** — the current resume lists a co-authored npj Digital
+2. **Publication record is understated** — the current resume lists a co-authored npj Digital
    Medicine paper (under revision), a narrative review in preparation, and the IPR 2026 and RSNA 2025
    posters, none of which `/research` carries. Deliberately not invented; needs the
    operator's call on what to surface.
-4. **Search Console** — the single biggest visibility lever left is operator-only: verify the site in
+3. **Search Console** — the single biggest visibility lever left is operator-only: verify the site in
    Google Search Console (HTML-file or meta-tag method), submit `sitemap.xml`, and request indexing
    of `/` and `/research/`. Also add the site URL to the GitHub profile, LinkedIn and Google Scholar /
    ORCID if they exist — inbound links from those profiles are what raises ranking for the name. If
    the operator shares Scholar/ORCID URLs, add them to `SITE_SAME_AS` in `src/lib/site.ts`.
-5. Backlog: startup chime, Cmd/Ctrl+K palette. No analytics is installed, so there is no
+4. Backlog: startup chime, Cmd/Ctrl+K palette. No analytics is installed, so there is no
    measurement of what visitors actually open.
 
 **Closed by the operator:** BiomeTrail is public as of 2026-10-21 (the Cloudflare Access wall and

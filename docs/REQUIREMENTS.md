@@ -1,4 +1,4 @@
-<!-- status: live · reviewed_as_of: 2026-09-22 · tech-stack pins verified against package.json -->
+<!-- status: live · reviewed_as_of: 2026-11-17 · tech-stack pins verified against package.json -->
 # Requirements
 
 ## Objective
@@ -23,6 +23,7 @@ Personal portfolio site for Junseong Lee — a Windows XP-themed interactive des
 ## Acceptance Criteria
 - Desktop XP shell loads with working windows, taskbar, start menu, sound toggle
 - Mobile shell provides equivalent content access without drag-based windows
+- The homepage links to the SEØNG YouTube channel and the portfolio presents the DJ mixes as a hobby
 - `/projects` and `/research` are crawlable, indexed, and linked from site navigation
 - The home page carries readable content and structured data without JavaScript
 - The contact form composes a draft in the visitor's own mail client; the site sends nothing itself

@@ -1,9 +1,9 @@
-<!-- status: live · reviewed_as_of: 2026-10-21 -->
+<!-- status: live · reviewed_as_of: 2026-11-17 -->
 # Plan
 
 ## Current Goal
-None. The 2026-10-21 pass (npj publication, public BiomeTrail, new resume, fluid explorer rows)
-shipped; back in maintenance mode until the operator flags the next change.
+Add a YouTube shortcut to the XP desktop and mobile launcher, and feature SEØNG under
+“Listen to my mixes” in the existing portfolio explorer.
 
 ## Stages
 1. **Explore** — understand current state
@@ -13,13 +13,12 @@ shipped; back in maintenance mode until the operator flags the next change.
 5. **Handoff** — update docs
 
 ## Active Stage
-- Explore (awaiting operator direction)
+- Local verification complete. Publish via GitHub Pages and check the public homepage.
 
 ## Risks And Unknowns
 - The explorer's side-by-side layout uses CSS container queries and `:has()`. Both are supported in
   Chrome 105+/Safari 16+/Firefox 110+; older browsers fall back to the stacked layout, which is still
   an improvement on the previous nested-scroll version. Not yet checked in Safari or Firefox.
-- The "Listen to my mixes" entry is still pending a URL from the operator.
 - The contact form deliberately has no sender. If a future change wants real delivery it needs a
   hosted endpoint, not an environment variable.
 - No analytics is installed, so there is no measurement of what visitors actually open.

@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react'
+import { YOUTUBE_CHANNEL_URL } from '../lib/site'
 
 function IEToolbar({ url, onGo }: { url: string; onGo: () => void }): React.ReactElement {
   return (
@@ -19,7 +20,7 @@ function IEToolbar({ url, onGo }: { url: string; onGo: () => void }): React.Reac
 type KindVisual = { icon: string; accent: string }
 
 function getKindVisual(folder: FolderId, kind: string): KindVisual {
-  if (folder === 'writing') return { icon: '✎', accent: '#c46b2a' }
+  if (folder === 'mixes') return { icon: '♫', accent: '#7f36a9' }
   if (folder === 'research') return { icon: '◈', accent: '#2b7a7a' }
   const k = kind.toLowerCase()
   if (k.includes('agent')) return { icon: '⌬', accent: '#6e3bd8' }
@@ -32,7 +33,7 @@ function getKindVisual(folder: FolderId, kind: string): KindVisual {
 import { projects } from './ProjectsSection'
 import { researchEntries } from './ResearchSection'
 
-type FolderId = 'projects' | 'research' | 'writing'
+type FolderId = 'projects' | 'research' | 'mixes'
 
 interface ExplorerEntry {
   id: string
@@ -61,9 +62,9 @@ const folderCopy: Record<FolderId, { label: string; description: string }> = {
     label: 'Research',
     description: 'Repositories, papers, and collaborations.',
   },
-  writing: {
-    label: 'Writing',
-    description: 'Long-form reflections and essays.',
+  mixes: {
+    label: 'Listen to my mixes',
+    description: 'DJing as SEØNG.',
   },
 }
 
@@ -102,11 +103,19 @@ const explorerEntries: ExplorerEntry[] = [
     image: entry.image,
     imageAlt: entry.imageAlt,
   })),
+  {
+    id: 'mixes-seong',
+    title: 'SEØNG',
+    folder: 'mixes',
+    kind: 'DJ mixes',
+    meta: '@junseong652',
+    summary: 'I DJ in my spare time and share mixes as SEØNG. Expect melodic house, techno, stutter house, and everything in between.',
+    actionLabel: 'Listen on YouTube',
+    href: YOUTUBE_CHANNEL_URL,
+  },
 ]
 
-/* Writing is archived: the /writing pages stay live and indexed, but the
-   folder is no longer surfaced in the shell. */
-const folderOrder: FolderId[] = ['research', 'projects']
+const folderOrder: FolderId[] = ['research', 'projects', 'mixes']
 
 const JunLeeSection: React.FC = () => {
   const [activeFolder, setActiveFolder] = useState<FolderId>('research')
@@ -146,8 +155,7 @@ const JunLeeSection: React.FC = () => {
       <div className="xp-pane xp-home-header">
         <h1>Notes from Junseong Lee</h1>
         <p>
-          A running place for research and projects. Use the folders on the left to browse what
-          I have been learning, building, and thinking through.
+          Browse my research, software projects, and DJ mixes.
         </p>
       </div>
 
@@ -236,7 +244,7 @@ const JunLeeSection: React.FC = () => {
                   </div>
                 )}
                 <div className="xp-preview-copy">
-                  <span className="xp-preview-label">{folderCopy[activeFolder].label}</span>
+                  <span className="xp-preview-label">{activeFolder === 'mixes' ? 'Hobby' : folderCopy[activeFolder].label}</span>
                   <h2>{selectedEntry.title}</h2>
                   <div className="xp-research-chips">
                     <span className="xp-project-chip">{selectedEntry.kind}</span>
